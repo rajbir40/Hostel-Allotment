@@ -16,7 +16,7 @@ app.use(cors({
 }))
 
 
-connectMongoDB("mongodb://127.0.0.1:27017/hostel-allotment")
+connectMongoDB("mongodb+srv://software:jupyter@cluster0.tv4pl.mongodb.net/")
 .then(()=>console.log("MongoDB connected"));
 
 app.use(cookieParser());

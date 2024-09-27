@@ -1,0 +1,23 @@
+body{
+    overflow: hidden;
+}
+
+.box{
+    /* border: 2px solid red; */
+    width: 100vw;
+    height: 90vh;
+    background-image: url("https://img.freepik.com/free-vector/hotel-review-concept_23-2148166107.jpg?t=st=1727260928~exp=1727264528~hmac=f318442d9e005989a8fb27e287f600e31a54682aa9d63b6820faef5f070c41a8&w=740");
+    background-repeat: no-repeat;
+    background-position: right;
+    display: flex;
+    justify-content:left;
+    align-items: center;
+}
+
+.tagline{
+    width: 35vw;
+    font-weight: bolder;
+    font-size: 120%;
+    margin: 15vh;
+    color: #204080;
+}

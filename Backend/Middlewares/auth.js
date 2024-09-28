@@ -12,7 +12,7 @@ export async function authenticateuser(req, res, next) {
         // Verify the token
         const data = jwt.verify(token, secret);
         req.user = data.user;
-        next(); // Pass control to the next middleware
+        next(); 
     } catch (error) {
         res.status(401).send({ error: "Please authenticate using a valid token" });
     }

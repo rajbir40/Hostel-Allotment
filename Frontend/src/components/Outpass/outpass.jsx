@@ -31,7 +31,7 @@ const Outpass = () => {
         formData,
       },{withCredentials:true});
       alert("Submission successful!");
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       console.log(error);
 

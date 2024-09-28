@@ -7,6 +7,7 @@ import Signup from "./components/Signup";
 import Navbar from './components/Navbar/Navbar.jsx'
 import Review from "./components/Review"
 import Outpass from './components/Outpass/outpass.jsx';
+import Logout from './components/logout.jsx';
 
 function App() {
   return (
@@ -18,6 +19,8 @@ function App() {
         <Route path="/forgot-password" element={<Forget />} />
         <Route path="/review" element={<Review />} />
         <Route path="/outpass" element={<Outpass />} />
+        <Route path="/logout" element={<Logout />} />
+
         
       </Routes>
     </Router>

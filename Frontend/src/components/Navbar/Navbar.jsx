@@ -19,7 +19,7 @@ function Navbar() {
                 <a href="/"><div className="nav-item">Home</div></a>
                 <a><div className="nav-item">Hostel Allotment</div></a>
                 <a href="/outpass"><div className="nav-item">Outpass</div></a>
-                <div className="nav-item">Logout</div>
+                <a href="/outpass"></a><div className="nav-item">Logout</div>
                 <div className="nav-item">Profile</div>
                 
                 

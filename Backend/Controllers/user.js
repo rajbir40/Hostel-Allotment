@@ -51,6 +51,17 @@ export async function handleUserLogin(req,res) {
 
 }
 
+export async function handleUserLogout(req,res) {
+  try{
+    await res.clearCookie("token");
+    return res.status(200).json({ message: "Logged out successfully" });
+  }
+  catch(error){
+    console.error(error.message);
+    res.status(500).send("Internal server error");
+  }
+}
+
 
 
 export const handleSendOtp = async (req, res) => {

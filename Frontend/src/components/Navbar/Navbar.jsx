@@ -21,6 +21,8 @@ function Navbar() {
                 <a href="/outpass"><div className="nav-item">Outpass</div></a>
                 <div className="nav-item">Logout</div>
                 <a href="/profile" ><div className="nav-item">Profile</div></a>
+                <a href="/outpass"></a><div className="nav-item">Logout</div>
+                <div className="nav-item">Profile</div>
                 
                 
             </div>

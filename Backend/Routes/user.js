@@ -1,6 +1,6 @@
 import express from "express";
 import User from "../Models/user.js";
-import { handleUserSignUp,handleUserLogin, handleSendOtp, handleVerifyOtp } from "../Controllers/user.js";
+import { handleUserSignUp,handleUserLogin, handleSendOtp, handleVerifyOtp, handleUserLogout} from "../Controllers/user.js";
 import { handleApplyOutpass } from "../Controllers/outpass.js";
 import { authenticateuser } from "../Middlewares/auth.js";
 
@@ -9,6 +9,7 @@ const router = express.Router();
 // Create a new user
 router.post("/signup",handleUserSignUp);
 router.post("/login",handleUserLogin);
+router.post("/logout",authenticateuser,handleUserLogout);
 router.post("/getuser",authenticateuser,async (req,res)=>{
     try {
         const userId = req.user.id;

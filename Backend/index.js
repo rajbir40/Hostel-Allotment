@@ -22,7 +22,7 @@ connectMongoDB("mongodb+srv://software:jupyter@cluster0.tv4pl.mongodb.net/")
 
 app.use(cookieParser());
 
-app.use("/user",userRoute);c
+app.use("/user",userRoute);
 app.use("/pending",outpassRoute);
 app.use("/update",outpassRoute);
 app.use("/addhostel",hostelRoute);

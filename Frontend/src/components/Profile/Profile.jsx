@@ -11,11 +11,11 @@ export default function Profile() {
         <img src="https://pagedone.io/asset/uploads/1705473378.png" alt="cover-image" className="w-full absolute top-0 left-0 z-0 h-60 object-cover"/>
         <div className="w-full max-w-7xl mx-auto px-6 md:px-8">
             <div className="flex items-center justify-center sm:justify-start relative z-10 mb-5">
-                <img src={profile} alt="user-avatar-image" className="border-4 border-solid border-white rounded-full object-cover size-60"/>
+                <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="user-avatar-image" className="border-4 border-solid border-white rounded-full object-cover size-60"/>
             </div>
             <div className="flex flex-col sm:flex-row max-sm:gap-5 items-center justify-between mb-5">
                 <div className="block">
-                    <h3 className="font-manrope font-bold text-4xl text-gray-900 mb-1">rajbir</h3>
+                    <h3 className="font-manrope font-bold text-4xl text-gray-900 mb-1">Raju Singh</h3>
                     <p className="font-normal text-base leading-7 text-gray-500">sawara</p>
                 </div>
                 <button
@@ -35,7 +35,7 @@ export default function Profile() {
                         className="py-3.5 px-5 rounded-full bg-indigo-600 text-white font-semibold text-base leading-7 shadow-sm shadow-transparent transition-all duration-500 hover:shadow-gray-100 hover:bg-indigo-700">Edit
                         Profile</button>
                     <button
-                        className="py-3.5 px-5 rounded-full bg-indigo-50 text-indigo-600 font-semibold text-base leading-7 shadow-sm shadow-transparent transition-all duration-500 hover:bg-indigo-100">Settings</button>
+                        className="py-3.5 px-5 rounded-full bg-indigo-50 text-indigo-600 font-semibold texR-base leading-7 shadow-sm shadow-transparent transition-all duration-500 hover:bg-indigo-100">Settings</button>
                 </div>
                 <div className="flex flex-col md:flex-row items-center gap-6 ">
                     <p className="flex items-center gap-2 font-medium text-lg leading-8 text-gray-400 ">Skills

@@ -16,7 +16,7 @@ export default function Profile() {
             <div className="flex flex-col sm:flex-row max-sm:gap-5 items-center justify-between mb-5">
                 <div className="block">
                     <h3 className="font-manrope font-bold text-4xl text-gray-900 mb-1">Raju Singh</h3>
-                    <p className="font-normal text-base leading-7 text-gray-500">sawara</p>
+                    <p className="font-normal text-base leading-7 text-gray-500">Sawara pind wala </p>
                 </div>
                 <button
                     className="rounded-full py-3.5 px-5 bg-gray-100 flex items-center group transition-all duration-500 hover:bg-indigo-100 ">

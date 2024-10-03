@@ -15,8 +15,8 @@ export default function Profile() {
             </div>
             <div className="flex flex-col sm:flex-row max-sm:gap-5 items-center justify-between mb-5">
                 <div className="block">
-                    <h3 className="font-manrope font-bold text-4xl text-gray-900 mb-1">{user.name}</h3>
-                    <p className="font-normal text-base leading-7 text-gray-500">{user.address}</p>
+                    <h3 className="font-manrope font-bold text-4xl text-gray-900 mb-1">rajbir</h3>
+                    <p className="font-normal text-base leading-7 text-gray-500">sawara</p>
                 </div>
                 <button
                     className="rounded-full py-3.5 px-5 bg-gray-100 flex items-center group transition-all duration-500 hover:bg-indigo-100 ">
@@ -26,7 +26,7 @@ export default function Profile() {
                             stroke="#374151" stroke-width="1.6" stroke-linecap="round" />
                     </svg>
                     <span
-                        className="px-2 font-medium text-base leading-7 text-gray-700 transition-all duration-500 group-hover:text-indigo-600">{user.role}</span>
+                        className="px-2 font-medium text-base leading-7 text-gray-700 transition-all duration-500 group-hover:text-indigo-600">student</span>
                 </button>
             </div>
             <div className="flex flex-col lg:flex-row max-lg:gap-5 items-center justify-between py-0.5">

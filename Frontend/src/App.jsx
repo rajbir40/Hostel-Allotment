@@ -9,9 +9,11 @@ import Review from "./components/Review"
 import Outpass from './components/Outpass/outpass.jsx';
 import Profile from './components/Profile/Profile.jsx';
 import Logout from './components/logout.jsx';
+import UserContextProvider from './context/UserContextProvider.jsx';
 
 function App() {
   return (
+    <UserContextProvider>
     <Router><Navbar></Navbar>
       <Routes>
         <Route path="/" element={<Home/>} />
@@ -26,6 +28,8 @@ function App() {
         
       </Routes>
     </Router>
+    </UserContextProvider>
+
   );
 }
 

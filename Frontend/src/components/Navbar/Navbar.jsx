@@ -12,7 +12,7 @@ function Navbar() {
     return (
         <nav className="navbar">
             <div className="navbar-logo">
-                <h1>DormSpace</h1> 
+            <a href="/"><h1>DormSpace</h1></a>
             </div>
           
             <div className={`navbar-links ${isOpen ? 'open' : ''}`}>

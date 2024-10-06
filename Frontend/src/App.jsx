@@ -10,6 +10,8 @@ import Outpass from './components/Outpass/outpass.jsx';
 import Profile from './components/Profile/Profile.jsx';
 import Logout from './components/logout.jsx';
 import UserContextProvider from './context/UserContextProvider.jsx';
+import Allotment from './components/Allotment/Allotment.jsx';
+import HostelSelection from './components/Allotment/HostelSelection.jsx';
 
 function App() {
   return (
@@ -24,6 +26,8 @@ function App() {
         <Route path="/outpass" element={<Outpass />} />
         <Route path="/profile" element ={<Profile/>} />
         <Route path="/logout" element={<Logout />} />
+        <Route path='/allotment' element={<Allotment/>}/>
+        <Route path='/hostel-selection' element={<HostelSelection/>} />
 
         
       </Routes>

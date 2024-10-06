@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect} from 'react'
 import profile from '../../assets/profile.jpg'
 import axios from "axios";
 import UserContext from '../../context/UserContext';
@@ -7,7 +7,7 @@ export default function Profile() {
       const {user,setUser}=useContext(UserContext);
   return (
       <>
-                                                      <section className="relative pt-40 pb-24">
+        <section className="relative pt-40 pb-24">
         <img src="https://pagedone.io/asset/uploads/1705473378.png" alt="cover-image" className="w-full absolute top-0 left-0 z-0 h-60 object-cover"/>
         <div className="w-full max-w-7xl mx-auto px-6 md:px-8">
             <div className="flex items-center justify-center sm:justify-start relative z-10 mb-5">

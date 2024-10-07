@@ -27,7 +27,7 @@ function App() {
         <Route path="/profile" element ={<Profile/>} />
         <Route path="/logout" element={<Logout />} />
         <Route path='/allotment' element={<Allotment/>}/>
-        <Route path='/hostel-selection' element={<HostelSelection/>} />
+        <Route path='/selection' element={<HostelSelection/>} />
 
         
       </Routes>

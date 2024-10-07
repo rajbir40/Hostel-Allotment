@@ -1,3 +1,4 @@
+import { response } from "express";
 import Hostel from "../Models/Hostel.js";
 import Room from "../Models/room.js";
 
@@ -32,6 +33,28 @@ export async function createHostelWithRooms(req,res) {
 
 export async function handleRoomBooking(req,res) {
 
-    const roomId = req.params;
-    const studentId = req.params;
+    try{
+        const {roomId,studentId} = req.body;
+
+        const room = await Room.findById(roomId);
+
+        if(!room ){
+            return response.status(400).json({message:"room not found"});
+        }
+
+        if(!room.isAvailable){
+            return response.json(400).json({message:"room is not available"});
+        }
+
+        room.studentId = studentId;
+        room.isAvailable = false;
+
+        await room.save();
+
+        return res.json(200).json({message:"room booked successfully",room});
+    }
+    catch(err){
+        return res.json(500).json({message:"internal server occured"});
+    }
+
 }

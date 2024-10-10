@@ -11,6 +11,8 @@ import Profile from './components/Profile/Profile.jsx';
 import Logout from './components/logout.jsx';
 import Update from './components/Update.jsx';
 import UserContextProvider from './context/UserContextProvider.jsx';
+import Allotment from './components/Allotment/Allotment.jsx';
+import HostelSelection from './components/Allotment/HostelSelection.jsx';
 
 function App() {
   return (
@@ -26,6 +28,9 @@ function App() {
         <Route path="/profile" element ={<Profile/>} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/update" element={<Update/>} />
+        <Route path='/allotment' element={<Allotment/>}/>
+        <Route path='/selection' element={<HostelSelection/>} />
+
         
       </Routes>
     </Router>

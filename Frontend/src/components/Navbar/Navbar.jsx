@@ -17,7 +17,7 @@ function Navbar() {
           
             <div className={`navbar-links ${isOpen ? 'open' : ''}`}>
                 <a href="/"><div className="nav-item">Home</div></a>
-                <a><div className="nav-item">Hostel Allotment</div></a>
+                <a href="/selection"><div className="nav-item">Hostel Allotment</div></a>
                 <a href="/outpass"><div className="nav-item">Outpass</div></a>
                 <a href="/profile" ><div className="nav-item">Profile</div></a>
                 <a href="/logout"><div className="nav-item">Logout</div></a>

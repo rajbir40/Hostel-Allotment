@@ -1,10 +1,9 @@
-import React, { useState , useEffect} from "react";
+import React, { useState, useEffect} from "react";
 import UserContext from "./UserContext";
-import axios from 'axios';
-
+import axios from "axios";
 const UserContextProvider = ({children})=>{
       const [user,setUser]= useState(null);
-      const [loading,setLoading]=useState(false);
+      const [loading, setLoading] = useState(null);
       useEffect(() => {
             const fetchUser = async () => {
               try {

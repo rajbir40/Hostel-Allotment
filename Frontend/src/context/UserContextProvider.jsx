@@ -4,6 +4,7 @@ import axios from "axios";
 const UserContextProvider = ({children})=>{
       const [user,setUser]= useState(null);
       const [loading, setLoading] = useState(null);
+      const [room,setRoom]= useState(null);
       useEffect(() => {
             const fetchUser = async () => {
               try {
@@ -16,7 +17,6 @@ const UserContextProvider = ({children})=>{
                 setLoading(false);
               }
             };
-        
             fetchUser();
           }, []);
 

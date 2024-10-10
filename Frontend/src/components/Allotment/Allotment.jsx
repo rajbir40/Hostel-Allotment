@@ -1,6 +1,26 @@
-import React from 'react';
+import React,{useEffect,useState} from 'react';
+import axios from 'axios';
+const serverURL="http://localhost:8000";
 
 export default function Allotment() {
+  const [room,setRoom]=([]);
+
+  useEffect(() => {
+      const fetchRooms = async () => {
+        try {
+          const response = await fetch(`${serverURL}/api/users`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const roomData = await response.json();
+          setRoom(roomData);
+        } catch (error) {
+          console.error("Error fetching rooms:", error);
+        }
+      };
+  })
   return (
     <div>
       <div className="flex flex-row mt-5">

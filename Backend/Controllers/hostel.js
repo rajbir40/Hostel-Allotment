@@ -58,3 +58,13 @@ export async function handleRoomBooking(req,res) {
     }
 
 }
+
+const fetchAllRooms = async () => {
+    try {
+        const rooms = await Room.find(); 
+        return rooms; 
+    } catch (error) {
+        console.error('Error fetching rooms:', error);
+        throw error;
+    }
+};

@@ -19,15 +19,13 @@ function Navbar() {
                 <a href="/"><div className="nav-item">Home</div></a>
                 <a><div className="nav-item">Hostel Allotment</div></a>
                 <a href="/outpass"><div className="nav-item">Outpass</div></a>
-                <div className="nav-item">Logout</div>
                 <a href="/profile" ><div className="nav-item">Profile</div></a>
-                <a href="/outpass"></a><div className="nav-item">Logout</div>
-                <div className="nav-item">Profile</div>
+                <a href="/logout"><div className="nav-item">Logout</div></a>
                 
                 
             </div>
             <div className="navbar-toggle" onClick={toggleMenu}>
-                <span className="bar">Logout</span>
+            <a href="/logout"><span className="bar">Logout</span></a>
                 <span className="bar">Profile</span>
                 <span className="bar"></span>
             </div>

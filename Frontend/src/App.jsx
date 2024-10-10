@@ -9,6 +9,7 @@ import Review from "./components/Review"
 import Outpass from './components/Outpass/outpass.jsx';
 import Profile from './components/Profile/Profile.jsx';
 import Logout from './components/logout.jsx';
+import Update from './components/Update.jsx';
 import UserContextProvider from './context/UserContextProvider.jsx';
 
 function App() {
@@ -24,7 +25,7 @@ function App() {
         <Route path="/outpass" element={<Outpass />} />
         <Route path="/profile" element ={<Profile/>} />
         <Route path="/logout" element={<Logout />} />
-
+        <Route path="/update" element={<Update/>} />
         
       </Routes>
     </Router>

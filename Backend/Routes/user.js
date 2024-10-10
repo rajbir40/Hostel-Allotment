@@ -1,6 +1,6 @@
 import express from "express";
 import User from "../Models/user.js";
-import { handleUserSignUp,handleUserLogin, handleSendOtp, handleVerifyOtp, handleUserLogout} from "../Controllers/user.js";
+import { handleUserSignUp,handleUserLogin, handleSendOtp, handleVerifyOtp, handleUserLogout,userEdit} from "../Controllers/user.js";
 import { handleApplyOutpass } from "../Controllers/outpass.js";
 import { authenticateuser } from "../Middlewares/auth.js";
 
@@ -23,5 +23,6 @@ router.post("/send-code", handleSendOtp)
 router.post("/verify-code", handleVerifyOtp)
 
 router.post("/apply",authenticateuser,handleApplyOutpass);
+router.post("/user/update",userEdit);
 
 export default router;  

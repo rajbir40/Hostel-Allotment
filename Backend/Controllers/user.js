@@ -153,3 +153,28 @@ export const handleSendOtp = async (req, res) => {
       res.status(500).json({ message: 'Failed to verify OTP. Please try again later.' });
     }
   };
+
+export const userEdit= async (req, res) => {
+    try {
+      const { _id, fullName, email, mobile } = req.body;
+  
+      if (!_id) {
+        return res.status(400).json({ error: 'User ID (_id) is required' });
+      }
+  
+      const updatedUser = await USER.findByIdAndUpdate(
+        _id,
+        { fullName, email, mobile },
+        { new: true }
+      );
+  
+      if (!updatedUser) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      res.status(200).json({ user: updatedUser });
+    } catch (error) {
+      console.error('Error updating user:', error);
+      res.status(500).json({ error: 'Server Error' });
+    } 
+  });

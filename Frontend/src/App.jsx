@@ -9,6 +9,7 @@ import Review from "./components/Review"
 import Outpass from './components/Outpass/outpass.jsx';
 import Profile from './components/Profile/Profile.jsx';
 import Logout from './components/logout.jsx';
+import Update from './components/Update.jsx';
 import UserContextProvider from './context/UserContextProvider.jsx';
 import AllotmentGH1 from './components/Allotment/AllotmentGH1.jsx';
 import HostelSelection from './components/Allotment/HostelSelection.jsx';
@@ -28,6 +29,7 @@ function App() {
         <Route path="/logout" element={<Logout />} />
         <Route path='/allotmentgh1' element={<AllotmentGH1/>}/>
         <Route path='allotmentgh2' element={<AllotmentGH2/>}/>
+        <Route path="/update" element={<Update/>} />
         <Route path='/selection' element={<HostelSelection/>} />
 
         

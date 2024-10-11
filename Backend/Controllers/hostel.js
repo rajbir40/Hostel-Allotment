@@ -9,10 +9,10 @@ export async function createHostelWithRooms(req,res) {
         const newhostel = await Hostel.create({
             name : hostelName,
         })
-        await newhostel.save();
+
 
         let roomIds = [];
-        for(let i=1 ; i<=5 ; i++){
+        for(let i=101 ; i<=121 ; i++){
             const room = await Room.create({
                 roomNumber:i,
                 type:roomtype,
@@ -26,6 +26,7 @@ export async function createHostelWithRooms(req,res) {
         return res.status(200).json({message:"Successfully created hostel"});
     }
     catch(err){
+        console.log(err);
         return res.status(404).json({message:"Hostel not created"});
     }
 

@@ -34,6 +34,7 @@ export async function createHostelWithRooms(req,res) {
 export async function handleRoomBooking(req,res) {
 
     try{
+        console.log("Received room data:", req.body);
         const {roomId,studentId} = req.body;
 
         const room = await Room.findById(roomId);
@@ -59,12 +60,12 @@ export async function handleRoomBooking(req,res) {
 
 }
 
-const fetchAllRooms = async () => {
+export const fetchAllRooms = async (req,res) => {
     try {
         const rooms = await Room.find(); 
-        return rooms; 
+        return res.status(200).json(rooms);
     } catch (error) {
         console.error('Error fetching rooms:', error);
-        throw error;
+        return res.status(500).json({ message: "Internal server error" });
     }
 };

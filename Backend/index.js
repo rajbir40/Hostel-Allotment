@@ -27,6 +27,7 @@ app.use("/pending",outpassRoute);
 app.use("/update",outpassRoute);
 app.use("/addhostel",hostelRoute);
 app.use("/bookroom",hostelRoute);
+app.use("/room",hostelRoute);
 
 app.listen(PORT,()=>{
     console.log("Running on port 8000");

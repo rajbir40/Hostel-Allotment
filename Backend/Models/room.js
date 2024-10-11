@@ -29,7 +29,6 @@ const roomSchema = new mongoose.Schema(
     {timestamps:true}
 );
 
-roomSchema.index({ roomNumber: 1, hostelId: 1 }, { unique: true });
 
 
 const Room = mongoose.model("Room",roomSchema);

@@ -9,10 +9,10 @@ export async function createHostelWithRooms(req,res) {
         const newhostel = await Hostel.create({
             name : hostelName,
         })
-        await newhostel.save();
+
 
         let roomIds = [];
-        for(let i=1 ; i<=5 ; i++){
+        for(let i=101 ; i<=121 ; i++){
             const room = await Room.create({
                 roomNumber:i,
                 type:roomtype,
@@ -26,6 +26,7 @@ export async function createHostelWithRooms(req,res) {
         return res.status(200).json({message:"Successfully created hostel"});
     }
     catch(err){
+        console.log(err);
         return res.status(404).json({message:"Hostel not created"});
     }
 
@@ -34,6 +35,7 @@ export async function createHostelWithRooms(req,res) {
 export async function handleRoomBooking(req,res) {
 
     try{
+        console.log("Received room data:", req.body);
         const {roomId,studentId} = req.body;
 
         const room = await Room.findById(roomId);
@@ -58,3 +60,13 @@ export async function handleRoomBooking(req,res) {
     }
 
 }
+
+export const fetchAllRooms = async (req,res) => {
+    try {
+        const rooms = await Room.find(); 
+        return res.status(200).json(rooms);
+    } catch (error) {
+        console.error('Error fetching rooms:', error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+};

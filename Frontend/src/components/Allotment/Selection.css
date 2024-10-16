@@ -1,10 +1,9 @@
-/* Selection.css */
 
 @keyframes slideIn {
       0% {
         opacity: 0;
         transform: translateY(20px);
-        color: blue; /* Starting color */
+        color: #247cbc; /* Starting color */
       }
       40%{
             color: rgb(70, 83, 181); /* Midway color */
@@ -19,7 +18,7 @@
       100% {
         opacity: 1;
         transform: translateY(0);
-        color: rgb(109, 109, 179); /* Final color */
+        color: #247cbc; /* Final color */
       }
     }
     
@@ -54,3 +53,24 @@
       }
     }
     
+
+    .hello {
+      
+      background: linear-gradient(60deg, rgba(84,58,183,1) 0%, rgba(0,172,193,1) 100%);
+    }
+
+  
+
+    .sideimg-2{
+      width: 50vw;
+      height: 100%;
+      background-image: url('./sideimg.png');
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .Hostel-choose{
+      color: #4c44bb;
+    }
+
+   

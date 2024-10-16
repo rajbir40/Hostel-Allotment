@@ -35,37 +35,29 @@ export async function createHostelWithRooms(req,res) {
 export async function handleRoomBooking(req,res) {
 
     try{
-        const {roomId,studentId} = req.body;
 
-        const room = await Room.findById(roomId);
-
-        if(!room ){
-            return response.status(400).json({message:"room not found"});
+        const {roomNumber,hostel,studentId} = req.body;
+        if(!roomNumber || !hostel){
+            return res.status(400).json({message:"Roomnumber and hostel are required"});
         }
 
-        if(!room.isAvailable){
-            return response.json(400).json({message:"room is not available"});
+        const room = await Room.findOne({roomNumber:roomNumber, hostel:hostel});
+        if(!room){
+            return res.status(404).json({message:"Room not found"});
         }
 
-        room.studentId = studentId;
         room.isAvailable = false;
-
+        room.studentId = studentId;
         await room.save();
 
-        return res.json(200).json({message:"room booked successfully",room});
-    }
-    catch(err){
-        return res.json(500).json({message:"internal server occured"});
+        return res.status(200).json(room);
+
     }
 
+    catch(err){
+        return res.status(404).json({message:"Server didn't responded"});
+    }
+
+    
 }
 
-const fetchAllRooms = async () => {
-    try {
-        const rooms = await Room.find(); 
-        return rooms; 
-    } catch (error) {
-        console.error('Error fetching rooms:', error);
-        throw error;
-    }
-};

@@ -5,8 +5,12 @@ function Home() {
     return (
         <div>
             <div className="header">
+                <div className= "box">
                 <div className="inner-header flex">
                     <h1 style={{ fontSize: '170%' }}>Simplifying hostel life with quick allotments and instant outpass approvals—right at your fingertips!</h1>
+                </div>
+                <div className="sideimg"></div>
+
                 </div>
                 
                 <div>

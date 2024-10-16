@@ -10,7 +10,7 @@ export default function Logout() {
       // Make a request to the backend to logout and clear the authentication cookie
       const response = await axios.post('http://localhost:8000/user/logout', {}, { withCredentials: true });
       console.log(response.data.message);
-
+      localStorage.removeItem('user');
       // Show a success message and redirect to the login page
       alert('Logout successful!');
       navigate('/login');

@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import profile from '../assets/profile.jpg'
+// import profile from '../assets/profile.jpg'
 
 export default function Update() {
       const [user,setUser]=useState();
@@ -16,7 +16,7 @@ export default function Update() {
                 <div className="flex flex-col items-center space-y-5 sm:flex-row sm:space-y-0">
                   <img
                     className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-indigo-300 dark:ring-indigo-500"
-                    src={profile}
+                    
                     alt="Bordered avatar" />
 
                   <div className="flex flex-col space-y-5 sm:ml-8">

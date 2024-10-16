@@ -147,11 +147,15 @@ export default function SignUp() {
           </div>
 
           <div className="mt-6">
-            <button
+          <button
               type="submit"
-              className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+              className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform rounded-lg focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+              style={{
+                background: 'linear-gradient(60deg, rgba(84,58,183,1) 0%, rgba(0,172,193,1) 100%)',
+              }}
+            >
               Sign Up
-            </button>
+          </button>
 
             <div className="mt-6 text-center">
               <a href="/login" className="text-sm text-blue-500 hover:underline">

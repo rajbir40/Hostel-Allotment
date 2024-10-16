@@ -72,7 +72,10 @@ export default function SignIn() {
 
             <button
               type="submit"
-              className="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white"
+              className="block w-full rounded-lg px-5 py-3 text-sm font-medium text-white"
+              style={{
+                background: 'linear-gradient(60deg, rgba(84,58,183,1) 0%, rgba(0,172,193,1) 100%)',
+              }}
             >
               Sign in
             </button>

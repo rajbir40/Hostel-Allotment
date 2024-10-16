@@ -22,7 +22,7 @@ const ProfilePage = () => {
         if (studentId) {
           const response = await axios.get(`${serverURL}/user/users/${studentId}`);
           const user = response.data;
-          // console.log(user)
+          console.log(user)
           setUsername(user.name)
           setEmail(user.email)
           setDob(user.dob);

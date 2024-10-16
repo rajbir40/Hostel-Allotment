@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Ensure you have react-router-dom installed
 import axios from 'axios';
+import './Signup.css';
 
 export default function SignUp() {
   const [name, setName] = useState('');
@@ -25,9 +26,11 @@ export default function SignUp() {
   };
 
   return (
-    <section className="bg-white">
-      <div className="container flex items-center justify-center min-h-screen px-6 mx-auto">
-        <form onSubmit={handleSignup} className="w-full max-w-md bg-gray-100 p-6 rounded-lg shadow-lg">
+    <section >
+      <div className='main-signup'>
+       
+        <div className='form-signup'>
+        <form onSubmit={handleSignup} className="w-full max-w-md bg-white-100 p-6 rounded-lg ">
           <div className="flex justify-center mx-auto mb-4">
             <img className="w-auto h-7 sm:h-8" src="https://merakiui.com/images/logo.svg" alt="Logo" />
           </div>
@@ -157,7 +160,13 @@ export default function SignUp() {
             </div>
           </div>
         </form>
+        </div>
+
+        <div className='sidebar-signup'>
+        <h1>Welcome to DormSpace!</h1>
+        </div>
       </div>
+     
     </section>
   );
 }

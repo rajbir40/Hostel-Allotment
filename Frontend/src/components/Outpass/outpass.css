@@ -7,6 +7,9 @@
     border-radius: 10px;
     /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); */
     font-family: 'Arial', sans-serif;
+    /* border: 2px solid red ; */
+    width:40vw;
+    
   }
   
   h2 {
@@ -42,11 +45,12 @@
   input[type="date"],
   textarea {
     padding: 12px;
-    border-radius: 6px;
+    /* border-radius: 6px; */
     border: 1px solid #ccc;
     font-size: 16px;
     outline: none;
     transition: border-color 0.3s ease;
+    background-color: none;
   }
   
   input[type="text"]:focus,
@@ -86,3 +90,61 @@
     }
   }
   
+  .box-outpass{
+    width: 100vw;
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(60deg, rgba(84,58,183,1) 0%, rgba(0,172,193,1) 100%);
+  }
+
+  .sidepage-outpass{
+    width: 50vw;
+    height: 100%;
+    border: 2px solid blue ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .cover-outpass{
+    width: 50vw;
+    height: 100%;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  
+  .Generate-your-outpass {
+    color: #fff;
+}
+
+@keyframes slideInGeneratePass {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+        color: #fff; /* Starting color */
+    }
+    40% {
+        color: #fff; /* Midway color */
+    }
+    50% {
+        color: #fff; /* Midway color */
+    }
+    70% {
+        color: #fff;
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        color: #fff; /* Final color */
+    }
+}
+
+.animated-heading-outpass {
+    animation: slideInGeneratePass 1s ease forwards; /* Adjust duration as needed */
+    transition: color 0.5s ease; /* Smooth color transition */
+}

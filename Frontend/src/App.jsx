@@ -14,7 +14,8 @@ import AllotmentGH1 from './components/Allotment/AllotmentGH1.jsx';
 import HostelSelection from './components/Allotment/HostelSelection.jsx';
 import AllotmentGH2 from './components/Allotment/AllotmentGH2.jsx';
 import Allotment from './components/Allotment/Allotment.jsx';
-import AdminProfile from './components/Profile/Profile.jsx';
+import AdminProfile from './components/Profile/AdminProfile.jsx';
+import NewProfile from './components/Profile/NewProfile.jsx';
 function App() {
   return (
     <UserContextProvider>
@@ -33,6 +34,7 @@ function App() {
         <Route path='allotmentgh2' element={<AllotmentGH2/>}/>
         <Route path='/selection' element={<HostelSelection/>} />
         <Route path='/admin' element={<AdminProfile/>}/>
+        <Route path='/newprofile' element={<NewProfile/>}/>
       </Routes>
     </Router>
     </UserContextProvider>

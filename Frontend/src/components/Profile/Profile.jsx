@@ -1,19 +1,52 @@
 import React, { useState, useEffect } from "react";
+import User from "../../../../Backend/Models/user";
 import EditIcon from "./EditIcon";
+const serverURL="http://localhost:8000";
 
 const ProfilePage = () => {
   
-  const [username, setUsername] = useState(localStorage.getItem('username') || 'Jenny Wilson');
-  const [email, setEmail] = useState(localStorage.getItem('email') || 'jenny@gmail.com');
-  const [address, setAddress] = useState(localStorage.getItem('address') || 'New York, USA');
-  const [phone, setPhone] = useState(localStorage.getItem('phone') || 'Sky Angel');
-  const [dob, setDob] = useState(localStorage.getItem('dob') || 'April 20, 1981');
+  const [users,setUser]= useState([]);
+  const [studentId,setStudentId]= useState();
+  const user = User.findOne({studentId});
+  const [username, setUsername] = useState(user.name);
+  const [email, setEmail] = useState(user.email);
+  const [address, setAddress] = useState(user.address);
+  const [phone, setPhone] = useState(user.phone);
+  const [dob, setDob] = useState(user.dob);
+
+  useEffect(() => {
+    const getUserId = async () =>{
+        const savedValue = JSON.parse(localStorage?.getItem('user')); 
+        if (savedValue) {
+        setStudentId(savedValue);
+        console.log("User ID: " + savedValue);
+        }
+    };
+    const fetchUserData = async () => {
+      try {
+        if (studentId) {
+          const response = await axios.get(`${serverURL}/users/${studentId}`);
+          const user = response.data;
+          setUsername(user.name);
+          setEmail(user.email);
+          setAddress(user.address);
+          setPhone(user.phone);
+          setDob(user.dob);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+      fetchUsers();
+      getUserId();
+  },[]);
+
+
 
   const changeName = () => {
     const name = prompt('Enter new name', username);
     if (name) {
       setUsername(name);
-      localStorage.setItem('username', name); 
     }
   };
 
@@ -21,7 +54,6 @@ const ProfilePage = () => {
     const newEmail = prompt('Enter new email', email);
     if (newEmail) {
       setEmail(newEmail);
-      localStorage.setItem('email', newEmail); 
     }
   };
 
@@ -29,7 +61,6 @@ const ProfilePage = () => {
     const newAddress = prompt('Enter new address', address);
     if (newAddress) {
       setAddress(newAddress);
-      localStorage.setItem('address', newAddress); 
     }
   };
 
@@ -37,7 +68,6 @@ const ProfilePage = () => {
     const newPhone = prompt('Enter new phone number', phone);
     if (newPhone) {
       setPhone(newPhone);
-      localStorage.setItem('phone', newPhone); 
     }
   };
 
@@ -45,7 +75,6 @@ const ProfilePage = () => {
     const newDob = prompt('Enter new date of birth', dob);
     if (newDob) {
       setDob(newDob);
-      localStorage.setItem('dob', newDob); 
     }
   };
 

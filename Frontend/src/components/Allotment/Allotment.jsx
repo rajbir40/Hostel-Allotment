@@ -8,9 +8,6 @@ export default function Allotment() {
   const [selectedRoom, setSelectedRoom] = useState(null); 
   const [studentId,setStudentId] = useState(null);
   
-
-  
-
   useEffect(() => {
       const getUserId = async () =>{
         const savedValue = JSON.parse(localStorage?.getItem('user')); 
@@ -33,15 +30,23 @@ export default function Allotment() {
     },[]);
   
     const handleRoomClick = async (roomData) => {
-      setSelectedRoom(roomData); 
-      const reqData= {...roomData,studentId};
-      try {
-          const response = await axios.post(`${serverURL}/bookroom/room`, reqData);
-          console.log("Room data sent successfully:", response.data);
-      } catch (error) {
-          console.error("Error sending room data:", error);
-      }
-  };
+        setSelectedRoom(roomData);
+    
+        const confirmation = window.confirm(`Are you sure you want to book room ${roomData.roomNumber}?`);
+        if (confirmation) {
+          const reqData = { ...roomData, studentId };
+          try {
+            const response = await axios.post(`${serverURL}/bookroom/room`, reqData);
+            console.log("Room booked successfully:", response.data);
+            alert(`Room ${roomData.roomNumber} booked successfully!`);
+          } catch (error) {
+            console.error("Error booking room:", error);
+            alert("Failed to book the room. Please try again.");
+          }
+        } else {
+          alert(`Booking for room ${roomData.roomNumber} canceled.`);
+        }
+      };
   
     return (
       <div>

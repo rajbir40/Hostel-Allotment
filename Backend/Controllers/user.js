@@ -162,7 +162,7 @@ export const userEdit= async (req, res) => {
         return res.status(400).json({ error: 'User ID (_id) is required' });
       }
   
-      const updatedUser = await USER.findByIdAndUpdate(
+      const updatedUser = await User.findByIdAndUpdate(
         _id,
         { fullName, email, mobile },
         { new: true }

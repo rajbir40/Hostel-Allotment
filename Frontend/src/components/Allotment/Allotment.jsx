@@ -67,15 +67,15 @@ export default function Allotment() {
             <div className="flex justify-center gap-3">
               {room.slice(0, 2).map((r, index) => (
                 <button
-                  key={index}
-                  type="button"
-                  className={`text-white ${r.isAvailable ? 'bg-blue-700 hover:bg-blue-800' : 'bg-red-700 hover:bg-red-800'} focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 h-[40px] w-[61.48px] dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800`} 
-                  style={{ cursor: r.isAvailable ? 'pointer' : 'not-allowed' }}
-                  disabled={!r.isAvailable}
-                  onClick={() => r.isAvailable && handleRoomClick(r)}
-                  >
-                  {r.roomNumber}
-                </button>
+                    key={index}
+                    type="button"
+                    className={`text-white ${r.isAvailable ? 'bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800' : 'bg-red-700 hover:bg-red-800'} focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 h-[40px] w-[61.48px] `} 
+                    style={{ cursor: r.isAvailable ? 'pointer' : 'not-allowed' }}
+                    disabled={!r.isAvailable}
+                    onClick={() => r.isAvailable && handleRoomClick(r)}
+                    >
+                    {r.roomNumber}
+                  </button>
               ))}
             </div>
           </div>
@@ -86,45 +86,45 @@ export default function Allotment() {
               <div className="flex justify-center gap-3">
                 {room.slice(2, 4).map((r, index) => (
                   <button
-                    key={index}
-                    type="button"
-                    className={`text-white ${r.isAvailable ? 'bg-blue-700 hover:bg-blue-800' : 'bg-red-700 hover:bg-red-800'} focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 h-[40px] w-[61.48px] dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800`} 
-                    style={{ cursor: r.isAvailable ? 'pointer' : 'not-allowed' }}
-                    disabled={!r.isAvailable}
-                    onClick={() => r.isAvailable && handleRoomClick(r)}
-                    >
-                    {r.roomNumber}
-                  </button>
+                  key={index}
+                  type="button"
+                  className={`text-white ${r.isAvailable ? 'bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800' : 'bg-red-700 hover:bg-red-800'} focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 h-[40px] w-[61.48px] `} 
+                  style={{ cursor: r.isAvailable ? 'pointer' : 'not-allowed' }}
+                  disabled={!r.isAvailable}
+                  onClick={() => r.isAvailable && handleRoomClick(r)}
+                  >
+                  {r.roomNumber}
+                </button>
                 ))}
               </div>
               <div className="flex justify-center gap-3">
                 {room.slice(4, 6).map((r, index) => (
                   <button
-                    key={index}
-                    type="button"
-                    className={`text-white ${r.isAvailable ? 'bg-blue-700 hover:bg-blue-800' : 'bg-red-700 hover:bg-red-800'} focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 h-[40px] w-[61.48px] dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800`} 
-                    style={{ cursor: r.isAvailable ? 'pointer' : 'not-allowed' }}
-                    disabled={!r.isAvailable}
-                    onClick={() => r.isAvailable && handleRoomClick(r)}
-                    >
-                    {r.roomNumber}
-                  </button>
+                  key={index}
+                  type="button"
+                  className={`text-white ${r.isAvailable ? 'bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800' : 'bg-red-700 hover:bg-red-800'} focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 h-[40px] w-[61.48px] `} 
+                  style={{ cursor: r.isAvailable ? 'pointer' : 'not-allowed' }}
+                  disabled={!r.isAvailable}
+                  onClick={() => r.isAvailable && handleRoomClick(r)}
+                  >
+                  {r.roomNumber}
+                </button>
                 ))}
               </div>
 
               {/* Third Row */}
-              <div className="flex justify-center mt-5 gap-3">
+              <div className="flex justify-center mt-5 gap-3 p-2">
                 {room.slice(6, 10).map((r, index) => (
                   <button
-                    key={index}
-                    type="button"
-                    className={`text-white ${r.isAvailable ? 'bg-blue-700 hover:bg-blue-800' : 'bg-red-700 hover:bg-red-800'} focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 h-[40px] w-[61.48px] dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800`} 
-                    style={{ cursor: r.isAvailable ? 'pointer' : 'not-allowed' }}
-                    disabled={!r.isAvailable}
-                    onClick={() => r.isAvailable && handleRoomClick(r)}
-                    >
-                    {r.roomNumber}
-                  </button>
+                  key={index}
+                  type="button"
+                  className={`text-white ${r.isAvailable ? 'bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800' : 'bg-red-700 hover:bg-red-800'} focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 h-[40px] w-[61.48px] `} 
+                  style={{ cursor: r.isAvailable ? 'pointer' : 'not-allowed' }}
+                  disabled={!r.isAvailable}
+                  onClick={() => r.isAvailable && handleRoomClick(r)}
+                  >
+                  {r.roomNumber}
+                </button>
                 ))}
               </div>
             </div>
@@ -132,34 +132,34 @@ export default function Allotment() {
               <div className="flex justify-center gap-3">
                 {room.slice(10, 12).map((r, index) => (
                   <button
-                    key={index}
-                    type="button"
-                    className={`text-white ${r.isAvailable ? 'bg-blue-700 hover:bg-blue-800' : 'bg-red-700 hover:bg-red-800'} focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 h-[40px] w-[61.48px] dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800`} 
-                    style={{ cursor: r.isAvailable ? 'pointer' : 'not-allowed' }}
-                    disabled={!r.isAvailable}
-                    onClick={() => r.isAvailable && handleRoomClick(r)}
-                    >
-                    {r.roomNumber}
-                  </button>
+                  key={index}
+                  type="button"
+                  className={`text-white ${r.isAvailable ? 'bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800' : 'bg-red-700 hover:bg-red-800'} focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 h-[40px] w-[61.48px] `} 
+                  style={{ cursor: r.isAvailable ? 'pointer' : 'not-allowed' }}
+                  disabled={!r.isAvailable}
+                  onClick={() => r.isAvailable && handleRoomClick(r)}
+                  >
+                  {r.roomNumber}
+                </button>
                 ))}
               </div>
               <div className="flex justify-center gap-3">
                 {room.slice(12, 14).map((r, index) => (
                   <button
-                    key={index}
-                    type="button"
-                    className={`text-white ${r.isAvailable ? 'bg-blue-700 hover:bg-blue-800' : 'bg-red-700 hover:bg-red-800'} focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 h-[40px] w-[61.48px] dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800`} 
-                    style={{ cursor: r.isAvailable ? 'pointer' : 'not-allowed' }}
-                    disabled={!r.isAvailable}
-                    onClick={() => r.isAvailable && handleRoomClick(r)}
-                    >
-                    {r.roomNumber}
-                  </button>
+                  key={index}
+                  type="button"
+                  className={`text-white ${r.isAvailable ? 'bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800' : 'bg-red-700 hover:bg-red-800'} focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 h-[40px] w-[61.48px] `} 
+                  style={{ cursor: r.isAvailable ? 'pointer' : 'not-allowed' }}
+                  disabled={!r.isAvailable}
+                  onClick={() => r.isAvailable && handleRoomClick(r)}
+                  >
+                  {r.roomNumber}
+                </button>
                 ))}
               </div>
 
               {/* Fourth Row */}
-              <div className="flex justify-center mt-5 gap-3">
+              <div className="flex justify-center mt-5 gap-3 p-2">
                 {room.slice(14, 18).map((r, index) => (
                   <button
                     key={index}

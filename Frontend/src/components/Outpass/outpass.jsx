@@ -43,9 +43,16 @@ const Outpass = () => {
   };
 
   return (
-    <div>
+    <div className="box-outpass">
+      <div className="sidepage-outpass">
+      <h1 className="text-4xl font-bold mb-7 text-center animated-heading-outpass Generate-your-outpass">
+    Generate your Outpass
+</h1>
+
+      </div>
+     <div className="cover-outpass">
       <div className="outpass-form-container">
-        <h2>Outpass Form</h2>
+        {/* <h2>Outpass Form</h2> */}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="name">Name</label>
@@ -135,6 +142,8 @@ const Outpass = () => {
           </button>
         </form>
       </div>
+      </div>
+      
     </div>
   );
 };

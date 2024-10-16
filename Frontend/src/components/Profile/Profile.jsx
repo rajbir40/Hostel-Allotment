@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import User from "../../../../Backend/Models/user";
 import EditIcon from "./EditIcon";
 import './Profile.css';
 
@@ -14,7 +15,6 @@ const ProfilePage = () => {
     const name = prompt('Enter new name', username);
     if (name) {
       setUsername(name);
-      localStorage.setItem('username', name); 
     }
   };
 
@@ -22,7 +22,6 @@ const ProfilePage = () => {
     const newEmail = prompt('Enter new email', email);
     if (newEmail) {
       setEmail(newEmail);
-      localStorage.setItem('email', newEmail); 
     }
   };
 
@@ -30,7 +29,6 @@ const ProfilePage = () => {
     const newAddress = prompt('Enter new address', address);
     if (newAddress) {
       setAddress(newAddress);
-      localStorage.setItem('address', newAddress); 
     }
   };
 
@@ -38,7 +36,6 @@ const ProfilePage = () => {
     const newPhone = prompt('Enter new phone number', phone);
     if (newPhone) {
       setPhone(newPhone);
-      localStorage.setItem('phone', newPhone); 
     }
   };
 
@@ -46,7 +43,6 @@ const ProfilePage = () => {
     const newDob = prompt('Enter new date of birth', dob);
     if (newDob) {
       setDob(newDob);
-      localStorage.setItem('dob', newDob); 
     }
   };
 

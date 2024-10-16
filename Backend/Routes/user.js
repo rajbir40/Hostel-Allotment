@@ -23,6 +23,6 @@ router.post("/send-code", handleSendOtp)
 router.post("/verify-code", handleVerifyOtp)
 
 router.post("/apply",authenticateuser,handleApplyOutpass);
-router.post("/user/update",userEdit);
+router.post("/update",userEdit);
 
 export default router;  

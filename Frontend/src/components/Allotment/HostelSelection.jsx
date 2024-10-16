@@ -9,29 +9,31 @@ export default function HostelSelection() {
   };
 
   return (
-    <div className="flex h-screen">
-      <div className="w-1/2">
-        <img
-          src="https://images.unsplash.com/photo-1709805619372-40de3f158e83?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8aG9zdGVsfGVufDB8fDB8fHww"
-          alt="loading..."
-          className="h-full object-cover"
-        />
+    <div className=" flex h-screen">
+
+      <div className="hello w-1/2 h-screen" >
+        <div className="sideimg-2"></div>
+
       </div>
-      <div className="w-1/2 flex flex-col justify-center items-center p-8">
-        <h1 className="text-4xl font-bold mb-7 text-center animated-heading">
+
+
+      <div className="w-1/2 flex flex-col justify-center items-center p-8 " >
+        <h1 className="text-4xl font-bold mb-7 text-center animated-heading Hostel-choose">
           Choose your hostel
           <div className="aurora">
+            {/* <div className="aurora__item"></div>
             <div className="aurora__item"></div>
             <div className="aurora__item"></div>
-            <div className="aurora__item"></div>
-            <div className="aurora__item"></div>
+            <div className="aurora__item"></div> */}
           </div>
         </h1>
+       
         <button
           onClick={toggleDropdown}
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-[30%]"
+          className="text-white bg-[#247cbc] hover:bg-[#1c88bc] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-[30%]"
           type="button"
         >
+         
           Click Here
           <svg
             className="w-2.5 h-2.5 ms-3"
@@ -40,12 +42,13 @@ export default function HostelSelection() {
             fill="none"
             viewBox="0 0 10 6"
           >
-            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4"/>
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
           </svg>
         </button>
+       
 
         <div
-          className={`z-10 ${isDropdownOpen ? 'block' : 'hidden'} bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 mt-2`}
+          className={`z-10 ${isDropdownOpen ? 'block' : 'hidden'} bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 mt-2`} 
         >
           <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
             <li>

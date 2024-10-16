@@ -5,11 +5,37 @@ import './Profile.css';
 
 const ProfilePage = () => {
   
-  const [username, setUsername] = useState(localStorage.getItem('username') || 'Student');
-  const [email, setEmail] = useState(localStorage.getItem('email') || 'student@gmail.com');
-  const [address, setAddress] = useState(localStorage.getItem('address') || 'New York, USA');
-  const [phone, setPhone] = useState(localStorage.getItem('phone') || '9876543210');
-  const [dob, setDob] = useState(localStorage.getItem('dob') || 'April 20, 1981');
+  const [users,setUser]= useState([]);
+  const [studentId,setStudentId]= useState();
+  const [username, setUsername] = useState();
+  const [email, setEmail] = useState();
+  const [address, setAddress] = useState();
+  const [phone, setPhone] = useState();
+  const [dob, setDob] = useState();
+
+  useEffect(() => {
+    const getUserId = async () =>{
+        const savedValue = JSON.parse(localStorage?.getItem('user')); 
+        if (savedValue) {
+        setStudentId(savedValue);
+        console.log("User ID: " + savedValue);
+        }
+    };
+    const fetchUserData = async () => {
+      try {
+        if (studentId) {
+          const response = await axios.get(`${serverURL}/users/${studentId}`);
+          const user = response.data;
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+      fetchUserData();
+      getUserId();
+  },[]);
+
+
 
   const changeName = () => {
     const name = prompt('Enter new name', username);

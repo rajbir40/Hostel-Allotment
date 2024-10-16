@@ -9,15 +9,17 @@ import Review from "./components/Review"
 import Outpass from './components/Outpass/outpass.jsx';
 import Profile from './components/Profile/Profile.jsx';
 import Logout from './components/logout.jsx';
-import UserContextProvider from './context/UserContextProvider.jsx';
+import Update from './components/Update.jsx';
+import { UserProvider } from './context/UserContext.jsx';
 import AllotmentGH1 from './components/Allotment/AllotmentGH1.jsx';
 import HostelSelection from './components/Allotment/HostelSelection.jsx';
 import AllotmentGH2 from './components/Allotment/AllotmentGH2.jsx';
 import Allotment from './components/Allotment/Allotment.jsx';
-import AdminProfile from './components/Profile/Profile.jsx';
+import AdminProfile from './components/Profile/AdminProfile.jsx';
+import NewProfile from './components/Profile/NewProfile.jsx';
 function App() {
   return (
-    <UserContextProvider>
+    <UserProvider>
     <Router><Navbar></Navbar>
       <Routes>
         <Route path="/" element={<Home/>} />
@@ -33,9 +35,10 @@ function App() {
         <Route path='allotmentgh2' element={<AllotmentGH2/>}/>
         <Route path='/selection' element={<HostelSelection/>} />
         <Route path='/admin' element={<AdminProfile/>}/>
+        <Route path='/newprofile' element={<NewProfile/>}/>
       </Routes>
     </Router>
-    </UserContextProvider>
+    </UserProvider>
 
   );
 }

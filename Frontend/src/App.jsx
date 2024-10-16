@@ -14,6 +14,7 @@ import UserContextProvider from './context/UserContextProvider.jsx';
 import AllotmentGH1 from './components/Allotment/AllotmentGH1.jsx';
 import HostelSelection from './components/Allotment/HostelSelection.jsx';
 import AllotmentGH2 from './components/Allotment/AllotmentGH2.jsx';
+import Allotment from './components/Allotment/Allotment.jsx';
 function App() {
   return (
     <UserContextProvider>
@@ -27,6 +28,7 @@ function App() {
         <Route path="/outpass" element={<Outpass />} />
         <Route path="/profile" element ={<Profile/>} />
         <Route path="/logout" element={<Logout />} />
+        <Route path="/alloGh1" element={<Allotment />}/>
         <Route path='/allotmentgh1' element={<AllotmentGH1/>}/>
         <Route path='allotmentgh2' element={<AllotmentGH2/>}/>
         <Route path="/update" element={<Update/>} />

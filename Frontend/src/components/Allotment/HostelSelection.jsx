@@ -67,7 +67,7 @@ export default function HostelSelection() {
               <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">BH-5</a>
             </li>
             <li>
-              <a href="/allotmentgh1" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">GH-1</a>
+              <a href="/alloGh1" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">GH-1</a>
             </li>
             <li>
               <a href="/allotmentgh2" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">GH-2</a>

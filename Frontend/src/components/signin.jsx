@@ -15,6 +15,7 @@ export default function SignIn() {
       const response = await axios.post('http://localhost:8000/user/login', { email, password }, { withCredentials: true });
       console.log(response)
       alert('Login successful!');
+      localStorage.setItem('user', JSON.stringify(response.data.id));
       navigate('/')
     } catch (error) {
       // Handle login error

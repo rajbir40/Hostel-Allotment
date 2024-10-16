@@ -42,7 +42,7 @@ export async function handleUserLogin(req,res) {
         }
         const authToken = jwt.sign(data,secret);
         await res.cookie("token",authToken);
-        return res.json({authToken});
+        return res.json({authToken,"id":user._id});
     } 
     catch (error) {
         console.error(error.message);

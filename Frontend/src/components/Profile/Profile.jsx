@@ -7,12 +7,11 @@ const ProfilePage = () => {
   
   const [users,setUser]= useState([]);
   const [studentId,setStudentId]= useState();
-  const user = User.findOne({studentId});
-  const [username, setUsername] = useState(user.name);
-  const [email, setEmail] = useState(user.email);
-  const [address, setAddress] = useState(user.address);
-  const [phone, setPhone] = useState(user.phone);
-  const [dob, setDob] = useState(user.dob);
+  const [username, setUsername] = useState();
+  const [email, setEmail] = useState();
+  const [address, setAddress] = useState();
+  const [phone, setPhone] = useState();
+  const [dob, setDob] = useState();
 
   useEffect(() => {
     const getUserId = async () =>{
@@ -27,17 +26,12 @@ const ProfilePage = () => {
         if (studentId) {
           const response = await axios.get(`${serverURL}/users/${studentId}`);
           const user = response.data;
-          setUsername(user.name);
-          setEmail(user.email);
-          setAddress(user.address);
-          setPhone(user.phone);
-          setDob(user.dob);
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     };
-      fetchUsers();
+      fetchUserData();
       getUserId();
   },[]);
 

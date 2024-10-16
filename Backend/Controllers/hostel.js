@@ -35,9 +35,7 @@ export async function createHostelWithRooms(req,res) {
 export async function handleRoomBooking(req,res) {
 
     try{
-        console.log("Received room data:", req.body);
-        const {roomId,studentId} = req.body;
-
+        
         const {roomNumber,hostel,studentId} = req.body;
         if(!roomNumber || !hostel){
             return res.status(400).json({message:"Roomnumber and hostel are required"});

@@ -2,6 +2,7 @@ import { response } from "express";
 import Hostel from "../Models/Hostel.js";
 import Room from "../Models/room.js";
 import User from "../Models/user.js"
+import mongoose from "mongoose";
 
 export async function createHostelWithRooms(req,res) {
 

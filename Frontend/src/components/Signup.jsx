@@ -8,7 +8,7 @@ export default function SignUp() {
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
   const [dob, setDob] = useState('');
-  const [number, setNumber] = useState('');
+  const [phoneNumber, setNumber] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('student'); // Default to 'student'
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ export default function SignUp() {
 
     try {
       // Post data to the backend API
-      const response = await axios.post('http://localhost:8000/user/signup', { name, email, password, role ,address, dob});
+      const response = await axios.post('http://localhost:8000/user/signup', { name, email, password, role ,address, dob ,phoneNumber});
       alert('Signup successful!');
       navigate('/login'); // Redirect to login or another page
     } catch (error) {
@@ -92,7 +92,7 @@ export default function SignUp() {
            
             <input
               type="text"
-              value={number}
+              value={phoneNumber}
               onChange={(e) => setNumber(e.target.value)}
               className="block w-full py-3 text-gray-700 bg-gray-200 border rounded-lg pl-10 focus:border-blue-400 focus:outline-none"
               placeholder="Phone Number"

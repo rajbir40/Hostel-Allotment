@@ -10,7 +10,7 @@ export default function NewProfile() {
   const [username, setUsername] = useState();
   const [email, setEmail] = useState();
   const [address, setAddress] = useState();
-  const [phone, setPhone] = useState();
+  const [phoneNumber, setPhone] = useState();
   const [dob, setDob] = useState();
 
 
@@ -29,7 +29,11 @@ export default function NewProfile() {
           setEmail(user.email)
           setDob(user.dob);
           setAddress(user.address)
+          setPhone(user.phoneNumber);
           
+        }
+        else{
+          console.error("Error fetching user data:");
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -59,6 +63,7 @@ export default function NewProfile() {
               {[
                 { label: 'Full Name', value: username },
                 { label: 'Email', value: email },
+                { label: 'Phone Number', value: phoneNumber },
                 { label: 'Date of Birth', value: new Date(dob).toDateString() },
                 { label: 'Address', value: address },
               ].map(({ label, value }) => (

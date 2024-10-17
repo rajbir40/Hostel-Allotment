@@ -16,6 +16,7 @@ import Allotment from './components/Allotment/Allotment.jsx';
 import AdminProfile from './components/Profile/AdminProfile.jsx';
 import NewProfile from './components/Profile/NewProfile.jsx';
 import './App.css';
+// import NavbarTest from './components/Navbar/NavbarTest.jsx';
 function App() {
   return (
     <UserProvider>
@@ -27,14 +28,15 @@ function App() {
         <Route path="/forgot-password" element={<Forget />} />
         <Route path="/review" element={<Review />} />
         <Route path="/outpass" element={<Outpass />} />
-        
+        <Route path ="/abc" element={<Navbar/>}/>
         <Route path="/logout" element={<Logout />} />
         <Route path="/alloGh1" element={<Allotment />}/>
-        <Route path='/allotmentgh1' element={<AllotmentGH1/>}/>
+        {/* <Route path='/allotmentgh1' element={<AllotmentGH1/>}/> */}
         <Route path='allotmentgh2' element={<AllotmentGH2/>}/>
         <Route path='/selection' element={<HostelSelection/>} />
         <Route path='/admin' element={<AdminProfile/>}/>
         <Route path='/newprofile' element={<NewProfile/>}/>
+        {/* <Route path='/abc' element={<NavbarTest/>}/> */}
       </Routes>
     </Router>
     </UserProvider>

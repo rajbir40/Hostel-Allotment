@@ -13,8 +13,8 @@ function Home() {
                 <div className="inner-header flex">
                     <h1 style={{ fontSize: '170%' }}>Simplifying hostel life with quick allotments and instant outpass approvals—right at your fingertips!</h1>
                     <div className="button-box-home">
-                        <button className="btn-home" onClick={() => navigate('/outpass')}>Generate Outpass</button>
-                        <button className="btn-home" onClick={() => navigate('/selection')}>Book Room</button>
+                        <button className="btn-home mr-4" onClick={() => navigate('/outpass')}>Generate Outpass</button>
+                        <button className="btn-home ml-2" onClick={() => navigate('/selection')}>Book Room</button>
                     </div>
                 </div>
                 <div className="sideimg"></div>

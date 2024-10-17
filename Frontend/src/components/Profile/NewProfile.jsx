@@ -13,11 +13,11 @@ export default function NewProfile() {
           alt="Profile" 
           className="w-32 h-32 rounded-full object-cover" 
         />
-        <h2 className="mt-4 text-lg font-semibold">Username</h2>
+        <h2 className="mt-4 text-lg font-semibold" style={{ color: '#4854bc' }}>Username</h2>
         <h3 className="mt-2 text-gray-600">Email</h3>
       </div>
       <div className="col-span-2 bg-white shadow-md rounded-lg p-6 h-[70vh] overflow-auto mt-10 mr-12">
-        <h4 className="font-bold text-lg mb-12 text-center" style={{fontSize:'40px'}}>Profile Details</h4>
+        <h4 className="font-bold text-lg mb-12 text-center mt-10" style={{fontSize:'40px' , color : '#4854bc'}}>Profile Details</h4>
         <div className="card mb-3">
           <div className="card-body">
             <div className="space-y-4 ml-[15%] mr-12 mt-[13%]">
@@ -29,7 +29,7 @@ export default function NewProfile() {
                 { label: 'Address', value: 'Bay Area, San Francisco, CA' },
               ].map(({ label, value }) => (
                 <div key={label} className="flex justify-between">
-                  <h6 className="mb-0 font-semibold">{label}</h6>
+                  <h6 className="mb-0 font-semibold" style={{ color: '#4854bc' }}>{label}</h6>
                   <span className="text-gray-600">{value}</span>
                 </div>
               ))}

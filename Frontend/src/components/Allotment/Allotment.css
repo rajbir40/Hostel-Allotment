@@ -1,7 +1,7 @@
 .main-allotment{
     width: 100vw;
     height: 90vh;
-    border: 2px solid red ;
+    /* border: 2px solid red ; */
     display: flex;
     justify-content: center;
     align-items: center;

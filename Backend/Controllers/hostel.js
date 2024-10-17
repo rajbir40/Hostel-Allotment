@@ -40,6 +40,13 @@ export async function handleRoomBooking(req,res) {
         
         const {roomNumber,hostel,studentId} = req.body;
 
+        const studentObjectId = new mongoose.Types.ObjectId(studentId);
+        const existingStudent = await Room.findOne({studentId:studentObjectId});
+
+        if(existingStudent){
+            return res.status(400).json({message:"You have already booked a room"});
+        }
+
         if(!roomNumber || !hostel){
             return res.status(400).json({message:"Roomnumber and hostel are required"});
         }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Selection.css'; // Make sure to import your CSS
+import Navbar from '../Navbar/Navbar';
 
 export default function HostelSelection() {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -9,7 +10,9 @@ export default function HostelSelection() {
   };
 
   return (
-    <div className=" flex h-screen">
+    <div>
+      <Navbar/>
+          <div className=" flex h-screen">
 
       <div className="hello w-1/2 h-screen" >
         <div className="sideimg-2"></div>
@@ -78,6 +81,7 @@ export default function HostelSelection() {
           </ul>
         </div>
       </div>
+    </div>
     </div>
   );
 }

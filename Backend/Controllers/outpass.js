@@ -43,7 +43,8 @@ export async function handleUpdateStatus(req,res) {
         res.status(200).json({ message: 'Outpass status updated successfully', status });
     }
     catch(err){
-
+        console.log(err);
+        return res.status(404).json({message:"statis not updated"});
     }
 }
 

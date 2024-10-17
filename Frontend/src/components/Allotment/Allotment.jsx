@@ -1,6 +1,7 @@
 import React,{useEffect,useState} from 'react'
 import axios from 'axios';
 import './Allotment.css';
+import Navbar from '../Navbar/Navbar';
 
 const serverURL="http://localhost:8000";
 
@@ -51,6 +52,8 @@ export default function Allotment() {
       };
   
     return (
+      <div>
+        <Navbar></Navbar>
       <div className='main-allotment'>
         <div className='hostel'>
     {/* Floor Buttons */}
@@ -192,5 +195,8 @@ export default function Allotment() {
 </div>
 
     </div>
+    </div>
+    
+
   );
 };

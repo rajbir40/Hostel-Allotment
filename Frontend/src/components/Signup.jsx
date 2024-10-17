@@ -7,6 +7,7 @@ export default function SignUp() {
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
   const [dob, setDob] = useState('');
+  const [number, setNumber] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('student'); // Default to 'student'
   const navigate = useNavigate();
@@ -102,6 +103,22 @@ export default function SignUp() {
               onChange={(e) => setDob(e.target.value)}
               className="block w-full py-3 text-gray-700 bg-gray-200 border rounded-lg pl-10 focus:border-blue-400 focus:outline-none"
               placeholder="Date of birth"
+            />
+          </div>
+
+          <div className="relative flex items-center mt-4">
+            <span className="absolute left-3">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+            </svg>
+
+            </span>
+            <input
+              type="text"
+              value={number}
+              onChange={(e) => setNumber(e.target.value)}
+              className="block w-full py-3 text-gray-700 bg-gray-200 border rounded-lg pl-10 focus:border-blue-400 focus:outline-none"
+              placeholder="Phone Number"
             />
           </div>
 

@@ -5,7 +5,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(60deg, rgba(84,58,183,1) 0%, rgba(0,172,193,1) 100%);
+    background: linear-gradient(60deg, rgb(142, 134, 172) 0%, rgb(55, 164, 179) 100%);
 }
 
 .hostel{
@@ -20,4 +20,6 @@
     width: 70vw;
     background-color: white;
     /* border-radius: 5%; */
-}
+}}
+
+

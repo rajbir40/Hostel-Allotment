@@ -7,9 +7,7 @@ import Signup from "./components/Signup";
 import Navbar from './components/Navbar/Navbar.jsx'
 import Review from "./components/Review"
 import Outpass from './components/Outpass/outpass.jsx';
-// import Profile from './components/Profile/Profile.jsx';
 import Logout from './components/logout.jsx';
-//import Update from './components/Update.jsx';
 import { UserProvider } from './context/UserContext.jsx';
 import AllotmentGH1 from './components/Allotment/AllotmentGH1.jsx';
 import HostelSelection from './components/Allotment/HostelSelection.jsx';

@@ -1,7 +1,9 @@
 
+@import url(//fonts.googleapis.com/css?family=Lato:300:400);
+
 .navbar {
     display: flex;
-   
+    font-family: 'Lato', sans-serif;
     justify-content: space-between;
     align-items: center;
     padding: 1rem 5%;
@@ -13,7 +15,7 @@
 
 .navbar-logo h1 {
     font-size: 2rem;
-    color: #204080;
+    color: #444cbc;
     font-weight: bold;
     margin: 0;
 }
@@ -32,10 +34,11 @@
     text-decoration: none;
     color: #333;
     font-size: 1rem;
+    /* font-weight: 500; */
 }
 
 .nav-item:hover {
-    color: #0066ff;
+    color: #444cbc;
 }
 
 

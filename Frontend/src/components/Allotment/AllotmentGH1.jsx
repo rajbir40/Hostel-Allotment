@@ -1,5 +1,6 @@
 import React,{useState} from 'react';
-
+import Navbar from '../Navbar/Navbar';
+import './Allotment.css'
 export default function AllotmentGH1() {
   const [detail, setDetail] = useState('ground');
   const setDetails=(floor)=>{
@@ -7,6 +8,7 @@ export default function AllotmentGH1() {
   }
   return (
     <div>
+      <Navbar/>
       <div className="flex flex-row mt-5">
         <button type="button" class="grid-item text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={()=>setDetails('ground')}>Ground Floor</button>
         <button type="button" class="grid-item text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={()=>setDetails('first')}>1st Floor</button>

@@ -7,4 +7,5 @@ router.post("/hostel",createHostelWithRooms);
 router.post("/room",handleRoomBooking);
 router.get("/",fetchAllRooms);
 
+
 export default router;  

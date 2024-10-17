@@ -25,7 +25,6 @@ export async function handleUserSignUp(req, res) {
             name,
             email,
             address,
-            phoneNumber,
             password: secPass,
             dob,
             role,
@@ -36,7 +35,6 @@ export async function handleUserSignUp(req, res) {
             email: user.email,
             address: user.address,
             dob: user.dob,
-            phoneNumber:user.phoneNumber,
             role: user.role,
             createdAt: user.createdAt,
             updatedAt: user.updatedAt

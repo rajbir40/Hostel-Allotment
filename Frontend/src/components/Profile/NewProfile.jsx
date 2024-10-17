@@ -26,6 +26,7 @@ export default function NewProfile() {
           setEmail(user.email)
           setDob(user.dob);
           setAddress(user.address)
+          setPhone(user.number)
           
         }
       } catch (error) {
@@ -56,6 +57,7 @@ export default function NewProfile() {
               {[
                 { label: 'Full Name', value: username },
                 { label: 'Email', value: email },
+                { label: 'Phone Number', value: phone },
                 { label: 'Date of Birth', value: new Date(dob).toDateString() },
                 { label: 'Address', value: address },
               ].map(({ label, value }) => (

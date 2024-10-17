@@ -18,7 +18,7 @@ export default function SignUp() {
 
     try {
       // Post data to the backend API
-      const response = await axios.post('http://localhost:8000/user/signup', { name, email, password, role ,address, dob});
+      const response = await axios.post('http://localhost:8000/user/signup', { name, email, password, role ,address, dob,number});
       alert('Signup successful!');
       navigate('/login'); // Redirect to login or another page
     } catch (error) {

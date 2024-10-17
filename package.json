@@ -1,5 +1,7 @@
 {
   "dependencies": {
-    "axios": "^1.7.7"
+    "axios": "^1.7.7",
+    "react-sweetalert2": "^0.6.0",
+    "sweetalert2": "^11.14.3"
   }
 }

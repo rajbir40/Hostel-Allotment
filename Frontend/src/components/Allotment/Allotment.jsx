@@ -1,4 +1,6 @@
 import React,{useEffect,useState} from 'react'
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import axios from 'axios';
 import './Allotment.css';
 import Navbar from '../Navbar/Navbar';
@@ -33,23 +35,45 @@ export default function Allotment() {
     },[]);
   
     const handleRoomClick = async (roomData) => {
-        setSelectedRoom(roomData);
-    
-        const confirmation = window.confirm(`Are you sure you want to book room ${roomData.roomNumber}?`);
-        if (confirmation) {
-          const reqData = { ...roomData, studentId };
-          try {
-            const response = await axios.post(`${serverURL}/bookroom/room`, reqData);
-            console.log("Room booked successfully:", response.data);
-            alert(`Room ${roomData.roomNumber} booked successfully!`);
-          } catch (error) {
-            console.error("Error booking room:", error);
-            alert("Failed to book the room. Please try again.");
-          }
-        } else {
-          alert(`Booking for room ${roomData.roomNumber} canceled.`);
+      setSelectedRoom(roomData);
+  
+      const result = await MySwal.fire({
+        title: `Are you sure you want to book room ${roomData.roomNumber}?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, book it!',
+        cancelButtonText: 'No, cancel!',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+      });
+  
+      if (result.isConfirmed) {
+        const reqData = { ...roomData, studentId };
+        try {
+          const response = await axios.post(`${serverURL}/bookroom/room`, reqData);
+          console.log('Room booked successfully:', response.data);
+          
+          MySwal.fire(
+            'Booked!',
+            `Room ${roomData.roomNumber} has been booked successfully!`,
+            'success'
+          );
+        } catch (error) {
+          console.error('Error booking room:', error);
+          MySwal.fire(
+            'Error!',
+            'Failed to book the room. Please try again.',
+            'error'
+          );
         }
-      };
+      } else {
+        MySwal.fire(
+          'Cancelled',
+          `Booking for room ${roomData.roomNumber} has been canceled.`,
+          'info'
+        );
+      }
+    };
   
     return (
       <div>

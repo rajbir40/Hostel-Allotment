@@ -40,13 +40,13 @@ export default function SignUp() {
   return (
     <section>
       <div className='main-signup'>
-        <div className='form-signup'>
-          <form onSubmit={handleSignup} className="w-full max-w-md bg-white-100 p-6 rounded-lg ">
+        <div className='form-signup '>
+          <form onSubmit={handleSignup} className="w-full max-w-md bg-white-100  rounded-lg signup-box">
             <div className="flex justify-center mx-auto mb-4">
               <img className="w-auto h-7 sm:h-8" src="https://merakiui.com/images/logo.svg" alt="Logo" />
             </div>
 
-            <div className="flex items-center justify-center mt-6 mb-6">
+            <div className="flex items-center justify-center mt-6 mb-6 ">
               <a
                 href="#"
                 className="w-1/3 pb-4 font-medium text-center text-gray-800 capitalize border-b-2 border-blue-500">

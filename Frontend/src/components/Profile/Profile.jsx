@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import User from "../../../../Backend/Models/user";
 import EditIcon from "./EditIcon";
 import './Profile.css';
 import axios from 'axios'
@@ -34,44 +33,44 @@ const ProfilePage = () => {
       }
     };
       fetchUserData();
-  },[studentId]);
+  },[]);
 
 
 
-  const changeName = () => {
-    const name = prompt('Enter new name', username);
-    if (name) {
-      setUsername(name);
-    }
-  };
+  // const changeName = () => {
+  //   const name = prompt('Enter new name', username);
+  //   if (name) {
+  //     setUsername(name);
+  //   }
+  // };
 
-  const changeEmail = () => {
-    const newEmail = prompt('Enter new email', email);
-    if (newEmail) {
-      setEmail(newEmail);
-    }
-  };
+  // const changeEmail = () => {
+  //   const newEmail = prompt('Enter new email', email);
+  //   if (newEmail) {
+  //     setEmail(newEmail);
+  //   }
+  // };
 
-  const changeAddress = () => {
-    const newAddress = prompt('Enter new address', address);
-    if (newAddress) {
-      setAddress(newAddress);
-    }
-  };
+  // const changeAddress = () => {
+  //   const newAddress = prompt('Enter new address', address);
+  //   if (newAddress) {
+  //     setAddress(newAddress);
+  //   }
+  // };
 
-  const changePhone = () => {
-    const newPhone = prompt('Enter new phone number', phone);
-    if (newPhone) {
-      setPhone(newPhone);
-    }
-  };
+  // const changePhone = () => {
+  //   const newPhone = prompt('Enter new phone number', phone);
+  //   if (newPhone) {
+  //     setPhone(newPhone);
+  //   }
+  // };
 
-  const changeDob = () => {
-    const newDob = prompt('Enter new date of birth', dob);
-    if (newDob) {
-      setDob(newDob);
-    }
-  };
+  // const changeDob = () => {
+  //   const newDob = prompt('Enter new date of birth', dob);
+  //   if (newDob) {
+  //     setDob(newDob);
+  //   }
+  // };
 
   return (
     <div className="min-h-screen flex items-center justify-center mainn">

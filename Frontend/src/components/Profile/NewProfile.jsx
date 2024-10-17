@@ -1,8 +1,40 @@
-import React from 'react';
+import React,{useState, useEffect} from 'react';
+import axios from 'axios';
 import './Profile.css';
 import Navbar from '../Navbar/Navbar';
+const serverURL = 'http://localhost:8000'
 
 export default function NewProfile() {
+  const [users,setUser]= useState([]);
+  const [studentId,setStudentId]= useState();
+  const [username, setUsername] = useState();
+  const [email, setEmail] = useState();
+  const [address, setAddress] = useState();
+  const [phone, setPhone] = useState();
+  const [dob, setDob] = useState();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        setStudentId(JSON.parse(localStorage?.getItem('user')))
+        console.log(studentId)
+        if (studentId) {
+          const response = await axios.get(`${serverURL}/user/users/${studentId}`);
+          const user = response.data;
+          console.log(user)
+          setUsername(user.name)
+          setEmail(user.email)
+          setDob(user.dob);
+          setAddress(user.address)
+          
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+      fetchUserData();
+  },[studentId]);
+
   return (
     <div>
       <Navbar/>
@@ -13,8 +45,8 @@ export default function NewProfile() {
           alt="Profile" 
           className="w-32 h-32 rounded-full object-cover" 
         />
-        <h2 className="mt-4 text-lg font-semibold">Username</h2>
-        <h3 className="mt-2 text-gray-600">Email</h3>
+        <h2 className="mt-4 text-lg font-semibold">{username}</h2>
+        <h3 className="mt-2 text-gray-600">{email}</h3>
       </div>
       <div className="col-span-2 bg-white shadow-md rounded-lg p-6 h-[70vh] overflow-auto mt-10 mr-12">
         <h4 className="font-bold text-lg mb-12 text-center" style={{fontSize:'40px'}}>Profile Details</h4>
@@ -22,11 +54,10 @@ export default function NewProfile() {
           <div className="card-body">
             <div className="space-y-4 ml-[15%] mr-12 mt-[13%]">
               {[
-                { label: 'Full Name', value: 'Kenneth Valdez' },
-                { label: 'Email', value: 'fip@jukmuh.al' },
-                { label: 'Phone', value: '(239) 816-9029' },
-                { label: 'Mobile', value: '(320) 380-4539' },
-                { label: 'Address', value: 'Bay Area, San Francisco, CA' },
+                { label: 'Full Name', value: username },
+                { label: 'Email', value: email },
+                { label: 'Date of Birth', value: new Date(dob).toDateString() },
+                { label: 'Address', value: address },
               ].map(({ label, value }) => (
                 <div key={label} className="flex justify-between">
                   <h6 className="mb-0 font-semibold">{label}</h6>

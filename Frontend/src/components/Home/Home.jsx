@@ -1,8 +1,10 @@
 import React from "react";
 import './Home.css';
 import Navbar from '../Navbar/Navbar';
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
+    const navigate = useNavigate();
     return (
         <div>
             <Navbar></Navbar>
@@ -10,6 +12,10 @@ function Home() {
                 <div className= "box">
                 <div className="inner-header flex">
                     <h1 style={{ fontSize: '170%' }}>Simplifying hostel life with quick allotments and instant outpass approvals—right at your fingertips!</h1>
+                    <div className="button-box-home">
+                        <button className="btn-home" onClick={() => navigate('/outpass')}>Generate Outpass</button>
+                        <button className="btn-home" onClick={() => navigate('/selection')}>Book Room</button>
+                    </div>
                 </div>
                 <div className="sideimg"></div>
 

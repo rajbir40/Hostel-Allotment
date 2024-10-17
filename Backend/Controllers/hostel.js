@@ -3,6 +3,7 @@ import Hostel from "../Models/Hostel.js";
 import Room from "../Models/room.js";
 import User from "../Models/user.js"
 import mongoose from "mongoose";
+import nodemailer from "nodemailer";
 
 export async function createHostelWithRooms(req,res) {
 
@@ -44,15 +45,9 @@ export async function handleRoomBooking(req,res) {
         const existingRoom = await Room.findOne({studentId:studentObjectId});
 
         if (existingRoom) {
-            return res.status(400).json({ message: 'You have already booked a room.' });
+            return res.status(208).json({ message: 'You have already booked a room.' });
         }
 
-        const studentObjectId = new mongoose.Types.ObjectId(studentId);
-        const existingStudent = await Room.findOne({studentId:studentObjectId});
-
-        if(existingStudent){
-            return res.status(400).json({message:"You have already booked a room"});
-        }
 
         if(!roomNumber || !hostel){
             return res.status(400).json({message:"Roomnumber and hostel are required"});
@@ -67,6 +62,30 @@ export async function handleRoomBooking(req,res) {
         room.studentId = studentId;
         await room.save();
 
+        const userEmail = await User.findById(studentObjectId).select('email');
+        if(!userEmail){
+            return res.status(404).json({message:"Email not found"});
+        }
+
+        const transporter = nodemailer.createTransport({
+            host: "smtp.gmail.com",
+            port: 587,
+            secure: false, 
+            auth: {
+                user: "mahakumbhlostfound@gmail.com", // Your email
+                pass: "oevg lizk taxf hkrj", // Your email's app-specific password
+            },
+        });``
+
+        const mailOptions = {
+            from: 'rbir3438@gmail.com', // Replace with your email
+            to: userEmail,
+            subject: 'Regarding Room Booking',
+            text: `You has been alloted room number : ${roomNumber} of hostel ${hostel}.`,
+        };
+
+        await transporter.sendMail(mailOptions);
+          
         return res.status(200).json(room);
 
     }

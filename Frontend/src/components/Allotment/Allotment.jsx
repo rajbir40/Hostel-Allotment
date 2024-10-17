@@ -28,6 +28,7 @@ export default function Allotment() {
         const response = await axios.get(`${serverURL}/room`);
         console.log(response.data);
         const filteredRooms = response.data.filter(room => room.hostel === 'GH-1');
+        
         setRoom(filteredRooms);
       } catch (error) {
         console.error("Error fetching rooms:", error);
@@ -53,6 +54,12 @@ export default function Allotment() {
       const response = await axios.post(`${serverURL}/bookroom/room`, reqData);
       console.log('Room booked successfully:', response.data);
       setModalIsOpen(false);
+      if(response.status == 208){
+        alert("You already booked a room");
+        return;
+      }
+      alert(`Room ${roomData.roomNumber} booked successfully!`);
+      window.location.reload(true); 
       alert(`Room ${selectedRoom.roomNumber} has been booked successfully!`);
     } catch (error) {
       console.error('Error booking room:', error);

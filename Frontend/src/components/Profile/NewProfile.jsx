@@ -13,6 +13,9 @@ export default function NewProfile() {
   const [phone, setPhone] = useState();
   const [dob, setDob] = useState();
 
+
+  
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {

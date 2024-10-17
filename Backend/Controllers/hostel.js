@@ -1,6 +1,7 @@
 import { response } from "express";
 import Hostel from "../Models/Hostel.js";
 import Room from "../Models/room.js";
+import User from "../Models/user.js"
 
 export async function createHostelWithRooms(req,res) {
 
@@ -37,6 +38,7 @@ export async function handleRoomBooking(req,res) {
     try{
         
         const {roomNumber,hostel,studentId} = req.body;
+
         if(!roomNumber || !hostel){
             return res.status(400).json({message:"Roomnumber and hostel are required"});
         }
@@ -55,6 +57,7 @@ export async function handleRoomBooking(req,res) {
     }
 
     catch(err){
+        console.log(err)
         return res.status(404).json({message:"Server didn't responded"});
     }
 
@@ -70,3 +73,20 @@ export const fetchAllRooms = async (req,res) => {
         return res.status(500).json({ message: "Internal server error" });
     }
 };
+
+export async function fetchUserData(req,res) {
+    try{
+        const studentId = req.params.id;
+        if(!studentId){
+            return res.status(400).json({message:"Student id required"});
+        }
+        const student = await User.findById(studentId);
+        if(!student){
+            return res.status(400).json({message:"User not found"});
+        }
+        return res.status(200).json(student);
+    }
+    catch(error){
+        return res.status(404).json({message:"Server error"});
+    }
+}

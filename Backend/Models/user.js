@@ -10,8 +10,16 @@ const userSchema = new mongoose.Schema(
             type:String,
             required:true,
         },
+        address:{
+            type:String,
+            required:true,
+        },
         password:{
             type:String,
+            required:true,
+        },
+        dob:{
+            type:Date,
             required:true,
         },
         otp:{

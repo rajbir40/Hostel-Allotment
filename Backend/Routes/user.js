@@ -3,6 +3,7 @@ import User from "../Models/user.js";
 import { handleUserSignUp,handleUserLogin, handleSendOtp, handleVerifyOtp, handleUserLogout,userEdit} from "../Controllers/user.js";
 import { handleApplyOutpass } from "../Controllers/outpass.js";
 import { authenticateuser } from "../Middlewares/auth.js";
+import { fetchUserData } from "../Controllers/hostel.js";
 
 const router = express.Router();
 
@@ -10,19 +11,11 @@ const router = express.Router();
 router.post("/signup",handleUserSignUp);
 router.post("/login",handleUserLogin);
 router.post("/logout",authenticateuser,handleUserLogout);
-router.post("/getuser",authenticateuser,async (req,res)=>{
-    try {
-        const userId = req.user.id;
-        const user = await User.findById(userId);
-        res.send(user);
-    } catch (error) {
-        return res.status(400).json({message:"login"});
-    }
-});
 router.post("/send-code", handleSendOtp)
 router.post("/verify-code", handleVerifyOtp)
 
 router.post("/apply",authenticateuser,handleApplyOutpass);
 router.post("/update",userEdit);
+router.get("/users/:id",fetchUserData);
 
 export default router;  

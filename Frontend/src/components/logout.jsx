@@ -22,31 +22,45 @@ export default function Logout() {
   };
 
   return (
-    <section>
-      <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-lg">
-          <h1 className="text-center text-2xl font-bold text-indigo-600 sm:text-3xl">Logout</h1>
+    <section className="flex items-center justify-center min-h-screen bg-gray-100"
+    style={{
+      background:
+        'linear-gradient(60deg, rgba(84,58,183,1) 0%, rgba(0,172,193,1) 100%)',
+    }}
+    >
+    <div className="mx-auto max-w-screen-xl px-4 py-20 sm:px-8 lg:px-10">
+      <div className="mx-auto max-w-md bg-white rounded-lg shadow-lg p-10">
+        <h1 className="text-center text-3xl font-bold text-indigo-600 sm:text-4xl">
+          Logout
+        </h1>
 
-          <p className="mx-auto mt-4 max-w-md text-center text-gray-500">
-            Are you sure you want to log out?
-          </p>
+        <p className="mx-auto mt-6 max-w-lg text-center text-gray-500 text-lg">
+          Are you sure you want to log out?
+        </p>
 
-          <div className="mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8">
-            <button
-              onClick={handleLogout}
-              className="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white"
-            >
-              Logout
-            </button>
+        <div className="mt-8 space-y-6">
+          <button
+            onClick={handleLogout}
+            className="block w-full rounded-lg px-6 py-4 text-base font-medium text-white"
+            style={{
+              background:
+                'linear-gradient(60deg, rgba(84,58,183,1) 0%, rgba(0,172,193,1) 100%)',
+            }}
+          >
+            Logout
+          </button>
 
-            <div className="flex justify-between items-center mt-4 text-sm text-gray-500">
-              <p>
-                Go back to <a className="underline" href="/">Home</a>
-              </p>
-            </div>
+          <div className="flex justify-center items-center mt-6 text-base text-gray-500">
+            <p>
+              Go back to{' '}
+              <a className="underline text-indigo-600" href="/">
+                Home
+              </a>
+            </p>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
   );
 }

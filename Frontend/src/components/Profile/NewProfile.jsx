@@ -1,7 +1,11 @@
 import React from 'react';
-import './Profile.css'
+import './Profile.css';
+import Navbar from '../Navbar/Navbar';
+
 export default function NewProfile() {
   return (
+    <div>
+      <Navbar/>
     <div className="grid grid-cols-3 gap-8 h-screen p-6 mainn">
       <div className="flex flex-col items-center bg-white shadow-md rounded-lg p-4 h-[70vh] mt-10 ml-12">
         <img 
@@ -33,6 +37,7 @@ export default function NewProfile() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }

@@ -7,8 +7,9 @@ import Signup from "./components/Signup";
 import Navbar from './components/Navbar/Navbar.jsx'
 import Review from "./components/Review"
 import Outpass from './components/Outpass/outpass.jsx';
-import Profile from './components/Profile/Profile.jsx';
+// import Profile from './components/Profile/Profile.jsx';
 import Logout from './components/logout.jsx';
+//import Update from './components/Update.jsx';
 import { UserProvider } from './context/UserContext.jsx';
 import AllotmentGH1 from './components/Allotment/AllotmentGH1.jsx';
 import HostelSelection from './components/Allotment/HostelSelection.jsx';
@@ -16,10 +17,11 @@ import AllotmentGH2 from './components/Allotment/AllotmentGH2.jsx';
 import Allotment from './components/Allotment/Allotment.jsx';
 import AdminProfile from './components/Profile/AdminProfile.jsx';
 import NewProfile from './components/Profile/NewProfile.jsx';
+import './App.css';
 function App() {
   return (
     <UserProvider>
-    <Router><Navbar></Navbar>
+    <Router>
       <Routes>
         <Route path="/" element={<Home/>} />
         <Route path="/login" element={<SignIn />} />
@@ -27,7 +29,7 @@ function App() {
         <Route path="/forgot-password" element={<Forget />} />
         <Route path="/review" element={<Review />} />
         <Route path="/outpass" element={<Outpass />} />
-        <Route path="/profile" element ={<Profile/>} />
+        
         <Route path="/logout" element={<Logout />} />
         <Route path="/alloGh1" element={<Allotment />}/>
         <Route path='/allotmentgh1' element={<AllotmentGH1/>}/>

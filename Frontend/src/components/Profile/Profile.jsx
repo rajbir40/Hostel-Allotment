@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import User from "../../../../Backend/Models/user";
 import EditIcon from "./EditIcon";
 import './Profile.css';
-
+import axios from 'axios'
+const serverURL = 'http://localhost:8000'
 const ProfilePage = () => {
   
   const [users,setUser]= useState([]);
@@ -14,26 +15,26 @@ const ProfilePage = () => {
   const [dob, setDob] = useState();
 
   useEffect(() => {
-    const getUserId = async () =>{
-        const savedValue = JSON.parse(localStorage?.getItem('user')); 
-        if (savedValue) {
-        setStudentId(savedValue);
-        console.log("User ID: " + savedValue);
-        }
-    };
     const fetchUserData = async () => {
       try {
+        setStudentId(JSON.parse(localStorage?.getItem('user')))
+        console.log(studentId)
         if (studentId) {
-          const response = await axios.get(`${serverURL}/users/${studentId}`);
+          const response = await axios.get(`${serverURL}/user/users/${studentId}`);
           const user = response.data;
+          console.log(user)
+          setUsername(user.name)
+          setEmail(user.email)
+          setDob(user.dob);
+          setAddress(user.address)
+          
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     };
       fetchUserData();
-      getUserId();
-  },[]);
+  },[studentId]);
 
 
 
@@ -91,7 +92,7 @@ const ProfilePage = () => {
             <span className="text-gray-600">Username</span>
             <div className="flex items-center">
               <span className="text-gray-900 font-medium">{username}</span>
-              <button className="ml-2" onClick={changeName}><EditIcon /></button>
+              {/* <button className="ml-2" onClick={changeName}><EditIcon /></button> */}
             </div>
           </div>
 
@@ -99,7 +100,7 @@ const ProfilePage = () => {
             <span className="text-gray-600">Email</span>
             <div className="flex items-center">
               <span className="text-blue-500 underline">{email}</span>
-              <button className="ml-2" onClick={changeEmail}><EditIcon /></button>
+              {/* <button className="ml-2" onClick={changeEmail}><EditIcon /></button> */}
             </div>
           </div>
 
@@ -107,23 +108,23 @@ const ProfilePage = () => {
             <span className="text-gray-600">Address</span>
             <div className="flex items-center">
               <span className="text-gray-900 font-medium">{address}</span>
-              <button className="ml-2" onClick={changeAddress}><EditIcon /></button>
+              {/* <button className="ml-2" onClick={changeAddress}><EditIcon /></button> */}
             </div>
           </div>
 
-          <div className="flex justify-between items-center">
+          {/* <div className="flex justify-between items-center">
             <span className="text-gray-600">Contact No.</span>
             <div className="flex items-center">
               <span className="text-gray-900 font-medium">{phone}</span>
-              <button className="ml-2" onClick={changePhone}><EditIcon /></button>
+               <button className="ml-2" onClick={changePhone}><EditIcon /></button> 
             </div>
-          </div>
+          </div> */}
 
           <div className="flex justify-between items-center">
             <span className="text-gray-600">DOB</span>
             <div className="flex items-center">
-              <span className="text-gray-900 font-medium">{dob}</span>
-              <button className="ml-2" onClick={changeDob}><EditIcon /></button>
+              <span className="text-gray-900 font-medium">{new Date(dob).toDateString()}</span>
+              {/* <button className="ml-2" onClick={changeDob}><EditIcon /></button> */}
             </div>
           </div>
         </div>

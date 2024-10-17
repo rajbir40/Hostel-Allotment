@@ -22,6 +22,7 @@ export default function SignIn() {
       setTimeout(() => {
         setIsModalOpen(false);
         navigate('/');
+        window.location.reload(true); 
       }, 2000); // Close modal after 2 seconds and navigate
     } catch (error) {
       console.error('Login failed:', error.response?.data?.message || 'An error occurred');

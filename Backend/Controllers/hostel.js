@@ -39,11 +39,6 @@ export async function handleRoomBooking(req,res) {
         
         const {roomNumber,hostel,studentId} = req.body;
 
-        const alreadyBooked = await Room.findOne(studentId);
-        if(alreadyBooked){
-            return res.status(404).json({message:"You have already booked a room"});
-        }
-
         if(!roomNumber || !hostel){
             return res.status(400).json({message:"Roomnumber and hostel are required"});
         }
@@ -62,6 +57,7 @@ export async function handleRoomBooking(req,res) {
     }
 
     catch(err){
+        console.log(err)
         return res.status(404).json({message:"Server didn't responded"});
     }
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
+
 import axios from 'axios';
 import './Allotment.css';
 import Navbar from '../Navbar/Navbar';
@@ -28,7 +29,6 @@ export default function Allotment() {
         const response = await axios.get(`${serverURL}/room`);
         console.log(response.data);
         const filteredRooms = response.data.filter(room => room.hostel === 'GH-1');
-        
         setRoom(filteredRooms);
       } catch (error) {
         console.error("Error fetching rooms:", error);
@@ -54,18 +54,17 @@ export default function Allotment() {
       const response = await axios.post(`${serverURL}/bookroom/room`, reqData);
       console.log('Room booked successfully:', response.data);
       setModalIsOpen(false);
-      if(response.status == 208){
-        alert("You already booked a room");
+      if(response.status==208){
+        alert("You have already booked a room!");
         return;
       }
-      alert(`Room ${roomData.roomNumber} booked successfully!`);
-      window.location.reload(true); 
       alert(`Room ${selectedRoom.roomNumber} has been booked successfully!`);
     } catch (error) {
       console.error('Error booking room:', error);
       alert('Failed to book the room. Please try again.');
     }
   };
+
 
   return (
     <div>
@@ -104,6 +103,7 @@ export default function Allotment() {
                   ))}
                 </div>
               </div>
+
 
               {/* Second Row */}
               <div className="flex justify-evenly mt-5">
@@ -208,6 +208,7 @@ export default function Allotment() {
       </div>
     </div>
   </div>
+
 
       {/* Modal for Room Booking Confirmation */}
       <Modal

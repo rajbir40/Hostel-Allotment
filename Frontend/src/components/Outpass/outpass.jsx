@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./Outpass.css";
 import { useNavigate } from "react-router-dom";
+import Navbar from '../Navbar/Navbar';
 
 const Outpass = () => {
   const navigate = useNavigate();
@@ -43,7 +44,10 @@ const Outpass = () => {
   };
 
   return (
+    <div>
+      <Navbar />
     <div className="box-outpass">
+      
       <div className="sidepage-outpass">
         <h1 className="text-4xl font-bold mb-7 text-center animated-heading-outpass Generate-your-outpass">
           Generate your Outpass
@@ -144,6 +148,7 @@ const Outpass = () => {
         </div>
       </div>
 
+    </div>
     </div>
   );
 };

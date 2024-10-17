@@ -163,7 +163,7 @@ export default function SignUp() {
         </div>
 
         <div className='sidebar-signup'>
-        <h1>Welcome to DormSpace!</h1>
+        <h1>SignUp to DormSpace!</h1>
         </div>
       </div>
      

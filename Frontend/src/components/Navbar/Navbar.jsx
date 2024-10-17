@@ -21,7 +21,7 @@ function Navbar() {
                 <Link to="/"><div className="nav-item">Home</div></Link>
                 <Link to="/selection"><div className="nav-item">Hostel Allotment</div></Link>
                 <Link to="/outpass"><div className="nav-item">Outpass</div></Link>
-                <Link to="/profile"><div className="nav-item">Profile</div></Link>
+                <Link to="/newprofile"><div className="nav-item">Profile</div></Link>
 
                 {/* Conditional rendering for Login/Logout */}
                 {user ? (

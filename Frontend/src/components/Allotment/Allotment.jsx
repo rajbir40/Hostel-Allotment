@@ -59,6 +59,7 @@ export default function Allotment() {
         return;
       }
       alert(`Room ${selectedRoom.roomNumber} has been booked successfully!`);
+      window.location.reload(true); 
     } catch (error) {
       console.error('Error booking room:', error);
       alert('Failed to book the room. Please try again.');

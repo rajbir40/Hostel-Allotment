@@ -6,6 +6,9 @@ const roomSchema = new mongoose.Schema(
             type:Number,
             required:true,
         },
+        floor:{
+            type:String,
+        },
         studentId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',

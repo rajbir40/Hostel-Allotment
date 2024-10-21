@@ -44,7 +44,7 @@ export async function handleUpdateStatus(req,res) {
     }
     catch(err){
         console.log(err);
-        return res.status(404).json({message:"statis not updated"});
+        return res.status(404).json({message:"stats not updated"});
     }
 }
 

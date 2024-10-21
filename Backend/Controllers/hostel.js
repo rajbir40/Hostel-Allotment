@@ -4,6 +4,7 @@ import Room from "../Models/room.js";
 import User from "../Models/user.js"
 import mongoose from "mongoose";
 import nodemailer from "nodemailer";
+import Roomrequest from "../Models/Roomrequest.js";
 
 export async function createHostelWithRooms(req,res) {
 
@@ -12,8 +13,6 @@ export async function createHostelWithRooms(req,res) {
         const newhostel = await Hostel.create({
             name : hostelName,
         })
-
-
         let roomIds = [];
         for(let i=101 ; i<=121 ; i++){
             const room = await Room.create({
@@ -72,13 +71,13 @@ export async function handleRoomBooking(req,res) {
             port: 587,
             secure: false, 
             auth: {
-                user: "mahakumbhlostfound@gmail.com", // Your email
-                pass: "oevg lizk taxf hkrj", // Your email's app-specific password
+                user: "mahakumbhlostfound@gmail.com", 
+                pass: "oevg lizk taxf hkrj", 
             },
         });``
 
         const mailOptions = {
-            from: 'rbir3438@gmail.com', // Replace with your email
+            from: 'rbir3438@gmail.com', 
             to: userEmail,
             subject: 'Regarding Room Booking',
             text: `You has been alloted room number : ${roomNumber} of hostel ${hostel}.`,
@@ -123,4 +122,37 @@ export async function fetchUserData(req,res) {
     catch(error){
         return res.status(404).json({message:"Server error"});
     }
+}
+
+export async function handleRoomBookingRequest(req,res) {
+
+    try{
+        
+        const {roomNumber,hostel,studentId} = req.body;
+
+
+        if(!roomNumber || !hostel){
+            return res.status(400).json({message:"Roomnumber and hostel are required"});
+        }
+
+        const room = await Room.findOne({roomNumber:roomNumber, hostel:hostel});
+        if(!room){
+            return res.status(404).json({message:"Room not found"});
+        }
+
+        const roomReqest = await Roomrequest.create({
+            studentId:studentId,
+            roomId:room._id,
+        })
+
+        return res.status(200).json({message:"Request sent"});
+
+    }
+
+    catch(err){
+        console.log(err)
+        return res.status(404).json({message:"Server didn't responded"});
+    }
+
+    
 }

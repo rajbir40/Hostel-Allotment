@@ -6,6 +6,10 @@ const hostelSchema = new Schema({
     type: String,
     required: true
   },
+  floor: {
+    type: String,
+    default: "Ground",
+  },
   totalRooms: {
     type: Number,
     default: 100

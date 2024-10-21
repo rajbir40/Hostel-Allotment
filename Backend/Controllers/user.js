@@ -12,8 +12,7 @@ const generateOTP = () => {
 export async function handleUserSignUp(req, res) {
     try {
         const { name, email, password, role, address, dob ,phoneNumber} = req.body;
-        console.log(phoneNumber)
-
+        
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ message: "Email already in use" });

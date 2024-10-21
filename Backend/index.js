@@ -5,6 +5,7 @@ import cors from "cors"
 import cookieParser from "cookie-parser";
 import outpassRoute from "./Routes/outpass.js";
 import hostelRoute from "./Routes/Hostel.js";
+import adminRoute from "./Routes/admin.js";
 
 const app = express();
 const PORT = 8000;
@@ -29,6 +30,12 @@ app.use("/addhostel",hostelRoute);
 app.use("/bookroom",hostelRoute);
 app.use("/room",hostelRoute);
 app.use("/getuser",hostelRoute);
+
+app.use("/getNumber",adminRoute);
+app.use("/bookroomrequest",hostelRoute);
+app.use("/updateroomrequest",adminRoute);
+
+
 
 app.listen(PORT,()=>{
     console.log("Running on port 8000");

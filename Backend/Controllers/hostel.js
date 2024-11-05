@@ -8,18 +8,20 @@ import Roomrequest from "../Models/Roomrequest.js";
 
 export async function createHostelWithRooms(req,res) {
 
-    const {hostelName,roomtype,number} = req.body;
+    const {hostelName,roomtype,floor,number} = req.body;
     try{
         const newhostel = await Hostel.create({
             name : hostelName,
         })
         let roomIds = [];
-        for(let i=101 ; i<=121 ; i++){
+        for(let i=1 ; i<=number ; i++){
             const room = await Room.create({
                 roomNumber:i,
                 type:roomtype,
                 hostel:hostelName,
+                floor:floor,
             })
+            // console.log(room);
             await room.save();
             roomIds.push(room._id);
         }
@@ -107,23 +109,6 @@ export const fetchAllRooms = async (req,res) => {
     }
 };
 
-export async function fetchUserData(req,res) {
-    try{
-        const studentId = req.params.id;
-        if(!studentId){
-            return res.status(400).json({message:"Student id required"});
-        }
-        const student = await User.findById(studentId);
-        if(!student){
-            return res.status(400).json({message:"User not found"});
-        }
-        return res.status(200).json(student);
-    }
-    catch(error){
-        return res.status(404).json({message:"Server error"});
-    }
-}
-
 export async function handleRoomBookingRequest(req,res) {
 
     try{
@@ -142,7 +127,10 @@ export async function handleRoomBookingRequest(req,res) {
 
         const roomReqest = await Roomrequest.create({
             studentId:studentId,
-            roomId:room._id,
+            hostel:room.hostel,
+            type:room.type,
+            status:room.status,
+            roomNumber:roomNumber,
         })
 
         return res.status(200).json({message:"Request sent"});
@@ -155,4 +143,100 @@ export async function handleRoomBookingRequest(req,res) {
     }
 
     
+}
+
+export async function fetchRoomBookingRequest(req,res) {
+    try {
+        const requests = await Roomrequest.find({status:"Pending"}); 
+        return res.status(200).json(requests);
+    } catch (error) {
+        console.error('Error fetching requests:', error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+}
+
+export async function fetchRoomBookingRequestById(req,res) {
+    try {
+        const id = req.params.id;
+        const request = await Roomrequest.findById(id); 
+        return res.status(200).json(request);
+    } catch (error) {
+        console.error('Error fetching request:', error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+}
+
+export async function updateRoomBookingRequest(req,res) {
+
+    const {update} = req.body;
+    const Id = req.params.id;
+
+    try{
+        const roomRequest = await Roomrequest.findById(Id);
+        if(!roomRequest || !roomRequest.status){
+            return res.status(404).json({message:"invalid room request"});
+        }
+        roomRequest.status = update;
+
+
+        if(update === 'Approved'){
+
+            const studentId = roomRequest.studentId;
+            const userEmail = await User.findOne(studentId).select('email');
+            if(!userEmail){
+                return res.status(404).json({message:"Email not found"});   
+            }
+
+            const roomid = roomRequest.roomId;
+            const room = await Room.findById(roomid);
+
+            room.isAvailable = false;
+            room.studentId = studentId;
+            await room.save();
+
+            if(!userEmail){
+                return res.status(404).json({message:"Email not found"});
+            }
+    
+            const transporter = nodemailer.createTransport({
+                host: "smtp.gmail.com",
+                port: 587,
+                secure: false, 
+                auth: {
+                    user: "mahakumbhlostfound@gmail.com", 
+                    pass: "oevg lizk taxf hkrj", 
+                },
+            });``
+    
+            const mailOptions = {
+                from: 'rbir3438@gmail.com',
+                to: userEmail,
+                subject: 'Regarding Room Booking',
+                text: `You has been alloted room number : ${room.roomNumber} of hostel.`,
+            };
+    
+            await transporter.sendMail(mailOptions);
+              
+            return res.status(200).json(room);
+
+        }
+
+        await roomRequest.save();
+        res.status(200).json({ message: 'Room request status updated successfully', status:update });
+    }
+    catch(err){
+        console.log(err);
+        return res.status(404).json({message:"status not updated"});
+    }
+    
+}
+
+export async function getHostelDetails(req,res) {
+    try {
+        const hostel = await Hostel.find(); 
+        return res.status(200).json(hostel);
+    } catch (error) {
+        console.error('Error fetching hostel:', error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
 }

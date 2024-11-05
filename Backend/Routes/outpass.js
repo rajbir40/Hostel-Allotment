@@ -3,7 +3,7 @@ import {handleFetchAllRequests, handleUpdateStatus } from "../Controllers/outpas
 
 const router = express.Router();
 
-router.get("/",handleFetchAllRequests);
-router.post("/:Id/status",handleUpdateStatus);
+router.get("/fetchoutpass",handleFetchAllRequests);
+router.post("/status",handleUpdateStatus);
 
 export default router;  

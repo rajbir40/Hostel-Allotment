@@ -7,11 +7,28 @@ const roomBookingSchema = new mongoose.Schema({
       ref: 'Student',
       required: true
     },
-    roomId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Room',
-        required: true,
+    roomMateId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Student',
+      default: null,
     },
+    hostel: {
+      type:String,
+      required:true,
+    },
+    roomNumber:{
+      type:Number,
+      required:true,
+  },
+    isAvailable:{
+      type:Boolean,
+      default:true,
+  },
+    type:{
+      type:String,
+      required:true,
+      enum: ["Single","Double"],
+  },
     status: {
       type: String,
       enum: ['Pending', 'Approved', 'Rejected'],

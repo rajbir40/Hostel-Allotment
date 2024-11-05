@@ -90,7 +90,22 @@ export async function handleUserLogout(req,res) {
   }
 }
 
-
+export async function fetchUserData(req,res) {
+  try{
+      const studentId = req.params.id;
+      if(!studentId){
+          return res.status(400).json({message:"Student id required"});
+      }
+      const student = await User.findById(studentId);
+      if(!student){
+          return res.status(400).json({message:"User not found"});
+      }
+      return res.status(200).json(student);
+  }
+  catch(error){
+      return res.status(404).json({message:"Server error"});
+  }
+}
 
 export const handleSendOtp = async (req, res) => {
     const { email} = req.body;

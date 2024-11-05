@@ -1,5 +1,7 @@
 import express from "express";
-import { createHostelWithRooms, handleRoomBooking, fetchAllRooms ,handleRoomBookingRequest} from "../Controllers/hostel.js";
+import { createHostelWithRooms, handleRoomBooking, fetchAllRooms ,
+    handleRoomBookingRequest ,fetchRoomBookingRequest ,fetchRoomBookingRequestById,
+    updateRoomBookingRequest, getHostelDetails } from "../Controllers/hostel.js";
 
 const router = express.Router();
 
@@ -8,6 +10,10 @@ router.post("/room",handleRoomBooking);
 router.post("/req",handleRoomBookingRequest);
 
 router.get("/",fetchAllRooms);
+router.get("/hostel",getHostelDetails);
+router.get("/fetch",fetchRoomBookingRequest);
+router.get("/requestdetails/:id",fetchRoomBookingRequestById);
+router.post("/update/:id",updateRoomBookingRequest)
 
 
 export default router;  

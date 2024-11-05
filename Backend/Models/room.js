@@ -8,6 +8,7 @@ const roomSchema = new mongoose.Schema(
         },
         floor:{
             type:String,
+            required:true,
         },
         studentId: {
             type: mongoose.Schema.Types.ObjectId,

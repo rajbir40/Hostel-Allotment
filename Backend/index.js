@@ -29,11 +29,15 @@ app.use("/update",outpassRoute);
 app.use("/addhostel",hostelRoute);
 app.use("/bookroom",hostelRoute);
 app.use("/room",hostelRoute);
-app.use("/getuser",hostelRoute);
+app.use("/getuser",userRoute);
 
-app.use("/getNumber",adminRoute);
+app.use("/getrooms",hostelRoute);
+app.use("/gethostel",hostelRoute);
+
 app.use("/bookroomrequest",hostelRoute);
-app.use("/updateroomrequest",adminRoute);
+app.use("/roomrequests",hostelRoute);
+
+app.use("/getnumber",adminRoute);
 
 
 

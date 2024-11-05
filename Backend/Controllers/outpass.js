@@ -31,20 +31,19 @@ export async function handleFetchAllRequests(req,res) {
 }
 
 export async function handleUpdateStatus(req,res) {
-    const {Id} = req.params;
-    const {update} = req.body;
+    const {status, roll_number} = req.body;
     try{
-        const outpass = await Outpass.findById(Id);
+        const outpass = await Outpass.findOne({roll_no:roll_number});
         if(!outpass || !outpass.status){
             return res.status(404).json({message:"invalid outpass"})
         }
-        outpass.status = update;
-        await outpass.save;
-        res.status(200).json({ message: 'Outpass status updated successfully', status });
+        outpass.status = status;
+        await outpass.save();
+        res.status(200).json({ message: 'Outpass status updated successfully', outpass });
     }
     catch(err){
         console.log(err);
-        return res.status(404).json({message:"stats not updated"});
+        return res.status(404).json({message:"status not updated"});
     }
 }
 

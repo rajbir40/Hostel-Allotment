@@ -11,7 +11,7 @@ const generateOTP = () => {
 
 export async function handleUserSignUp(req, res) {
     try {
-        const { name, email, password, role, address, dob ,phoneNumber} = req.body;
+        const { name, email, password, role, address, dob ,phoneNumber, enrollmentId} = req.body;
         
         const existingUser = await User.findOne({ email });
         if (existingUser) {
@@ -28,6 +28,7 @@ export async function handleUserSignUp(req, res) {
             phoneNumber,
             password: secPass,
             dob,
+            enrollmentId,
             role,
         });
 

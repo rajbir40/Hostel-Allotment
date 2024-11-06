@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Modal from './Modal'; // Import the modal component
+import Modal from './Modal';
 import './Signup.css';
 
 export default function SignUp() {
@@ -11,45 +11,50 @@ export default function SignUp() {
   const [dob, setDob] = useState('');
   const [phoneNumber, setNumber] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('student'); // Default to 'student'
-  const [isModalOpen, setModalOpen] = useState(false); // State to control modal visibility
-  const [modalMessage, setModalMessage] = useState(''); // Modal message
+  const [role, setRole] = useState('student');
+  const [enrollmentId, setEnrollmentId] = useState(''); // State for enrollment ID
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {
     e.preventDefault();
 
     try {
+      // Include enrollmentId in the data only if role is "student"
+      const data = { name, email, password, role, address, dob, phoneNumber };
+      if (role === 'student') {
+        data.enrollmentId = enrollmentId;
+      }
+
       // Post data to the backend API
-      const response = await axios.post('http://localhost:8000/user/signup', { name, email, password, role, address, dob, phoneNumber });
-      setModalMessage('Signup successful!'); // Set success message
-      setModalOpen(true); // Show modal
+      const response = await axios.post('http://localhost:8000/user/signup', data);
+      setModalMessage('Signup successful!');
+      setModalOpen(true);
     } catch (error) {
       setModalMessage('Signup failed: ' + (error.response?.data?.message || 'An error occurred'));
-      setModalOpen(true); // Show modal on error
+      setModalOpen(true);
     }
   };
 
   const closeModal = () => {
     setModalOpen(false);
     if (modalMessage === 'Signup successful!') {
-      navigate('/login'); // Navigate to login page after successful signup
+      navigate('/login');
     }
   };
 
   return (
     <section>
       <div className='main-signup'>
-        <div className='form-signup '>
-          <form onSubmit={handleSignup} className="w-full max-w-md bg-white-100  rounded-lg signup-box">
+        <div className='form-signup'>
+          <form onSubmit={handleSignup} className="w-full max-w-md bg-white-100 rounded-lg signup-box">
             <div className="flex justify-center mx-auto mb-4">
               <img className="w-auto h-7 sm:h-8" src="https://merakiui.com/images/logo.svg" alt="Logo" />
             </div>
 
             <div className="flex items-center justify-center mt-6 mb-6 ">
-              <a
-                href="#"
-                className="w-1/3 pb-4 font-medium text-center text-gray-800 capitalize border-b-2 border-blue-500">
+              <a href="#" className="w-1/3 pb-4 font-medium text-center text-gray-800 capitalize border-b-2 border-blue-500">
                 Sign Up
               </a>
             </div>
@@ -73,6 +78,18 @@ export default function SignUp() {
                 placeholder="Email address"
               />
             </div>
+
+            {role === 'student' && (
+              <div className="relative flex items-center mt-6">
+                <input
+                  type="text"
+                  value={enrollmentId}
+                  onChange={(e) => setEnrollmentId(e.target.value)}
+                  className="block w-full py-3 text-gray-700 bg-gray-200 border rounded-lg pl-3 focus:border-blue-400 focus:outline-none"
+                  placeholder="Enrollment ID"
+                />
+              </div>
+            )}
 
             <div className="relative flex items-center mt-6">
               <input

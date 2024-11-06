@@ -14,6 +14,11 @@ const userSchema = new mongoose.Schema(
             type:String,
             required:true,
         },
+        enrollmentId:{
+            type:String,
+            required:true,
+            default:"ADM123"
+        },
         phoneNumber:{
             type:Number,
             required:true,

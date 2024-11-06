@@ -6,10 +6,6 @@ const hostelSchema = new Schema({
     type: String,
     required: true
   },
-  floor: {
-    type: String,
-    default: "Ground",
-  },
   totalRooms: {
     type: Number,
     default: 100
@@ -18,7 +14,20 @@ const hostelSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Room",
     required: true
-}]
+  }],
+  bookedRooms : {
+    type: Number,
+  },
+  singleRooms: {
+    type: Number,
+  },
+  doubleRooms: {
+    type: Number,
+  },
+  availableRooms: {
+    type: Number,
+  },
+
 });
 
 const Hostel = mongoose.model("Hostel", hostelSchema);

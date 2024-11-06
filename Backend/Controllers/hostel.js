@@ -8,10 +8,15 @@ import Roomrequest from "../Models/Roomrequest.js";
 
 export async function createHostelWithRooms(req,res) {
 
-    const {hostelName,roomtype,floor,number} = req.body;
+    const {hostelName,roomtype,number,bookedRooms,availableRooms,singleRooms,doubleRooms,floor} = req.body;
     try{
         const newhostel = await Hostel.create({
             name : hostelName,
+            totalRooms : number,
+            bookedRooms:bookedRooms,
+            availableRooms:availableRooms,
+            singleRooms:singleRooms,
+            doubleRooms:doubleRooms
         })
         let roomIds = [];
         for(let i=1 ; i<=number ; i++){
@@ -21,7 +26,6 @@ export async function createHostelWithRooms(req,res) {
                 hostel:hostelName,
                 floor:floor,
             })
-            // console.log(room);
             await room.save();
             roomIds.push(room._id);
         }
@@ -189,6 +193,8 @@ export async function updateRoomBookingRequest(req,res) {
 
             const roomid = roomRequest.roomId;
             const room = await Room.findById(roomid);
+
+            console.log(room)
 
             room.isAvailable = false;
             room.studentId = studentId;

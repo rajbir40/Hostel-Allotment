@@ -1,81 +1,105 @@
-import React from "react";
-import Sidebar from "./Sidebar";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
+import Sidebar from './Sidebar';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { Loader } from 'lucide-react';
 
-export default function OutpassRequest() {
-  const host = "http://localhost:8000";
+const OutpassRequest = () => {
+  const host = 'http://localhost:8000';
   const [outpass, setOutpass] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchOutpass = async () => {
+    setIsLoading(true);
     const response = await fetch(`${host}/pending/fetchoutpass`);
     const data = await response.json();
-    const pendingOutpasses = await data.filter(
-      (item) => item.status === "Pending"
-    );
+    const pendingOutpasses = await data.filter((item) => item.status === 'Pending');
     setOutpass(pendingOutpasses);
+    setIsLoading(false);
   };
 
   useEffect(() => {
     fetchOutpass();
   }, []);
 
-  const handleApprove = async (roll_no) => {
+  const handleApprove = async (rollNumber) => {
+    setIsLoading(true);
     const response = await fetch(`${host}/update/status`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        status: "Approved",
-        roll_number: roll_no,
+        status: 'Approved',
+        roll_number: rollNumber,
       }),
     });
 
-    const outpass = await response.json();
-    if (outpass.status === "Approved") {
-      fetchOutpass();
-    }
+    await response.json();
+    fetchOutpass();
+    setIsLoading(false);
   };
 
   return (
-    <div>
-      <Sidebar></Sidebar>
-      <div className="dashboard">
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">S No.</th>
-              <th scope="col">Name</th>
-              <th scope="col">Roll No.</th>
-              <th scope="col">Where</th>
-              <th scope="col">Reasponsibility</th>
-              <th scope="col">Reason</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {outpass.map((item, index) => (
-              <tr key={index}>
-                <th scope="row">{index + 1}</th>
-                <td>{item.name}</td>
-                <td>{item.roll_no}</td>
-                <td>{item.where}</td>
-                <td>{item.responsibility}</td>
-                <td>{item.reason}</td>
-                <td>
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={() => handleApprove(item.roll_no)}
-                  >
-                    Approve
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className=" min-h-screen bg-gray-100">
+        <Sidebar />
+
+      <div className="ml-64 flex-1 overflow-auto">
+        <div className="p-8">
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle>Outpass Requests</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {isLoading ? (
+                <div className="flex justify-center items-center h-64">
+                  <Loader className="animate-spin" size={32} />
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableCell>#</TableCell>
+                        <TableCell>Name</TableCell>
+                        <TableCell>Roll No.</TableCell>
+                        <TableCell>Where</TableCell>
+                        <TableCell>Responsibility</TableCell>
+                        <TableCell>Reason</TableCell>
+                        <TableCell>Action</TableCell>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {outpass.map((item, index) => (
+                        <TableRow key={index}>
+                          <TableCell>{index + 1}</TableCell>
+                          <TableCell>{item.name}</TableCell>
+                          <TableCell>{item.roll_no}</TableCell>
+                          <TableCell>{item.where}</TableCell>
+                          <TableCell>{item.responsibility}</TableCell>
+                          <TableCell>{item.reason}</TableCell>
+                          <TableCell>
+                            <Button
+                              type="button"
+                              size="sm"
+                              onClick={() => handleApprove(item.roll_no)}
+                            >
+                              Approve
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default OutpassRequest;

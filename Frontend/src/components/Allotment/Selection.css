@@ -1,76 +1,75 @@
 
 @keyframes slideIn {
-      0% {
-        opacity: 0;
-        transform: translateY(20px);
-        color: #247cbc; /* Starting color */
-      }
-      40%{
-            color: rgb(70, 83, 181); /* Midway color */
-      }
-      
-      50% {
-        color: rgb(82, 120, 196); /* Midway color */
-      }
-      70%{
-            color: rgb(67, 109, 193);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-        color: #247cbc; /* Final color */
-      }
-    }
-    
-    .animated-heading {
-      animation: slideIn 1s ease forwards; /* Adjust duration as needed */
-      transition: color 0.5s ease; /* Smooth color transition */
-    }
-    
-    .aurora {
-      display: flex;
-      justify-content: center;
-      margin-top: 10px; /* Adjust margin as needed */
-    }
-    
-    .aurora__item {
-      width: 10px;
-      height: 10px;
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 50%;
-      margin: 0 2px;
-      animation: pulse 1.5s infinite alternate;
-    }
-    
-    @keyframes pulse {
-      0% {
-        transform: scale(1);
-        background: rgba(0, 0, 0, 0.2);
-      }
-      100% {
-        transform: scale(1.5);
-        background: rgba(0, 0, 0, 0.4);
-      }
-    }
-    
-
-    .hello {
-      
-      background: linear-gradient(60deg, rgba(84,58,183,1) 0%, rgba(0,172,193,1) 100%);
-    }
-
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+    color: #247cbc; /* Starting color */
+  }
+  40%{
+        color: rgb(70, 83, 181); /* Midway color */
+  }
   
+  50% {
+    color: rgb(82, 120, 196); /* Midway color */
+  }
+  70%{
+        color: rgb(67, 109, 193);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    color: #247cbc; /* Final color */
+  }
+}
 
-    .sideimg-2{
-      width: 50vw;
-      height: 100%;
-      background-image: url('./sideimg.png');
-      background-repeat: no-repeat;
-      background-position: center;
-    }
+.animated-heading {
+  animation: slideIn 1s ease forwards; /* Adjust duration as needed */
+  transition: color 0.5s ease; /* Smooth color transition */
+}
 
-    .Hostel-choose{
-      color: #4c44bb;
-    }
+.aurora {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px; /* Adjust margin as needed */
+}
 
-   
+.aurora__item {
+  width: 10px;
+  height: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  margin: 0 2px;
+  animation: pulse 1.5s infinite alternate;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    background: rgba(0, 0, 0, 0.2);
+  }
+  100% {
+    transform: scale(1.5);
+    background: rgba(0, 0, 0, 0.4);
+  }
+}
+
+
+.hello {
+  
+  background: linear-gradient(60deg, rgba(84,58,183,1) 0%, rgba(0,172,193,1) 100%);
+}
+
+
+
+.sideimg-2{
+  width: 50vw;
+  height: 100%;
+  background-image: url('./sideimg.png');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.Hostel-choose{
+  color: #4c44bb;
+}
+

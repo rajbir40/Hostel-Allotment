@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
-import { useState, useEffect, useRef } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
+import { Loader } from "lucide-react";
 
 export default function RoomInquiry() {
   const host = "http://localhost:8000";
   const [hostels, setHostels] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedHostel, setSelectedHostel] = useState(null);
 
   const fetchHostels = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch(`${host}/gethostel/hostel`, {
         method: "GET",
@@ -14,10 +20,12 @@ export default function RoomInquiry() {
           "Content-Type": "application/json",
         },
       });
-      const hostel = await response.json();
-      setHostels(hostel);
+      const hostelData = await response.json();
+      setHostels(hostelData);
     } catch (error) {
       console.error("Error fetching hostels:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -25,170 +33,91 @@ export default function RoomInquiry() {
     fetchHostels();
   }, []);
 
-  const handleOnClick = () => {
-    ref.current.click();
+  const handleHostelDetails = (hostel) => {
+    setSelectedHostel(hostel);
   };
 
-  const ref = useRef(null);
+  const handleCloseHostelDetails = () => {
+    setSelectedHostel(null);
+  };
 
   return (
-    <div>
-      <button
-        ref={ref}
-        type="button"
-        className="btn btn-primary d-none"
-        data-bs-toggle="modal"
-        data-bs-target="#staticBackdrop"
-      >
-        Launch static backdrop modal
-      </button>
+    <div className="h-screen bg-gray-100">
+      <div className="w-64 hidden md:block">
+        <Sidebar />
+      </div>
 
-      <div
-        className="modal fade"
-        id="staticBackdrop"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        tabIndex="-1"
-        aria-labelledby="staticBackdropLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h1 className="modal-title fs-5" id="staticBackdropLabel">
-                Hostel Details
-              </h1>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
+      <div className="ml-64 flex-1 overflow-auto">
+        <div className="p-8">
+          <h2 className="text-2xl font-bold mb-6">Available Hostels</h2>
+          {isLoading ? (
+            <div className="flex justify-center items-center h-64">
+              <Loader className="animate-spin" size={32} />
             </div>
-            <div className="modal-body">
-              <ol className="list-group list-group-numbered">
-                <li className="list-group-item d-flex justify-content-between align-items-start">
-                  <div className="ms-2 me-auto">
-                    <div className="fw-bold">Total Rooms</div>
-                    Content for list item
-                  </div>
-                </li>
-                <li className="list-group-item d-flex justify-content-between align-items-start">
-                  <div className="ms-2 me-auto">
-                    <div className="fw-bold">Available</div>
-                    Content for list item
-                  </div>
-                </li>
-                <li className="list-group-item d-flex justify-content-between align-items-start">
-                  <div className="ms-2 me-auto">
-                    <div className="fw-bold">Booked</div>
-                    Content for list item
-                  </div>
-                </li>
-                <li className="list-group-item d-flex justify-content-between align-items-start">
-                  <div className="ms-2 me-auto">
-                    <div className="fw-bold">Single Rooms</div>
-                    Content for list item
-                  </div>
-                </li>
-                <li className="list-group-item d-flex justify-content-between align-items-start">
-                  <div className="ms-2 me-auto">
-                    <div className="fw-bold">Double Rooms</div>
-                    Content for list item
-                  </div>
-                </li>
-              </ol>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {hostels.map((hostel) => (
+                <Card key={hostel.id} className="hover:shadow-lg transition-shadow">
+                  <CardHeader className="bg-gray-50">
+                    <CardTitle className="text-lg">{hostel.name}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-4">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => handleHostelDetails(hostel)}
+                      className="w-full mt-2"
+                    >
+                      View Details
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal"
-              >
-                Close
-              </button>
-            </div>
-          </div>
+          )}
         </div>
       </div>
 
-      <Sidebar></Sidebar>
-      <div className="dashboard">
-        <div className="hostel-box">
-          <div className="boys-hostel">
-            <div className="card w-25 mb-3">
-              <div className="card-body">
-                <h5 className="card-title">BH - 1</h5>
-                <a href="#" className="btn btn-primary" onClick={handleOnClick}>
-                  Hostel Details
-                </a>
+      {/* Details Dialog */}
+      {selectedHostel && (
+        <Dialog open={true} onOpenChange={handleCloseHostelDetails}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle className="text-xl font-bold mb-4">{selectedHostel.name}</DialogTitle>
+              <DialogClose />
+            </DialogHeader>
+            <div className="space-y-6 p-4">
+              <div className="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg">
+                <div>
+                  <div className="font-medium text-gray-600">Total Rooms</div>
+                  <div className="text-2xl font-semibold">{selectedHostel.totalRooms}</div>
+                </div>
+                <div>
+                  <div className="font-medium text-gray-600">Available</div>
+                  <div className="text-2xl font-semibold text-green-600">{selectedHostel.availableRooms}</div>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="flex justify-between items-center p-3 bg-gray-50 rounded">
+                  <div className="font-medium">Booked Rooms</div>
+                  <div className="font-semibold text-blue-600">{selectedHostel.bookedRooms}</div>
+                </div>
+                
+                <div className="flex justify-between items-center p-3 bg-gray-50 rounded">
+                  <div className="font-medium">Single Rooms</div>
+                  <div className="font-semibold">{selectedHostel.singleRooms}</div>
+                </div>
+                
+                <div className="flex justify-between items-center p-3 bg-gray-50 rounded">
+                  <div className="font-medium">Double Rooms</div>
+                  <div className="font-semibold">{selectedHostel.doubleRooms}</div>
+                </div>
               </div>
             </div>
-
-            <div className="card w-25 mb-3">
-              <div className="card-body">
-                <h5 className="card-title">BH - 2</h5>
-                <a href="#" className="btn btn-primary" onClick={handleOnClick}>
-                  Hostel Details
-                </a>
-              </div>
-            </div>
-
-            <div className="card w-25 mb-3">
-              <div className="card-body">
-                <h5 className="card-title">BH - 3</h5>
-                <a href="#" className="btn btn-primary" onClick={handleOnClick}>
-                  Hostel Details
-                </a>
-              </div>
-            </div>
-
-            <div className="card w-25 mb-3">
-              <div className="card-body">
-                <h5 className="card-title">BH - 4</h5>
-                <a href="#" className="btn btn-primary" onClick={handleOnClick}>
-                  Hostel Details
-                </a>
-              </div>
-            </div>
-
-            <div className="card w-25">
-              <div className="card-body">
-                <h5 className="card-title">BH - 5</h5>
-                <a href="#" className="btn btn-primary" onClick={handleOnClick}>
-                  Hostel Details
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div className="girls-hostel">
-            <div className="card w-25 mb-3">
-              <div className="card-body">
-                <h5 className="card-title">GH - 1</h5>
-                <a href="#" className="btn btn-primary" onClick={handleOnClick}>
-                  Hostel Details
-                </a>
-              </div>
-            </div>
-
-            <div className="card w-25 mb-3">
-              <div className="card-body">
-                <h5 className="card-title">GH - 2</h5>
-                <a href="#" className="btn btn-primary" onClick={handleOnClick}>
-                  Hostel Details
-                </a>
-              </div>
-            </div>
-
-            <div className="card w-25 mb-3">
-              <div className="card-body">
-                <h5 className="card-title">GH - 3</h5>
-                <a href="#" className="btn btn-primary" onClick={handleOnClick}>
-                  Hostel Details
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }

@@ -1,64 +1,94 @@
-import React from "react";
-import Sidebar from "./Sidebar";
-import { useState ,useEffect} from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import Sidebar from './Sidebar';
+import { Button } from '../ui/button';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
+import { Loader } from 'lucide-react';
 
-export default function RoomRequests() {
-
-  const host = "http://localhost:8000";
-  const [request,setRequest] = useState([]);
+const RoomRequests = () => {
+  const host = 'http://localhost:8000';
+  const [requests, setRequests] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const fetchRequest = async () => {
+  const fetchRequests = async () => {
+    setIsLoading(true);
     const response = await fetch(`${host}/roomrequests/fetch`);
     const data = await response.json();
-    const pendingRequests = await data.filter(
-      (item) => item.status === "Pending"
-    )
-    setRequest(pendingRequests);
+    const pendingRequests = data.filter((item) => item.status === 'Pending');
+    setRequests(pendingRequests);
+    setIsLoading(false);
   };
 
-  const handleClick = (id,studentId) => {
-    navigate('/adminpage/roomrequests/approval', {state : {id,studentId}}); 
+  const handleClick = (id, studentId) => {
+    navigate('/adminpage/roomrequests/approval', { state: { id, studentId } });
   };
 
   useEffect(() => {
-    fetchRequest();
+    fetchRequests();
   }, []);
 
   return (
-    <div>
-      <Sidebar></Sidebar>
-      <div className="dashboard">
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">S No.</th>
-              <th scope="col">Hostel</th>
-              <th scope="col">Room No.</th>
-              <th scope="col">Room Type</th>
-              <th scope="col">Availability</th>
-              <th scope="col">Status</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {request.map((item,index) => (
-              <tr key={index}>
-              <th scope="row">{index + 1}</th>
-              <td>{item.hostel}</td>
-              <td>{item.roomNumber}</td>
-              <td>{item.type}</td>
-              <td>{item.isAvailable.toString()}</td>
-              <td>{item.status}</td>
-              <td>
-                <button type="button" className="btn btn-primary origin-center" onClick={() => handleClick(item._id,item.studentId)}>Proceed</button>
-              </td>
-            </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="h-screen bg-gray-100">
+      <div className="w-64 hidden md:block">
+        <Sidebar />
+      </div>
+
+      <div className="ml-64 flex-1 overflow-auto">
+        <div className="p-8">
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle>Room Requests</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {isLoading ? (
+                <div className="flex justify-center items-center h-64">
+                  <Loader className="animate-spin" size={32} />
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableCell>S No.</TableCell>
+                        <TableCell>Hostel</TableCell>
+                        <TableCell>Room No.</TableCell>
+                        <TableCell>Room Type</TableCell>
+                        <TableCell>Availability</TableCell>
+                        <TableCell>Status</TableCell>
+                        <TableCell>Action</TableCell>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {requests.map((item, index) => (
+                        <TableRow key={index}>
+                          <TableCell>{index + 1}</TableCell>
+                          <TableCell>{item.hostel}</TableCell>
+                          <TableCell>{item.roomNumber}</TableCell>
+                          <TableCell>{item.type}</TableCell>
+                          <TableCell>{item.isAvailable.toString()}</TableCell>
+                          <TableCell>{item.status}</TableCell>
+                          <TableCell>
+                            <Button 
+                              onClick={() => handleClick(item._id, item.studentId)}
+                              size="sm"
+                            >
+                              Proceed
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default RoomRequests;

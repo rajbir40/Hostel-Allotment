@@ -190,72 +190,75 @@ export async function fetchRoomBookingRequestById(req,res) {
     }
 }
 
-export async function updateRoomBookingRequest(req,res) {
-
-    const {update} = req.body;
+export async function updateRoomBookingRequest(req, res) {
+    const { update } = req.body;
     const Id = req.params.id;
 
-    try{
+    try {
         const roomRequest = await Roomrequest.findById(Id);
-        if(!roomRequest || !roomRequest.status){
-            return res.status(404).json({message:"invalid room request"});
+        if (!roomRequest || !roomRequest.status) {
+            return res.status(404).json({ message: "Invalid room request" });
         }
-        roomRequest.status = update;
+        if(update === 'Rejected'){
+            roomRequest.status = 'Rejected';
+            await roomRequest.save();
+            return res.status(200).json({ message: "Request rejected" });
+        }
 
 
-        if(update === 'Approved'){
+        if (update === 'Approved') {
+
+            roomRequest.status = 'Approved';
+            roomRequest.isAvailable = false;
+            roomRequest.save();
 
             const studentId = roomRequest.studentId;
-            const userEmail = await User.findOne(studentId).select('email');
-            if(!userEmail){
-                return res.status(404).json({message:"Email not found"});   
+            const user = await User.findById(studentId).select('email');
+            if (!user) {
+                return res.status(404).json({ message: "User email not found" });
             }
 
-            const roomid = roomRequest.roomId;
-            const room = await Room.findById(roomid);
+            const room = await Room.findOne({roomNumber:roomRequest.roomNumber, hostel:roomRequest.hostel});
 
-            console.log(room)
+            if (!room) {
+                return res.status(404).json({ message: "Room not found" });
+            }
 
             room.isAvailable = false;
             room.studentId = studentId;
             await room.save();
 
-            if(!userEmail){
-                return res.status(404).json({message:"Email not found"});
-            }
+            // const transporter = nodemailer.createTransport({
+            //     host: "smtp.gmail.com",
+            //     port: 587,
+            //     secure: false, 
+            //     auth: {
+            //         user: "mahakumbhlostfound@gmail.com",
+            //         pass: "oevg lizk taxf hkrj",
+            //     },
+            // });
     
-            const transporter = nodemailer.createTransport({
-                host: "smtp.gmail.com",
-                port: 587,
-                secure: false, 
-                auth: {
-                    user: "mahakumbhlostfound@gmail.com", 
-                    pass: "oevg lizk taxf hkrj", 
-                },
-            });``
+            // const mailOptions = {
+            //     from: 'rbir3438@gmail.com',
+            //     to: user.email,
+            //     subject: 'Regarding Room Booking',
+            //     text: `You have been allotted room number: ${room.roomNumber} of hostel.`,
+            // };
     
-            const mailOptions = {
-                from: 'rbir3438@gmail.com',
-                to: userEmail,
-                subject: 'Regarding Room Booking',
-                text: `You has been alloted room number : ${room.roomNumber} of hostel.`,
-            };
-    
-            await transporter.sendMail(mailOptions);
+            //await transporter.sendMail(mailOptions);
               
-            return res.status(200).json(room);
-
+            return res.status(200).json({ message: "Room booked successfully" });
         }
 
         await roomRequest.save();
-        res.status(200).json({ message: 'Room request status updated successfully', status:update });
+        res.status(200).json({ message: 'Room request status updated successfully', status: update });
     }
-    catch(err){
+    catch (err) {
         console.log(err);
-        return res.status(404).json({message:"status not updated"});
+        return res.status(500).json({ message: "Status not updated due to server error" });
     }
-    
 }
+
 
 export async function getHostelDetails(req,res) {
     try {

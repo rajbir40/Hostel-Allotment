@@ -22,7 +22,7 @@ export default function NewProfile() {
         setStudentId(JSON.parse(localStorage?.getItem('user')))
         console.log(studentId)
         if (studentId) {
-          const response = await axios.get(`${serverURL}/user/users/${studentId}`);
+          const response = await axios.get(`${serverURL}/getuser/student/${studentId}`);
           const user = response.data;
           console.log(user)
           setUsername(user.name)

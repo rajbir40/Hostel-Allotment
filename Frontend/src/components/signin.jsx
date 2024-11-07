@@ -7,22 +7,37 @@ export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal
-  const [modalMessage, setModalMessage] = useState(''); // Modal message
+  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [modalMessage, setModalMessage] = useState(''); 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
-
+    e.preventDefault();
+  
     try {
-      const response = await axios.post('http://localhost:8000/user/login', { email, password }, { withCredentials: true });
+      const response = await axios.post(
+        'http://localhost:8000/user/login',
+        { email, password },
+        { withCredentials: true }
+      );
+  
       setModalMessage('Login successful!');
       localStorage.setItem('user', JSON.stringify(response.data.id));
+      localStorage.setItem('role', JSON.stringify(response.data.role));
+
       setIsModalOpen(true); // Open modal on success
+  
       setTimeout(() => {
         setIsModalOpen(false);
-        navigate('/');
-        window.location.reload(true); 
+  
+        // Check if the logged-in user is an admin
+        if (response.data.role === 'Admin') {
+          navigate('/adminpage/dashboard'); // Redirect to admin page
+        } else {
+          navigate('/'); // Redirect to user home page
+        }
+  
+        window.location.reload(true);
       }, 2000); // Close modal after 2 seconds and navigate
     } catch (error) {
       console.error('Login failed:', error.response?.data?.message || 'An error occurred');

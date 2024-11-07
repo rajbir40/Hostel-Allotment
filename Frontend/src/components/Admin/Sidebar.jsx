@@ -47,9 +47,9 @@ const Sidebar = () => {
       label: "Comment"
     },
     {
-      path: "#",
+      path: "/adminpage/profile",
       icon: Share2,
-      label: "Share"
+      label: "Admin Profile"
     }
   ];
 

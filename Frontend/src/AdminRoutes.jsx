@@ -5,6 +5,7 @@ import OutpassRequest from './components/Admin/OutpassRequest';
 import RoomRequests from './components/Admin/RoomRequests'
 import RoomApprovalPage from './components/Admin/RoomApprovalPage';
 import RoomInquiry from './components/Admin/RoomInquiry';
+import AdminProfile from './components/Admin/AdminProfile'
 
 
 export default function AdminRoutes() {
@@ -16,6 +17,7 @@ export default function AdminRoutes() {
         <Route path='roomrequests' element={<RoomRequests/>}/>
         <Route path='roomrequests/approval' element={<RoomApprovalPage/>}/>
         <Route path='roominquiry' element={<RoomInquiry/>}/>
+        <Route path='profile' element={<AdminProfile/>}/>
       </Routes>
     </div>
   )

@@ -11,7 +11,7 @@ const generateOTP = () => {
 
 export async function handleUserSignUp(req, res) {
     try {
-        const { name, email, password, role, address, dob ,phoneNumber, enrollmentId} = req.body;
+        const { name, email, password, address, dob ,phoneNumber, enrollmentId} = req.body;
         
         const existingUser = await User.findOne({ email });
         if (existingUser) {
@@ -29,7 +29,6 @@ export async function handleUserSignUp(req, res) {
             password: secPass,
             dob,
             enrollmentId,
-            role,
         });
 
         const userResponse = { 
@@ -71,7 +70,7 @@ export async function handleUserLogin(req,res) {
         }
         const authToken = jwt.sign(data,secret);
         await res.cookie("token",authToken);
-        return res.json({authToken,"id":user._id});
+        return res.json({authToken,"id":user._id,"role":user.role});
     } 
     catch (error) {
         console.error(error.message);

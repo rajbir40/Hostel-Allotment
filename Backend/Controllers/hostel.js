@@ -40,6 +40,26 @@ export async function createHostelWithRooms(req,res) {
 
 }
 
+export async function createRooms(req,res) {
+    const {hostelName,roomtype,starting,ending,floor} = req.body;
+    try{
+        for(let i=starting ; i<=ending ; i++){
+            const room = await Room.create({
+                roomNumber:i,
+                type:roomtype,
+                hostel:hostelName,
+                floor:floor,
+            })
+            await room.save();
+        }
+        return res.status(200).json({message:"Successfully created rooms"});
+    }
+    catch(err){
+        console.log(err);
+        return res.status(404).json({message:"rooms not created"});
+    }
+}
+
 export async function handleRoomBooking(req,res) {
 
     try{

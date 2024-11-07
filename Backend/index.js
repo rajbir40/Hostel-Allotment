@@ -33,6 +33,7 @@ app.use("/getuser",userRoute);
 
 app.use("/getrooms",hostelRoute);
 app.use("/gethostel",hostelRoute);
+app.use("/rooms",hostelRoute);
 
 app.use("/bookroomrequest",hostelRoute);
 app.use("/roomrequests",hostelRoute);

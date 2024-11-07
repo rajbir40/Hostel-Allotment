@@ -1,7 +1,7 @@
 import express from "express";
 import { createHostelWithRooms, handleRoomBooking, fetchAllRooms ,
     handleRoomBookingRequest ,fetchRoomBookingRequest ,fetchRoomBookingRequestById,
-    updateRoomBookingRequest, getHostelDetails } from "../Controllers/hostel.js";
+    updateRoomBookingRequest, getHostelDetails ,createRooms} from "../Controllers/hostel.js";
 
 const router = express.Router();
 
@@ -14,6 +14,7 @@ router.get("/hostel",getHostelDetails);
 router.get("/fetch",fetchRoomBookingRequest);
 router.get("/requestdetails/:id",fetchRoomBookingRequestById);
 router.post("/update/:id",updateRoomBookingRequest)
+router.post("/create",createRooms);
 
 
 export default router;  

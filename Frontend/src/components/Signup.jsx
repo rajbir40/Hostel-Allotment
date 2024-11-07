@@ -131,7 +131,7 @@ export default function SignUp() {
               />
             </div>
 
-            <div className="relative flex items-center mt-4">
+            {/* <div className="relative flex items-center mt-4">
               <select
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
@@ -140,7 +140,7 @@ export default function SignUp() {
                 <option value="student">Student</option>
                 <option value="admin">Admin</option>
               </select>
-            </div>
+            </div> */}
 
             <div className="mt-6">
               <button

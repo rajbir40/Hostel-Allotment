@@ -42,23 +42,25 @@ export default function RoomInquiry() {
   };
 
   return (
-    <div className="h-screen bg-gray-100">
+    <div className="h-screen bg-gray-100" style={{background:'linear-gradient(60deg, rgba(84,58,183,1) 0%, rgba(0,172,193,1) 100%)'}}>
       <div className="w-64 hidden md:block">
         <Sidebar />
       </div>
 
-      <div className="ml-64 flex-1 overflow-auto">
+      <div className="ml-64 flex-1 overflow-auto" >
         <div className="p-8">
-          <h2 className="text-2xl font-bold mb-6">Available Hostels</h2>
+        <div className="flex justify-center items-center text-center mb-8">
+          <h1 className="text-3xl font-bold" style={{padding: '1%',position: 'fixed',top: '0',justifyContent: 'center',width: '100%',display: 'flex',backgroundColor: 'white',color: '#0000FF'}}>Hostel Details</h1>
+        </div>
           {isLoading ? (
             <div className="flex justify-center items-center h-64">
               <Loader className="animate-spin" size={32} />
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4" style={{marginTop:'70px'}}>
               {hostels.map((hostel) => (
-                <Card key={hostel.id} className="hover:shadow-lg transition-shadow">
-                  <CardHeader className="bg-gray-50">
+                <Card key={hostel.id} className="hover:shadow-lg transition-shadow" style={{margin:'12px'}}>
+                  <CardHeader className="bg-gray-50" style={{backgroundColor:'skyblue'}}>
                     <CardTitle className="text-lg">{hostel.name}</CardTitle>
                   </CardHeader>
                   <CardContent className="p-4">

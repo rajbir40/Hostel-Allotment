@@ -66,20 +66,20 @@ const Sidebar = () => {
         <div className="flex items-center justify-between">
           {!isCollapsed && (
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-[#0000FF] rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold">D</span>
               </div>
-              <span className="font-bold text-xl">DormSpace</span>
+              <span className="font-bold text-xl" style={{color:'#0000FF'}}>DormSpace</span>
             </div>
           )}
-          <Button
+          {/* <Button
             variant="ghost"
             size="icon"
             onClick={() => setIsCollapsed(!isCollapsed)}
             className="h-8 w-8"
           >
             <Menu className="h-4 w-4" />
-          </Button>
+          </Button> */}
         </div>
       </div>
 
@@ -119,7 +119,7 @@ const Sidebar = () => {
             </Button>
           </Link>
           
-          <div className={`flex items-center ${
+          {/* <div className={`flex items-center ${
             isCollapsed ? 'justify-center' : 'justify-between'
           } px-4 py-2`}>
             {!isCollapsed && (
@@ -133,7 +133,7 @@ const Sidebar = () => {
               onCheckedChange={setIsDarkMode}
               className={isCollapsed ? 'ml-0' : 'ml-2'}
             />
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

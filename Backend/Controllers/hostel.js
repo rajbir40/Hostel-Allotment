@@ -234,6 +234,9 @@ export async function updateRoomBookingRequest(req, res) {
             room.studentId = studentId;
             await room.save();
 
+            user.roomId = room._id;
+            await user.save();
+
             // Update the recent activity entry to resolved
             recentActivity.resolved = true;
             recentActivity.description = `Request Approved for Room ${room.roomNumber} in ${roomRequest.hostel}`;

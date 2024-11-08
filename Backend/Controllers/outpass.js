@@ -4,7 +4,6 @@ import RecentActivity from "../Models/RecentActivity.js";
 export async function handleApplyOutpass(req, res) {
     try {
         console.log(req.body);
-        
         // Create new outpass request
         const outpass = await Outpass.create({
             name: req.body.formData.name,
@@ -20,7 +19,8 @@ export async function handleApplyOutpass(req, res) {
         await RecentActivity.create({
             type: "Outpass Request",
             description: `Outpass Request created for RollNumber ${req.body.formData.roll_no}`,
-            resolved: false
+            resolved: false,
+            enrollmentId:req.user.enrollmentId,
         });
 
         return res.json(outpass);

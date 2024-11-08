@@ -227,6 +227,7 @@ export const userEdit= async (req, res) => {
 export const handleFetchRecentActivity = async (req, res) => {
     try {
       const user = req.user;
+      console.log(user.enrollmentId);
       const activities = await RecentActivity.find({enrollmentId: user.enrollmentId}).sort({ createdAt: -1 });
       return res.status(200).json(activities);
     }

@@ -23,6 +23,9 @@ export default function NewProfile() {
         setStudentId(JSON.parse(localStorage?.getItem('user')));
         if (studentId) {
           const response = await axios.get(`${serverURL}/user/student/${studentId}`);
+          const activitiesResponse = await fetch(`${serverURL}/user/recent-activities`);
+          const activitiesData = await activitiesResponse.json();
+          setRecentActivities(activitiesData);
           const user = response.data;
           setUsername(user.name);
           setEmail(user.email);

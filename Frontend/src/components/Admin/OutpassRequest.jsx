@@ -42,15 +42,15 @@ const OutpassRequest = () => {
   };
 
   return (
-    <div className=" min-h-screen bg-gray-100" style={{background:'linear-gradient(60deg, rgba(84,58,183,1) 0%, rgba(0,172,193,1) 100%)'}}>
+    <div className=" min-h-screen bg-gray-100">
         <Sidebar />
 
       <div className="ml-64 flex-1 overflow-auto">
         <div className="p-8">
-        <div className="flex justify-center items-center text-center mb-8">
-          <h1 className="text-3xl font-bold" style={{padding: '1%',position: 'fixed',top: '0',justifyContent: 'center',width: '100%',display: 'flex',backgroundColor: 'white',color: '#0000FF'}}>Outpass Requests</h1>
-        </div>
-          <Card className="w-full" style={{marginTop:'90px'}}>
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle>Outpass Requests</CardTitle>
+            </CardHeader>
             <CardContent>
               {isLoading ? (
                 <div className="flex justify-center items-center h-64">
@@ -60,19 +60,19 @@ const OutpassRequest = () => {
                 <div className="overflow-x-auto">
                   <Table>
                     <TableHeader>
-                      <TableRow style={{fontWeight:'bolder', textAlign:'center'}}>
-                        <TableCell>S.No</TableCell>
+                      <TableRow>
+                        <TableCell>#</TableCell>
                         <TableCell>Name</TableCell>
                         <TableCell>Roll No.</TableCell>
-                        <TableCell>Proceeding to</TableCell>
-                        <TableCell>Own Responsibility</TableCell>
+                        <TableCell>Where</TableCell>
+                        <TableCell>Responsibility</TableCell>
                         <TableCell>Reason</TableCell>
                         <TableCell>Action</TableCell>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {outpass.map((item, index) => (
-                        <TableRow key={index} style={{textAlign:'center'}}>
+                        <TableRow key={index}>
                           <TableCell>{index + 1}</TableCell>
                           <TableCell>{item.name}</TableCell>
                           <TableCell>{item.roll_no}</TableCell>
@@ -84,7 +84,6 @@ const OutpassRequest = () => {
                               type="button"
                               size="sm"
                               onClick={() => handleApprove(item.roll_no)}
-                              style={{backgroundColor:'green'}}
                             >
                               Approve
                             </Button>

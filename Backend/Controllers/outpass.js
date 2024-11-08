@@ -14,7 +14,7 @@ export async function handleApplyOutpass(req, res) {
             responsibility: req.body.formData.responsibility,
             status: 'Pending' 
         });
-
+        console.log(req.user.enrollmentId);
         // Create a new recent activity entry
         await RecentActivity.create({
             type: "Outpass Request",

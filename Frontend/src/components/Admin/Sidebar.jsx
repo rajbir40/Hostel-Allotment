@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
 import {
   LayoutDashboard,
   BookOpenCheck,
@@ -10,57 +9,51 @@ import {
   MessageSquare,
   Share2,
   LogOut,
-  Moon,
-  ChevronRight,
   Menu
 } from "lucide-react";
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const location = useLocation();
 
-  const navigationItems = [
-    {
-      path: "/adminpage/dashboard",
-      icon: LayoutDashboard,
-      label: "Dashboard"
-    },
-    {
-      path: "/adminpage/roomrequests",
-      icon: BookOpenCheck,
-      label: "Booking Requests"
-    },
-    {
-      path: "/adminpage/roominquiry",
-      icon: Building2,
-      label: "Room Inquiry"
-    },
-    {
-      path: "/adminpage/outpassrequest",
-      icon: FileOutput,
-      label: "Outpass Requests"
-    },
-    {
-      path: "#",
-      icon: MessageSquare,
-      label: "Comment"
-    },
-    {
-      path: "/adminpage/profile",
-      icon: Share2,
-      label: "Admin Profile"
-    }
-  ];
-
-  const isActivePath = (path) => {
-    return location.pathname === path;
+  const handleLogout = () => {
+    confirmAlert({
+      title: "Confirm Logout",
+      message: "Are you sure you want to log out?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => {
+            localStorage.removeItem('user');
+            localStorage.removeItem('role');
+            window.location.href = '/login';
+          }
+        },
+        {
+          label: "No",
+          onClick: () => {}
+        }
+      ],
+      closeOnEscape: true,
+      closeOnClickOutside: true,
+    });
   };
 
+  const navigationItems = [
+    { path: "/adminpage/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+    { path: "/adminpage/roomrequests", icon: BookOpenCheck, label: "Booking Requests" },
+    { path: "/adminpage/roominquiry", icon: Building2, label: "Room Inquiry" },
+    { path: "/adminpage/outpassrequest", icon: FileOutput, label: "Outpass Requests" },
+    { path: "#", icon: MessageSquare, label: "Comment" },
+    { path: "/adminpage/profile", icon: Share2, label: "Admin Profile" },
+  ];
+
+  const isActivePath = (path) => location.pathname === path;
+
   return (
-    <div className={`fixed left-0 top-0 h-full border-r bg-white transition-all duration-300 z-50 ${
-      isCollapsed ? 'w-20' : 'w-64'
-    }`}>
+    <div className={`fixed left-0 top-0 h-full border-r bg-white transition-all duration-300 z-50 ${isCollapsed ? 'w-20' : 'w-64'}`}>
       {/* Header */}
       <div className="p-4 border-b">
         <div className="flex items-center justify-between">
@@ -90,13 +83,9 @@ const Sidebar = () => {
             <Link to={item.path} key={item.label}>
               <Button
                 variant={isActivePath(item.path) ? "secondary" : "ghost"}
-                className={`w-full justify-start mb-1 ${
-                  isCollapsed ? 'px-2' : 'px-4'
-                }`}
+                className={`w-full justify-start mb-1 ${isCollapsed ? 'px-2' : 'px-4'}`}
               >
-                <item.icon className={`h-4 w-4 ${
-                  isCollapsed ? 'mr-0' : 'mr-2'
-                }`} />
+                <item.icon className={`h-4 w-4 ${isCollapsed ? 'mr-0' : 'mr-2'}`} />
                 {!isCollapsed && <span>{item.label}</span>}
               </Button>
             </Link>
@@ -105,35 +94,14 @@ const Sidebar = () => {
 
         {/* Footer */}
         <div className="border-t pt-4 px-2 space-y-1">
-          <Link to="#">
-            <Button
-              variant="ghost"
-              className={`w-full justify-start ${
-                isCollapsed ? 'px-2' : 'px-4'
-              }`}
-            >
-              <LogOut className={`h-4 w-4 ${
-                isCollapsed ? 'mr-0' : 'mr-2'
-              }`} />
-              {!isCollapsed && <span>Logout</span>}
-            </Button>
-          </Link>
-          
-          <div className={`flex items-center ${
-            isCollapsed ? 'justify-center' : 'justify-between'
-          } px-4 py-2`}>
-            {!isCollapsed && (
-              <div className="flex items-center">
-                <Moon className="h-4 w-4 mr-2" />
-                <span>Dark Mode</span>
-              </div>
-            )}
-            <Switch
-              checked={isDarkMode}
-              onCheckedChange={setIsDarkMode}
-              className={isCollapsed ? 'ml-0' : 'ml-2'}
-            />
-          </div>
+          <Button
+            variant="ghost"
+            onClick={handleLogout}
+            className={`w-full justify-start ${isCollapsed ? 'px-2' : 'px-4'}`}
+          >
+            <LogOut className={`h-4 w-4 ${isCollapsed ? 'mr-0' : 'mr-2'}`} />
+            {!isCollapsed && <span>Logout</span>}
+          </Button>
         </div>
       </div>
     </div>

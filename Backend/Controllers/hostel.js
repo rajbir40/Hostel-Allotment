@@ -31,10 +31,23 @@ export async function createHostelWithRooms(req,res) {
 }
 
 export async function createRooms(req,res) {
-    
-    const {hostelName,roomtype,number,bookedRooms,availableRooms,singleRooms,doubleRooms,floor} = req.body;
-
-
+    const {hostelName,roomtype,starting,ending,floor} = req.body;
+    try{
+        for(let i=starting ; i<=ending ; i++){
+            const room = await Room.create({
+                roomNumber:i,
+                type:roomtype,
+                hostel:hostelName,
+                floor:floor,
+            })
+            await room.save();
+        }
+        return res.status(200).json({message:"Successfully created rooms"});
+    }
+    catch(err){
+        console.log(err);
+        return res.status(404).json({message:"rooms not created"});
+    }
 }
 
 export async function handleRoomBooking(req,res) {
@@ -110,40 +123,40 @@ export const fetchAllRooms = async (req,res) => {
     }
 };
 
-export async function handleRoomBookingRequest(req,res) {
 
-    try{
-        
-        const {roomNumber,hostel,studentId} = req.body;
+export async function handleRoomBookingRequest(req, res) {
+    try {
+        const { roomNumber, hostel, studentId } = req.body;
 
-
-        if(!roomNumber || !hostel){
-            return res.status(400).json({message:"Roomnumber and hostel are required"});
+        if (!roomNumber || !hostel) {
+            return res.status(400).json({ message: "Room number and hostel are required" });
         }
 
-        const room = await Room.findOne({roomNumber:roomNumber, hostel:hostel});
-        if(!room){
-            return res.status(404).json({message:"Room not found"});
+        const room = await Room.findOne({ roomNumber: roomNumber, hostel: hostel });
+        if (!room) {
+            return res.status(404).json({ message: "Room not found" });
         }
 
-        const roomReqest = await Roomrequest.create({
-            studentId:studentId,
-            hostel:room.hostel,
-            type:room.type,
-            status:room.status,
-            roomNumber:roomNumber,
-        })
+        const roomRequest = await Roomrequest.create({
+            studentId: studentId,
+            hostel: room.hostel,
+            type: room.type,
+            status: room.status,
+            roomNumber: roomNumber,
+        });
 
-        return res.status(200).json({message:"Request sent"});
+        // Create a recent activity entry with resolved set to false
+        await RecentActivity.create({
+            type: "Room Booking Request",
+            description: `New booking request for Room ${roomNumber} in ${hostel}`,
+            resolved: false,
+        });
 
+        return res.status(200).json({ message: "Request sent" });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: "Server didn't respond" });
     }
-
-    catch(err){
-        console.log(err)
-        return res.status(404).json({message:"Server didn't responded"});
-    }
-
-    
 }
 
 export async function fetchRoomBookingRequest(req,res) {
@@ -177,15 +190,25 @@ export async function updateRoomBookingRequest(req, res) {
             return res.status(404).json({ message: "Invalid room request" });
         }
 
+        // Find the recent activity related to this room request
+        const recentActivity = await RecentActivity.findOne({
+            description: `New booking request for Room ${roomRequest.roomNumber} in ${roomRequest.hostel}`,
+            resolved: false,
+        });
+
+        if (!recentActivity) {
+            return res.status(404).json({ message: "Activity not found" });
+        }
+
         // Handle rejection
         if (update === 'Rejected') {
             roomRequest.status = 'Rejected';
             await roomRequest.save();
 
-            const rejectionActivity = await RecentActivity.create({
-                type: "Room Booking Request",
-                description: `Request Rejected for Room ${roomRequest.roomNumber} in ${roomRequest.hostel}`
-            });
+            // Update the recent activity entry to resolved
+            recentActivity.resolved = true;
+            recentActivity.description = `Request Rejected for Room ${roomRequest.roomNumber} in ${roomRequest.hostel}`;
+            await recentActivity.save();
 
             return res.status(200).json({ message: "Request rejected" });
         }
@@ -211,12 +234,10 @@ export async function updateRoomBookingRequest(req, res) {
             room.studentId = studentId;
             await room.save();
 
-            // Create a recent activity entry for approval
-            const approvalActivity = await RecentActivity.create({
-                type: "Room Booking Request",
-                description: `Request Approved for Room ${room.roomNumber} in ${roomRequest.hostel}`
-            });
-            
+            // Update the recent activity entry to resolved
+            recentActivity.resolved = true;
+            recentActivity.description = `Request Approved for Room ${room.roomNumber} in ${roomRequest.hostel}`;
+            await recentActivity.save();
 
             return res.status(200).json({ message: "Room booked successfully" });
         }
@@ -228,6 +249,7 @@ export async function updateRoomBookingRequest(req, res) {
         return res.status(500).json({ message: "Status not updated due to server error" });
     }
 }
+
 
 
 export async function getHostelDetails(req,res) {

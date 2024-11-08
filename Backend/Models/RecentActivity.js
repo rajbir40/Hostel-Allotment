@@ -14,6 +14,10 @@ const recentActivitySchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  resolved: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const RecentActivity = mongoose.model("RecentActivity", recentActivitySchema);

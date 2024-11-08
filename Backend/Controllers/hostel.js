@@ -5,20 +5,13 @@ import User from "../Models/user.js"
 import mongoose from "mongoose";
 import nodemailer from "nodemailer";
 import Roomrequest from "../Models/Roomrequest.js";
+import RecentActivity from "../Models/RecentActivity.js";
 
 export async function createHostelWithRooms(req,res) {
 
     const {hostelName,roomtype,number,bookedRooms,availableRooms,singleRooms,doubleRooms,floor} = req.body;
     try{
-        const newhostel = await Hostel.create({
-            name : hostelName,
-            totalRooms : number,
-            bookedRooms:bookedRooms,
-            availableRooms:availableRooms,
-            singleRooms:singleRooms,
-            doubleRooms:doubleRooms
-        })
-        let roomIds = [];
+        
         for(let i=1 ; i<=number ; i++){
             const room = await Room.create({
                 roomNumber:i,
@@ -27,10 +20,7 @@ export async function createHostelWithRooms(req,res) {
                 floor:floor,
             })
             await room.save();
-            roomIds.push(room._id);
         }
-        newhostel.roomId = roomIds;
-        await newhostel.save();
         return res.status(200).json({message:"Successfully created hostel"});
     }
     catch(err){
@@ -133,40 +123,40 @@ export const fetchAllRooms = async (req,res) => {
     }
 };
 
-export async function handleRoomBookingRequest(req,res) {
 
-    try{
-        
-        const {roomNumber,hostel,studentId} = req.body;
+export async function handleRoomBookingRequest(req, res) {
+    try {
+        const { roomNumber, hostel, studentId } = req.body;
 
-
-        if(!roomNumber || !hostel){
-            return res.status(400).json({message:"Roomnumber and hostel are required"});
+        if (!roomNumber || !hostel) {
+            return res.status(400).json({ message: "Room number and hostel are required" });
         }
 
-        const room = await Room.findOne({roomNumber:roomNumber, hostel:hostel});
-        if(!room){
-            return res.status(404).json({message:"Room not found"});
+        const room = await Room.findOne({ roomNumber: roomNumber, hostel: hostel });
+        if (!room) {
+            return res.status(404).json({ message: "Room not found" });
         }
 
-        const roomReqest = await Roomrequest.create({
-            studentId:studentId,
-            hostel:room.hostel,
-            type:room.type,
-            status:room.status,
-            roomNumber:roomNumber,
-        })
+        const roomRequest = await Roomrequest.create({
+            studentId: studentId,
+            hostel: room.hostel,
+            type: room.type,
+            status: room.status,
+            roomNumber: roomNumber,
+        });
 
-        return res.status(200).json({message:"Request sent"});
+        // Create a recent activity entry with resolved set to false
+        await RecentActivity.create({
+            type: "Room Booking Request",
+            description: `New booking request for Room ${roomNumber} in ${hostel}`,
+            resolved: false,
+        });
 
+        return res.status(200).json({ message: "Request sent" });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: "Server didn't respond" });
     }
-
-    catch(err){
-        console.log(err)
-        return res.status(404).json({message:"Server didn't responded"});
-    }
-
-    
 }
 
 export async function fetchRoomBookingRequest(req,res) {
@@ -190,72 +180,80 @@ export async function fetchRoomBookingRequestById(req,res) {
     }
 }
 
-export async function updateRoomBookingRequest(req,res) {
-
-    const {update} = req.body;
+export async function updateRoomBookingRequest(req, res) {
+    const { update } = req.body;
     const Id = req.params.id;
 
-    try{
+    try {
         const roomRequest = await Roomrequest.findById(Id);
-        if(!roomRequest || !roomRequest.status){
-            return res.status(404).json({message:"invalid room request"});
+        if (!roomRequest || !roomRequest.status) {
+            return res.status(404).json({ message: "Invalid room request" });
         }
-        roomRequest.status = update;
 
+        // Find the recent activity related to this room request
+        const recentActivity = await RecentActivity.findOne({
+            description: `New booking request for Room ${roomRequest.roomNumber} in ${roomRequest.hostel}`,
+            resolved: false,
+        });
 
-        if(update === 'Approved'){
+        if (!recentActivity) {
+            return res.status(404).json({ message: "Activity not found" });
+        }
+
+        // Handle rejection
+        if (update === 'Rejected') {
+            roomRequest.status = 'Rejected';
+            await roomRequest.save();
+
+            // Update the recent activity entry to resolved
+            recentActivity.resolved = true;
+            recentActivity.description = `Request Rejected for Room ${roomRequest.roomNumber} in ${roomRequest.hostel}`;
+            await recentActivity.save();
+
+            return res.status(200).json({ message: "Request rejected" });
+        }
+
+        // Handle approval
+        if (update === 'Approved') {
+            roomRequest.status = 'Approved';
+            roomRequest.isAvailable = false;
+            await roomRequest.save();
 
             const studentId = roomRequest.studentId;
-            const userEmail = await User.findOne(studentId).select('email');
-            if(!userEmail){
-                return res.status(404).json({message:"Email not found"});   
+            const user = await User.findById(studentId).select('email');
+            if (!user) {
+                return res.status(404).json({ message: "User email not found" });
             }
 
-            const roomid = roomRequest.roomId;
-            const room = await Room.findById(roomid);
-
-            console.log(room)
+            const room = await Room.findOne({ roomNumber: roomRequest.roomNumber, hostel: roomRequest.hostel });
+            if (!room) {
+                return res.status(404).json({ message: "Room not found" });
+            }
 
             room.isAvailable = false;
             room.studentId = studentId;
             await room.save();
 
-            if(!userEmail){
-                return res.status(404).json({message:"Email not found"});
-            }
-    
-            const transporter = nodemailer.createTransport({
-                host: "smtp.gmail.com",
-                port: 587,
-                secure: false, 
-                auth: {
-                    user: "mahakumbhlostfound@gmail.com", 
-                    pass: "oevg lizk taxf hkrj", 
-                },
-            });``
-    
-            const mailOptions = {
-                from: 'rbir3438@gmail.com',
-                to: userEmail,
-                subject: 'Regarding Room Booking',
-                text: `You has been alloted room number : ${room.roomNumber} of hostel.`,
-            };
-    
-            await transporter.sendMail(mailOptions);
-              
-            return res.status(200).json(room);
+            user.roomId = room._id;
+            await user.save();
 
+            // Update the recent activity entry to resolved
+            recentActivity.resolved = true;
+            recentActivity.description = `Request Approved for Room ${room.roomNumber} in ${roomRequest.hostel}`;
+            await recentActivity.save();
+
+            return res.status(200).json({ message: "Room booked successfully" });
         }
 
         await roomRequest.save();
-        res.status(200).json({ message: 'Room request status updated successfully', status:update });
-    }
-    catch(err){
+        res.status(200).json({ message: 'Room request status updated successfully', status: update });
+    } catch (err) {
         console.log(err);
-        return res.status(404).json({message:"status not updated"});
+        return res.status(500).json({ message: "Status not updated due to server error" });
     }
-    
 }
+
+
 
 export async function getHostelDetails(req,res) {
     try {

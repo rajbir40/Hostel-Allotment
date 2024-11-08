@@ -43,10 +43,9 @@ const userSchema = new mongoose.Schema(
             type:String,
             default:"Student",
         },
-        roomId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Room',
-            default: null,
+        roomNumber:{
+            type:Number,
+            default:null,
         },
     },
     {timestamps:true}

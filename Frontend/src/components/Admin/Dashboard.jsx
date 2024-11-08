@@ -2,25 +2,41 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { UserRound, FileOutput, HomeIcon } from "lucide-react";
 import Sidebar from './Sidebar';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Clock, ArrowRight, CheckCircle, AlertCircle } from 'lucide-react';
 
 const Dashboard = () => {
   const host = 'http://localhost:8000';
   const [userCount, setUserCount] = useState(0);
   const [roomCount, setRoomCount] = useState(0);
   const [outpassCount, setOutpassCount] = useState(0);
+  const [recentActivities, setRecentActivities] = useState([]); // State to hold recent activity data
+
+  const navigate = useNavigate();
 
   const fetchData = async () => {
-    const userResponse = await fetch(`${host}/getnumber/students`);
-    const userData = await userResponse.json();
-    setUserCount(userData.number);
+    try {
+      const userResponse = await fetch(`${host}/getnumber/students`);
+      const userData = await userResponse.json();
+      setUserCount(userData.number);
 
-    const roomResponse = await fetch(`${host}/roomrequests/fetch`);
-    const roomData = await roomResponse.json();
-    setRoomCount(roomData.length);
+      const roomResponse = await fetch(`${host}/roomrequests/fetch`);
+      const roomData = await roomResponse.json();
+      setRoomCount(roomData.length);
 
-    const outpassResponse = await fetch(`${host}/pending/fetchoutpass`);
-    const outpassData = await outpassResponse.json();
-    setOutpassCount(outpassData.length);
+      const outpassResponse = await fetch(`${host}/pending/fetchoutpass`);
+      const outpassData = await outpassResponse.json();
+      setOutpassCount(outpassData.length);
+
+      // Fetch recent activities for approvals and declines
+      const activitiesResponse = await fetch(`${host}/activity/recent-activities`);
+      const activitiesData = await activitiesResponse.json();
+      setRecentActivities(activitiesData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   useEffect(() => {
@@ -30,7 +46,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50 waves-container" style={{background:'linear-gradient(60deg, rgba(84,58,183,1) 0%, rgba(0,172,193,1) 100%)'}}>
       <Sidebar />
-      
+
       <div className="lg:ml-64 p-8">
         <div className="flex justify-center items-center text-center mb-8">
           <h1 className="text-3xl font-bold" style={{padding: '1%',position: 'fixed',top: '0',justifyContent: 'center',width: '100%',display: 'flex',backgroundColor: 'white',color: '#0000FF'}}>Dashboard</h1>

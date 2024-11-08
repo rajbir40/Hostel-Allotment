@@ -124,6 +124,8 @@ export default function AllotmentGH1() {
   
             
           </div>
+          //the one to use
+          <button type="button" className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-xs px-3 py-1.5 h-[30px] w-[50px] dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">104</button>
         </div>
         </div>
       )

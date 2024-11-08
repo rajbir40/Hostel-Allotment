@@ -14,8 +14,11 @@ import HostelSelection from './components/Allotment/HostelSelection.jsx';
 import AllotmentGH2 from './components/Allotment/AllotmentGH2.jsx';
 import Allotment from './components/Allotment/Allotment.jsx';
 import AdminProfile from './components/Profile/AdminProfile.jsx';
-import NewProfile from './components/Profile/NewProfile.jsx';
+import StudentProfile from './components/Profile/NewProfile.jsx';
 import Admin from './AdminRoutes.jsx'
+import AllotmentBH1 from './components/Allotment/AllotmentBH1.jsx';
+import AllotmentBH2 from './components/Allotment/AllotmentBH2.jsx';
+import AllotmentBH3 from './components/Allotment/AllotmentBH3.jsx';
 
 function App() {
   return (
@@ -33,9 +36,12 @@ function App() {
         <Route path="/alloGh1" element={<Allotment />}/>
         {/* <Route path='/allotmentgh1' element={<AllotmentGH1/>}/> */}
         <Route path='allotmentgh2' element={<AllotmentGH2/>}/>
+        <Route path='/allotmentBH1' element={<AllotmentBH1/>}/>
+        <Route path='/allotmentBH2' element={<AllotmentBH2/>}/>
+        <Route path='/allotmentBH3' element={<AllotmentBH3/>}/>
         <Route path='/selection' element={<HostelSelection/>} />
         <Route path='/admin' element={<AdminProfile/>}/>
-        <Route path='/newprofile' element={<NewProfile/>}/>
+        <Route path='/newprofile' element={<StudentProfile/>}/>
         {/* <Route path='/abc' element={<NavbarTest/>}/> */}
         <Route path='/adminpage/*'  element={<Admin/>}/>
       </Routes>

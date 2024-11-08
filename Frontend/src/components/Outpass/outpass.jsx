@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./Outpass.css";
 import { useNavigate } from "react-router-dom";
 import Navbar from '../Navbar/Navbar';
+import { Calendar, Clock, MapPin, User, UserCheck, FileText, AlertCircle } from 'lucide-react';
 
 const Outpass = () => {
   const navigate = useNavigate();
@@ -16,8 +16,8 @@ const Outpass = () => {
     responsibility: "",
   });
   
-  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
-  const [modalMessage, setModalMessage] = useState(""); // Modal message
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   const handleChange = (e) => {
     setFormData({
@@ -28,20 +28,18 @@ const Outpass = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      // Post data to the backend API
       const response = await axios.post("http://localhost:8000/user/apply", { formData }, { withCredentials: true });
       setModalMessage("Submission successful!");
-      setIsModalOpen(true); // Open modal on success
+      setIsModalOpen(true);
       setTimeout(() => {
         setIsModalOpen(false);
-        navigate("/"); // Redirect after closing modal
-      }, 2000); // Auto-close after 2 seconds
+        navigate("/");
+      }, 2000);
     } catch (error) {
       console.log(error);
       setModalMessage("Submission Failed: " + (error.response?.data?.message || "An error occurred"));
-      setIsModalOpen(true); // Open modal on error
+      setIsModalOpen(true);
     }
   };
 
@@ -50,116 +48,173 @@ const Outpass = () => {
   };
 
   return (
-    <div>
+    <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <div className="box-outpass">
-        <div className="sidepage-outpass">
-          <h1 className="text-4xl font-bold mb-7 text-center animated-heading-outpass Generate-your-outpass">
-            Generate your Outpass
-          </h1>
-          <div className="sidepage-outpass-img"></div>
-        </div>
-        <div className="cover-outpass">
-          <div className="outpass-form-container">
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="name">Name</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="Enter your name"
-                  required
-                />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Left side - Form heading and image */}
+          <div className="flex flex-col justify-center items-center">
+            <h1 className="text-4xl font-bold mb-6 text-blue-600 text-center">
+              Generate your Outpass
+            </h1>
+            <div className="relative w-full h-64 md:h-96 bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg shadow-lg flex items-center justify-center">
+              <div className="absolute inset-0 bg-blue-500 opacity-10 rounded-lg"></div>
+              <FileText className="w-24 h-24 text-blue-500" />
+            </div>
+          </div>
+
+          {/* Right side - Form */}
+          <div className="bg-white rounded-lg shadow-lg p-8">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-4">
+                <div className="relative">
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <User className="w-4 h-4 mr-2" />
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Enter your name"
+                    required
+                  />
+                </div>
+
+                <div className="relative">
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <UserCheck className="w-4 h-4 mr-2" />
+                    Roll Number
+                  </label>
+                  <input
+                    type="text"
+                    id="roll_no"
+                    name="roll_no"
+                    value={formData.roll_no}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Enter your roll number"
+                    required
+                  />
+                </div>
+
+                <div className="relative">
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <MapPin className="w-4 h-4 mr-2" />
+                    Where
+                  </label>
+                  <input
+                    type="text"
+                    id="where"
+                    name="where"
+                    value={formData.where}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Where are you going?"
+                    required
+                  />
+                </div>
+
+                <div className="relative">
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <AlertCircle className="w-4 h-4 mr-2" />
+                    Your responsibility
+                  </label>
+                  <input
+                    type="text"
+                    id="responsibility"
+                    name="responsibility"
+                    value={formData.responsibility}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Your responsibility? -Yes/No"
+                    required
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="relative">
+                    <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                      <Calendar className="w-4 h-4 mr-2" />
+                      Date of Arrival
+                    </label>
+                    <input
+                      type="date"
+                      id="dateOfArrival"
+                      name="dateOfArrival"
+                      value={formData.dateOfArrival}
+                      onChange={handleChange}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      required
+                    />
+                  </div>
+
+                  <div className="relative">
+                    <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                      <Clock className="w-4 h-4 mr-2" />
+                      Out Time
+                    </label>
+                    <input
+                      type="time"
+                      id="outTime"
+                      name="outTime"
+                      value={formData.outTime}
+                      onChange={handleChange}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="relative">
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <FileText className="w-4 h-4 mr-2" />
+                    Reason
+                  </label>
+                  <textarea
+                    id="reason"
+                    name="reason"
+                    value={formData.reason}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 h-32 resize-none"
+                    placeholder="Explain why you need an outpass"
+                    required
+                  />
+                </div>
               </div>
-              <div className="form-group">
-                <label htmlFor="roll_no">Roll Number</label>
-                <input
-                  type="text"
-                  id="roll_no"
-                  name="roll_no"
-                  value={formData.roll_no}
-                  onChange={handleChange}
-                  placeholder="Enter your roll number"
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="where">Where</label>
-                <input
-                  type="text"
-                  id="where"
-                  name="where"
-                  value={formData.where}
-                  onChange={handleChange}
-                  placeholder="Where are you going?"
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="responsibility">Your responsibility</label>
-                <input
-                  type="text"
-                  id="responsibility"
-                  name="responsibility"
-                  value={formData.responsibility}
-                  onChange={handleChange}
-                  placeholder="Your responsibility? -Yes/No"
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="dateOfArrival">Date of Arrival</label>
-                <input
-                  type="date"
-                  id="dateOfArrival"
-                  name="dateOfArrival"
-                  value={formData.dateOfArrival}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="outTime">Out Time</label>
-                <input
-                  type="time"
-                  id="outTime"
-                  name="outTime"
-                  value={formData.outTime}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="reason">Reason</label>
-                <textarea
-                  id="reason"
-                  name="reason"
-                  value={formData.reason}
-                  onChange={handleChange}
-                  placeholder="Explain why you need an outpass"
-                  required
-                />
-              </div>
-              <button type="submit" className="submit-btn">
-                Submit
+
+              <button
+                type="submit"
+                className="w-full bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200"
+              >
+                Submit Outpass Request
               </button>
             </form>
           </div>
         </div>
       </div>
 
-      {/* Modal popup */}
+      {/* Modal */}
       {isModalOpen && (
-        <div className="modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-lg p-8 max-w-sm w-full">
-            <p className="text-center text-lg font-medium">{modalMessage}</p>
-            <div className="text-center mt-4">
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="absolute inset-0 bg-black opacity-50"></div>
+          <div className="relative bg-white rounded-lg shadow-xl p-8 max-w-sm w-full mx-4">
+            <div className="text-center">
+              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 mb-4">
+                {modalMessage.includes("successful") ? (
+                  <UserCheck className="h-6 w-6 text-blue-600" />
+                ) : (
+                  <AlertCircle className="h-6 w-6 text-red-600" />
+                )}
+              </div>
+              <p className="text-lg font-medium text-gray-900 mb-4">{modalMessage}</p>
               <button
                 onClick={closeModal}
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg">
+                className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
                 Close
               </button>
             </div>

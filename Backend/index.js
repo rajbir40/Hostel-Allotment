@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import outpassRoute from "./Routes/outpass.js";
 import hostelRoute from "./Routes/Hostel.js";
 import adminRoute from "./Routes/admin.js";
+import activityRoutes from "./Routes/activityRoutes.js";
 
 const app = express();
 const PORT = 8000;
@@ -17,12 +18,12 @@ app.use(cors({
     credentials:true
 }))
 
-
 connectMongoDB("mongodb+srv://software:jupyter@cluster0.tv4pl.mongodb.net/")
 .then(()=>console.log("MongoDB connected"));
 
 app.use(cookieParser());
 
+app.use("/activity",activityRoutes);
 app.use("/user",userRoute);
 app.use("/pending",outpassRoute);
 app.use("/update",outpassRoute);

@@ -1,4 +1,5 @@
 import Outpass from "../Models/outpass.js";
+import RecentActivity from "../Models/RecentActivity.js";
 
 export async function handleApplyOutpass(req,res) {
     try{
@@ -37,6 +38,21 @@ export async function handleUpdateStatus(req,res) {
         if(!outpass || !outpass.status){
             return res.status(404).json({message:"invalid outpass"})
         }
+
+        if(status=== 'Approved'){
+            const rejectionActivity = await RecentActivity.create({
+                type: "Outpass Request",
+                description: `Request Approved for RollNumber ${roll_number}`
+            });
+        }
+
+        if(status ==='Rejected'){
+            const rejectionActivity = await RecentActivity.create({
+                type: "Outpass Request",
+                description: `Request Rejected for RollNumber ${roll_number}`
+            });
+        }
+
         outpass.status = status;
         await outpass.save();
         res.status(200).json({ message: 'Outpass status updated successfully', outpass });

@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { UserRound, FileOutput, HomeIcon, Search } from "lucide-react";
@@ -10,19 +9,29 @@ const Dashboard = () => {
   const [userCount, setUserCount] = useState(0);
   const [roomCount, setRoomCount] = useState(0);
   const [outpassCount, setOutpassCount] = useState(0);
+  const [recentActivities, setRecentActivities] = useState([]); // State to hold recent activity data
 
   const fetchData = async () => {
-    const userResponse = await fetch(`${host}/getnumber/students`);
-    const userData = await userResponse.json();
-    setUserCount(userData.number);
+    try {
+      const userResponse = await fetch(`${host}/getnumber/students`);
+      const userData = await userResponse.json();
+      setUserCount(userData.number);
 
-    const roomResponse = await fetch(`${host}/roomrequests/fetch`);
-    const roomData = await roomResponse.json();
-    setRoomCount(roomData.length);
+      const roomResponse = await fetch(`${host}/roomrequests/fetch`);
+      const roomData = await roomResponse.json();
+      setRoomCount(roomData.length);
 
-    const outpassResponse = await fetch(`${host}/pending/fetchoutpass`);
-    const outpassData = await outpassResponse.json();
-    setOutpassCount(outpassData.length);
+      const outpassResponse = await fetch(`${host}/pending/fetchoutpass`);
+      const outpassData = await outpassResponse.json();
+      setOutpassCount(outpassData.length);
+
+      // Fetch recent activities for approvals and declines
+      const activitiesResponse = await fetch(`${host}/activity/recent-activities`);
+      const activitiesData = await activitiesResponse.json();
+      setRecentActivities(activitiesData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   useEffect(() => {
@@ -92,9 +101,16 @@ const Dashboard = () => {
               <CardTitle>Recent Activity</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-500">
-                No recent activity to display
-              </p>
+              {recentActivities.length > 0 ? (
+                recentActivities.map((activity, index) => (
+                  <div key={index} className="text-sm text-gray-500 mb-2">
+                    <p><strong>{activity.type}</strong>: {activity.description}</p>
+                    <p>{new Date(activity.timestamp).toLocaleDateString()}</p>
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-gray-500">No recent activity to display</p>
+              )}
             </CardContent>
           </Card>
         </div>

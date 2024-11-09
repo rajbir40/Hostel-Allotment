@@ -18,6 +18,10 @@ const recentActivitySchema = new Schema({
     type: Boolean,
     default: false,
   },
+  enrollmentId:{
+    type: String,
+    required: true 
+  }
 });
 
 const RecentActivity = mongoose.model("RecentActivity", recentActivitySchema);

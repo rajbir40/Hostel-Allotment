@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema(
         enrollmentId:{
             type:String,
             required:true,
+            unique:true,
             default:"ADM123"
         },
         phoneNumber:{

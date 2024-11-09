@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import {
@@ -46,15 +46,17 @@ const Sidebar = () => {
     { path: "/adminpage/roomrequests", icon: BookOpenCheck, label: "Booking Requests" },
     { path: "/adminpage/roominquiry", icon: Building2, label: "Room Inquiry" },
     { path: "/adminpage/outpassrequest", icon: FileOutput, label: "Outpass Requests" },
-    { path: "#", icon: MessageSquare, label: "Comment" },
     { path: "/adminpage/profile", icon: Share2, label: "Admin Profile" },
   ];
 
   const isActivePath = (path) => location.pathname === path;
 
+  useEffect(() => {
+    setIsCollapsed(true);
+  }, [location.pathname]);
+
   return (
     <div className={`fixed left-0 top-0 h-full border-r bg-white transition-all duration-300 z-50 ${isCollapsed ? 'w-20' : 'w-64'}`}>
-      {/* Header */}
       <div className="p-4 border-b">
         <div className="flex items-center justify-between">
           {!isCollapsed && (
@@ -76,7 +78,6 @@ const Sidebar = () => {
         </div>
       </div>
 
-      {/* Navigation */}
       <div className="py-4 flex flex-col h-[calc(100vh-5rem)] justify-between">
         <nav className="px-2 space-y-1">
           {navigationItems.map((item) => (
@@ -92,7 +93,6 @@ const Sidebar = () => {
           ))}
         </nav>
 
-        {/* Footer */}
         <div className="border-t pt-4 px-2 space-y-1">
           <Button
             variant="ghost"

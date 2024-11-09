@@ -35,7 +35,7 @@ const RoomRequests = () => {
         <Sidebar />
       </div>
 
-      <div className="ml-64 flex-1 overflow-auto">
+      <div className="ml-16 flex-1 overflow-auto">
         <div className="p-8">
           <Card className="w-full">
             <CardHeader>

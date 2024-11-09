@@ -47,7 +47,7 @@ export default function SignUp() {
   return (
     <section>
       <div className='main-signup'>
-        <div className='form-signup'>
+        <div className='form-signup' style={{marginTop:'40px',padding:'17px'}}>
           <form onSubmit={handleSignup} className="w-full max-w-md bg-white-100 rounded-lg signup-box">
             <div className="flex justify-center mx-auto mb-4">
               <img className="w-auto h-7 sm:h-8" src="https://merakiui.com/images/logo.svg" alt="Logo" />
@@ -163,7 +163,7 @@ export default function SignUp() {
         </div>
 
         <div className='sidebar-signup'>
-          <h1>SignUp to DormSpace!</h1>
+          <h1 style={{padding:'60px'}}>SignUp to DormSpace!</h1>
         </div>
       </div>
 

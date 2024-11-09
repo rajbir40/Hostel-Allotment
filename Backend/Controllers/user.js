@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
 import User from "../Models/user.js";  
 import bcrypt from "bcryptjs";
+import RecentActivity from "../Models/RecentActivity.js";
 import jwt from "jsonwebtoken";
 const secret = "rajbirsingh1234";
 import crypto from "crypto"
@@ -65,7 +66,8 @@ export async function handleUserLogin(req,res) {
         }
         const data = {
             user:{
-                id : user.id
+              id : user.id,
+              enrollmentId : user.enrollmentId
             }
         }
         const authToken = jwt.sign(data,secret);
@@ -221,3 +223,16 @@ export const userEdit= async (req, res) => {
       res.status(500).json({ error: 'Server Error' });
     } 
   };
+
+export const handleFetchRecentActivity = async (req, res) => {
+    try {
+      const user = req.user;
+      console.log(user.enrollmentId);
+      const activities = await RecentActivity.find({enrollmentId: user.enrollmentId}).sort({ createdAt: -1 });
+      return res.status(200).json(activities);
+    }
+    catch (error) {
+      console.error('Error fetching recent activities:', error);
+      return res.status(500).json({ error: 'Failed to fetch recent activities' });
+    }
+}

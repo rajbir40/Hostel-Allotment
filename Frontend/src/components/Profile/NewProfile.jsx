@@ -226,6 +226,79 @@ const ProfilePage = ({
               </CardContent>
             </Card>
           </div>
+
+          {/* Recent Activity Card */}
+          <Card className="mt-10">
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle className="text-xl font-semibold">Recent Activity</CardTitle>
+              {recentActivities.length > 0 && (
+                <Badge variant="secondary" className="ml-2">
+                  {recentActivities.length} {recentActivities.length === 1 ? 'item' : 'items'}
+                </Badge>
+              )}
+            </CardHeader>
+            <CardContent>
+              {recentActivities.length > 0 ? (
+                <div className="space-y-4">
+                  {recentActivities.map((activity, index) => (
+                    <div
+                      key={index}
+                      className="flex items-start space-x-4 p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors"
+                    >
+                      <div className="flex-shrink-0">
+                        {activity.resolved ? (
+                          <CheckCircle className="w-5 h-5 text-green-500" />
+                        ) : (
+                          <AlertCircle className="w-5 h-5 text-yellow-500" />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between">
+                          <p className="font-medium text-sm text-gray-900">
+                            {activity.type}
+                          </p>
+                          <div className="flex items-center text-sm text-gray-500">
+                            <Clock className="w-4 h-4 mr-1" />
+                            {new Date(activity.timestamp).toLocaleDateString('en-US', {
+                              month: 'short',
+                              day: 'numeric',
+                              year: 'numeric'
+                            })}
+                          </div>
+                        </div>
+                        <p className="mt-1 text-sm text-gray-600">
+                          {activity.description}
+                        </p>
+                        {!activity.resolved && (
+                          <div className="mt-3">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 -ml-2"
+                              onClick={() => {
+                                const path = activity.type === "Room Booking Request"
+                                  ? "/adminpage/roomrequests"
+                                  : "/adminpage/outpassrequest";
+                                navigate(path);
+                              }}
+                            >
+                              View details
+                              <ArrowRight className="w-4 h-4 ml-1" />
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-8 text-center">
+                  <Clock className="w-12 h-12 text-gray-300 mb-3" />
+                  <p className="text-gray-500">No recent activity to display</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

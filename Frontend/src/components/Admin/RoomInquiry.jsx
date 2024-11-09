@@ -47,7 +47,7 @@ export default function RoomInquiry() {
         <Sidebar />
       </div>
 
-      <div className="ml-64 flex-1 overflow-auto">
+      <div className="ml-16 flex-1 overflow-auto">
         <div className="p-8">
           <h2 className="text-2xl font-bold mb-6">Available Hostels</h2>
           {isLoading ? (

@@ -33,12 +33,12 @@ function App() {
         <Route path="/outpass" element={<Outpass />} />
         <Route path ="/abc" element={<Navbar/>}/>
         <Route path="/logout" element={<Logout />} />
-        <Route path="/alloGh1" element={<Allotment />}/>
+        <Route path="/allotmentGH-1" element={<Allotment />}/>
         {/* <Route path='/allotmentgh1' element={<AllotmentGH1/>}/> */}
-        <Route path='allotmentgh2' element={<AllotmentGH2/>}/>
-        <Route path='/allotmentBH1' element={<AllotmentBH1/>}/>
-        <Route path='/allotmentBH2' element={<AllotmentBH2/>}/>
-        <Route path='/allotmentBH3' element={<AllotmentBH3/>}/>
+        <Route path='/allotmentGH-2' element={<AllotmentGH2/>}/>
+        <Route path='/allotmentBH-1' element={<AllotmentBH1/>}/>
+        <Route path='/allotmentBH-2' element={<AllotmentBH2/>}/>
+        <Route path='/allotmentBH-3' element={<AllotmentBH3/>}/>
         <Route path='/selection' element={<HostelSelection/>} />
         <Route path='/admin' element={<AdminProfile/>}/>
         <Route path='/newprofile' element={<StudentProfile/>}/>

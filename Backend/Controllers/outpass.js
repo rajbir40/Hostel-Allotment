@@ -3,23 +3,23 @@ import RecentActivity from "../Models/RecentActivity.js";
 
 export async function handleApplyOutpass(req, res) {
     try {
-        console.log(req.body);
+        console.log(req.body.roll_no);
         
         // Create new outpass request
         const outpass = await Outpass.create({
-            name: req.body.formData.name,
-            roll_no: req.body.formData.roll_no,
-            where: req.body.formData.where,
-            reason: req.body.formData.reason,
-            dateOfArrival: req.body.formData.dateOfArrival,
-            responsibility: req.body.formData.responsibility,
+            name: req.body.name,
+            roll_no: req.body.roll_no,
+            where: req.body.where,
+            reason: req.body.reason,
+            dateOfArrival: req.body.dateOfArrival,
+            responsibility: req.body.responsibility,
             status: 'Pending' 
         });
 
         // Create a new recent activity entry
         await RecentActivity.create({
             type: "Outpass Request",
-            description: `Outpass Request created for RollNumber ${req.body.formData.roll_no}`,
+            description: `Outpass Request created for RollNumber ${req.body.roll_no}`,
             resolved: false
         });
 
@@ -73,3 +73,13 @@ export async function handleUpdateStatus(req, res) {
         return res.status(404).json({ message: "Status not updated" });
     }
 }
+
+export async function handleFetchOutpass(req, res) {
+    try {
+      const studentId = String(req.params.id);
+      const outpasses = await Outpass.find({ roll_no: studentId }).sort({ createdAt: -1 }).limit(10);
+      res.json(outpasses);
+    } catch (error) {
+      res.status(500).json({ error: 'Error fetching outpass requests' });
+    }
+  }

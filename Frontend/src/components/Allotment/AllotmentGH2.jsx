@@ -21,7 +21,7 @@ export default function AllotmentGH2() {
         try {
           const response = await axios.get(`${serverURL}/room`);
           console.log(response.data);
-          const filteredRooms = response.data.filter(room => room.hostel === 'GH-1');
+          const filteredRooms = response.data.filter(room => room.hostel === 'GH-2');
           setRoom(filteredRooms);
         } catch (error) {
             console.error("Error fetching rooms:", error);

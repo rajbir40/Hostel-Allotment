@@ -31,7 +31,6 @@ const Dashboard = () => {
       const outpassData = await outpassResponse.json();
       setOutpassCount(outpassData.length);
 
-      // Fetch recent activities for approvals and declines
       const activitiesResponse = await fetch(`${host}/activity/recent-activities`);
       const activitiesData = await activitiesResponse.json();
       setRecentActivities(activitiesData);

@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Navbar from '../Navbar/Navbar';
 import { Calendar, Clock, MapPin, User, UserCheck, FileText, AlertCircle } from 'lucide-react';
+const serverURL = 'http://localhost:8000'
 
 const Outpass = () => {
   const navigate = useNavigate();
+  const [studentId, setStudentId] = useState();
+  const [rollNum, setRollNum] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     roll_no: "",
@@ -15,6 +18,26 @@ const Outpass = () => {
     outTime: "",
     responsibility: "",
   });
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const storedStudentId = JSON.parse(localStorage?.getItem('user'));
+        setStudentId(storedStudentId);
+        if (storedStudentId) {
+          const response = await axios.get(`${serverURL}/user/student/${storedStudentId}`);
+          const user = response.data;
+          setRollNum(user.enrollmentId);
+        } else {
+          console.error("No student ID found in local storage.");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
   
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
@@ -29,7 +52,9 @@ const Outpass = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8000/user/apply", { formData }, { withCredentials: true });
+      const dataToSend = { ...formData, roll_no: rollNum };
+      
+      const response = await axios.post("http://localhost:8000/user/apply", dataToSend, { withCredentials: true });
       setModalMessage("Submission successful!");
       setIsModalOpen(true);
       setTimeout(() => {
@@ -83,7 +108,7 @@ const Outpass = () => {
                     required
                   />
                 </div>
-
+{/* 
                 <div className="relative">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <UserCheck className="w-4 h-4 mr-2" />
@@ -99,7 +124,7 @@ const Outpass = () => {
                     placeholder="Enter your roll number"
                     required
                   />
-                </div>
+                </div> */}
 
                 <div className="relative">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">

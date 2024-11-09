@@ -31,6 +31,7 @@ app.use("/addhostel",hostelRoute);
 app.use("/bookroom",hostelRoute);
 app.use("/room",hostelRoute);
 app.use("/getuser",userRoute);
+app.use("/outpasses",outpassRoute);
 
 app.use("/getrooms",hostelRoute);
 app.use("/gethostel",hostelRoute);

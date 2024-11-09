@@ -1,109 +1,113 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios'; // Import axios
-import { UserContext } from '../../context/UserContext.jsx';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Button } from "@/components/ui/button";
+import {
+  LayoutDashboard,
+  BookOpenCheck,
+  Building2,
+  FileOutput,
+  MessageSquare,
+  Share2,
+  LogOut,
+  Menu
+} from "lucide-react";
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
-const serverURL = "http://localhost:8000";
+const Navbar = () => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const location = useLocation();
 
-export default function NavbarTest() {
-  // State to handle menu visibility
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { user, logout } = useContext(UserContext);
-  
-  const [role, setRole] = useState(null); // Set role as a state variable
-  const [studentId, setStudentId] = useState(null);
-
-  // Function to toggle the menu
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+  const handleLogout = () => {
+    confirmAlert({
+      title: "Confirm Logout",
+      message: "Are you sure you want to log out?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => {
+            localStorage.removeItem('user');
+            localStorage.removeItem('role');
+            window.location.href = '/login';
+          }
+        },
+        {
+          label: "No",
+          onClick: () => {}
+        }
+      ],
+      closeOnEscape: true,
+      closeOnClickOutside: true,
+    });
   };
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const savedUser = JSON.parse(localStorage.getItem('user'));
-        if (savedUser) {
-          setStudentId(savedUser.id); // Update with correct field if different
+  const navigationItems = [
+    { path: "/", icon: LayoutDashboard, label: "Dashboard" },
+    { path: "/outpass", icon: BookOpenCheck, label: "Generate Outpass" },
+    { path: "/selection", icon: Building2, label: "Book Room" },
+    { path: "/adminpage/profile", icon: Share2, label: "My Profile" },
+  ];
 
-          const response = await axios.get(`${serverURL}/user/student/${savedUser}`);
-          const userData = response.data;
-          setRole(userData.role); // Set the user role
-        } else {
-          console.error("No user data found in localStorage.");
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-    fetchUserData();
-  }, []);
+  const isActivePath = (path) => location.pathname === path;
+
+  useEffect(() => {
+    setIsCollapsed(true);
+  }, [location.pathname]);
 
   return (
-    <nav className="bg-white border-gray-200">
-      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-          <img src="https://flowbite.com/docs/images/logo.svg" className="h-8" alt="Flowbite Logo" />
-          <span className="self-center text-2xl font-semibold whitespace-nowrap text-black" style={{ color: 'blue' }}>
-            DormSpace
-          </span>
-        </a>
-        <button
-          onClick={toggleMenu}
-          type="button"
-          className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
-          aria-controls="navbar-default"
-          aria-expanded={isMenuOpen ? "true" : "false"}
-        >
-          <span className="sr-only">Open main menu</span>
-          <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15" />
-          </svg>
-        </button>
-        <div className={`${isMenuOpen ? "block" : "hidden"} w-full md:block md:w-auto`} id="navbar-default">
-          <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-white md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0">
-            <li>
-              <Link to="/" className="block py-2 px-3 text-black bg-white rounded md:bg-transparent md:text-black md:p-0" aria-current="page">
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link to="/selection" className="block py-2 px-3 text-black rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0">
-                Hostel Allotment
-              </Link>
-            </li>
-            <li>
-              <Link to="/outpass" className="block py-2 px-3 text-black rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0">
-                Outpass
-              </Link>
-            </li>
-            <li>
-              <Link to="/newprofile" className="block py-2 px-3 text-black rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0">
-                Profile
-              </Link>
-            </li>
-            {role === "admin" ? (
-              <li>
-                <Link to="/adminpage/dashboard" className="block py-2 px-3 text-black rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0">
-                  Admin Dashboard
-                </Link>
-              </li>
-            ) : (
-              <></>
-            )}
-            <li>
-              {user ? (
-                <a href="/logout" className="block py-2 px-3 text-black rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0" onClick={logout}>
-                  Logout
-                </a>
-              ) : (
-                <Link to="/login" className="block py-2 px-3 text-black rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0">
-                  Login
-                </Link>
-              )}
-            </li>
-          </ul>
+    <div className={`fixed left-0 top-0 h-full border-r bg-white transition-all duration-300 z-50 ${isCollapsed ? 'w-20' : 'w-64'}`}>
+      {/* Header */}
+      <div className="p-4 border-b">
+        <div className="flex items-center justify-between">
+          {!isCollapsed && (
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold">D</span>
+              </div>
+              <span className="font-bold text-xl">DormSpace</span>
+            </div>
+          )}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className="h-8 w-8"
+          >
+            <Menu className="h-4 w-4" />
+          </Button>
         </div>
       </div>
-    </nav>
+
+      {/* Navigation */}
+      <div className="py-4 flex flex-col h-[calc(100vh-5rem)] justify-between">
+        <nav className="px-2 space-y-1">
+          {navigationItems.map((item) => (
+            <Link to={item.path} key={item.label}>
+              <Button
+                variant={isActivePath(item.path) ? "secondary" : "ghost"}
+                className={`w-full justify-start mb-1 ${isCollapsed ? 'px-2' : 'px-4'}`}
+              >
+                <item.icon className={`h-4 w-4 ${isCollapsed ? 'mr-0' : 'mr-2'}`} />
+                {!isCollapsed && <span>{item.label}</span>}
+              </Button>
+            </Link>
+          ))}
+        </nav>
+
+        {/* Footer */}
+        <div className="border-t pt-4 px-2 space-y-1">
+          <Button
+            variant="ghost"
+            onClick={handleLogout}
+            className={`w-full justify-start ${isCollapsed ? 'px-2' : 'px-4'}`}
+          >
+            <LogOut className={`h-4 w-4 ${isCollapsed ? 'mr-0' : 'mr-2'}`} />
+            {!isCollapsed && <span>Logout</span>}
+          </Button>
+        </div>
+      </div>
+    </div>
   );
-}
+};
+
+export default Navbar;

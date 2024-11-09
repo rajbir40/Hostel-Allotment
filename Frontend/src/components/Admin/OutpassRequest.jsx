@@ -45,7 +45,7 @@ const OutpassRequest = () => {
     <div className=" min-h-screen bg-gray-100">
         <Sidebar />
 
-      <div className="ml-64 flex-1 overflow-auto">
+      <div className="ml-16 flex-1 overflow-auto">
         <div className="p-8">
           <Card className="w-full">
             <CardHeader>

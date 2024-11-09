@@ -48,7 +48,7 @@ const Dashboard = () => {
     <div className="min-h-screen bg-gray-50">
       <Sidebar />
 
-      <div className="lg:ml-64 p-8">
+      <div className="lg:ml-16 p-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
           <div className="relative w-64">

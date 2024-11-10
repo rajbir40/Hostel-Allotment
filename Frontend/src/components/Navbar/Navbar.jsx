@@ -45,7 +45,7 @@ const Navbar = () => {
     { path: "/", icon: LayoutDashboard, label: "Dashboard" },
     { path: "/outpass", icon: BookOpenCheck, label: "Generate Outpass" },
     { path: "/selection", icon: Building2, label: "Book Room" },
-    { path: "/adminpage/profile", icon: Share2, label: "My Profile" },
+    { path: "/newprofile", icon: Share2, label: "My Profile" },
   ];
 
   const isActivePath = (path) => location.pathname === path;

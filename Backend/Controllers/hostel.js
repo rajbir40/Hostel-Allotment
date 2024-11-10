@@ -149,7 +149,6 @@ export async function handleRoomBookingRequest(req, res) {
             type: "Room Booking Request",
             description: `New booking request for Room ${roomNumber} in ${hostel}`,
             resolved: false,
-            enrollmentId: req.user.enrollmentId,
         });
 
         return res.status(200).json({ message: "Request sent" });

@@ -228,7 +228,7 @@ const ProfilePage = ({
           </div>
 
           {/* Recent Activity Card */}
-          <Card className="mt-10">
+          {/* <Card className="mt-10">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="text-xl font-semibold">Recent Activity</CardTitle>
               {recentActivities.length > 0 && (
@@ -298,7 +298,7 @@ const ProfilePage = ({
                 </div>
               )}
             </CardContent>
-          </Card>
+          </Card> */}
         </div>
       </div>
     </div>

@@ -55,8 +55,8 @@ The **Hostel Allotment System** offers a streamlined, online platform to manage:
 ## 🛠️ Technology Stack  
 
 - **Frontend**:  
-  - Framework: Vite + React
-  - Design: [shadcn](https://shadcn.dev/)  
+  - Framework: [Vite + React](https://vite.dev/)
+  - Design: [shadcn](https://ui.shadcn.com/)  
 
 - **Backend**:  
   - Framework: Node.js (Express.js)  

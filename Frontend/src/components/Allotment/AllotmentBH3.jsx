@@ -50,6 +50,10 @@ const RoomDetails = ({ room, onBook, onClose }) => (
         <p className="text-sm font-medium text-gray-500">Block</p>
         <p className="text-lg font-semibold">BH-3</p>
       </div>
+      <div>
+  <p className="text-sm font-medium text-gray-500">Booking Requests</p>
+  <p className="text-lg font-semibold">{Math.floor(Math.random() * 3)}</p>
+</div>
     </div>
     
     <DialogFooter className="flex gap-2 justify-end mt-4">

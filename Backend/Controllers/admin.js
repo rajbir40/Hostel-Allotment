@@ -4,7 +4,7 @@ import User from "../Models/user.js"
 
 export async function getNumberOfStudents(req,res) {
 
-    const number = await User.find().countDocuments({"role":'student'});
+    const number = await User.find().countDocuments({"role":'Student'});
     return res.status(200).json({number});
     
 }

@@ -21,8 +21,12 @@ const RoomRequests = () => {
     setIsLoading(false);
   };
 
-  const handleClick = (id, studentId) => {
-    navigate('/adminpage/roomrequests/approval', { state: { id, studentId } });
+  const handleClick = (id, studentId, roomMateId) => {
+    const state = { id, studentId };
+    if (roomMateId) {
+      state.roomMateId = roomMateId; // Add roomMateId only if it exists
+    }
+    navigate('/adminpage/roomrequests/approval', { state });
   };
 
   useEffect(() => {
@@ -71,7 +75,7 @@ const RoomRequests = () => {
                           <TableCell>{item.status}</TableCell>
                           <TableCell>
                             <Button 
-                              onClick={() => handleClick(item._id, item.studentId)}
+                              onClick={() => handleClick(item._id, item.studentId, item.roomMateId)}
                               size="sm"
                             >
                               Proceed

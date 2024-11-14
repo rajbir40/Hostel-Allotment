@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Navbar from '../Navbar/Navbar';
-import { Calendar, Clock, MapPin, User, UserCheck, FileText, AlertCircle } from 'lucide-react';
-const serverURL = 'http://localhost:8000'
+import Navbar from "../Navbar/Navbar";
+import { Calendar, Clock, MapPin, User, UserCheck, FileText, AlertCircle } from "lucide-react";
+
+const serverURL = "http://localhost:8000";
 
 const Outpass = () => {
   const navigate = useNavigate();
-  const [studentId, setStudentId] = useState();
+  const [studentId, setStudentId] = useState(null);
   const [rollNum, setRollNum] = useState("");
   const [formData, setFormData] = useState({
     name: "",
-    roll_no: "",
     where: "",
     dateOfArrival: "",
     reason: "",
@@ -19,18 +19,22 @@ const Outpass = () => {
     responsibility: "",
   });
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const storedStudentId = JSON.parse(localStorage?.getItem('user'));
-        setStudentId(storedStudentId);
-        if (storedStudentId) {
-          const response = await axios.get(`${serverURL}/user/student/${storedStudentId}`);
-          const user = response.data;
-          setRollNum(user.enrollmentId);
-        } else {
+        const storedStudentId = JSON.parse(localStorage.getItem("user"));
+        if (!storedStudentId) {
           console.error("No student ID found in local storage.");
+          return;
         }
+
+        setStudentId(storedStudentId);
+        const response = await axios.get(`${serverURL}/user/student/${storedStudentId}`);
+        const user = response.data;
+        setRollNum(user.enrollmentId);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -38,32 +42,33 @@ const Outpass = () => {
 
     fetchUserData();
   }, []);
-  
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const dataToSend = { ...formData, roll_no: rollNum };
-      
-      const response = await axios.post("http://localhost:8000/user/apply", dataToSend, { withCredentials: true });
+      await axios.post(`${serverURL}/user/apply`, dataToSend, { withCredentials: true });
+
       setModalMessage("Submission successful!");
       setIsModalOpen(true);
+
       setTimeout(() => {
         setIsModalOpen(false);
         navigate("/");
       }, 2000);
     } catch (error) {
-      console.log(error);
-      setModalMessage("Submission Failed: " + (error.response?.data?.message || "An error occurred"));
+      console.error("Submission Error:", error);
+      const errorMessage = error.response?.data?.message || "An error occurred during submission.";
+      setModalMessage(`Submission Failed: ${errorMessage}`);
       setIsModalOpen(true);
     }
   };
@@ -108,23 +113,6 @@ const Outpass = () => {
                     required
                   />
                 </div>
-{/* 
-                <div className="relative">
-                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
-                    <UserCheck className="w-4 h-4 mr-2" />
-                    Roll Number
-                  </label>
-                  <input
-                    type="text"
-                    id="roll_no"
-                    name="roll_no"
-                    value={formData.roll_no}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Enter your roll number"
-                    required
-                  />
-                </div> */}
 
                 <div className="relative">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
@@ -146,7 +134,7 @@ const Outpass = () => {
                 <div className="relative">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <AlertCircle className="w-4 h-4 mr-2" />
-                    Your responsibility
+                    Your Responsibility
                   </label>
                   <input
                     type="text"
@@ -155,7 +143,7 @@ const Outpass = () => {
                     value={formData.responsibility}
                     onChange={handleChange}
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Your responsibility? -Yes/No"
+                    placeholder="Your responsibility? - Yes/No"
                     required
                   />
                 </div>
@@ -229,16 +217,16 @@ const Outpass = () => {
           <div className="relative bg-white rounded-lg shadow-xl p-8 max-w-sm w-full mx-4">
             <div className="text-center">
               <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 mb-4">
-                {modalMessage.includes("successful") ? (
-                  <UserCheck className="h-6 w-6 text-blue-600" />
+                {modalMessage.includes("Failed") ? (
+                  <AlertCircle className="w-6 h-6 text-red-500" />
                 ) : (
-                  <AlertCircle className="h-6 w-6 text-red-600" />
+                  <UserCheck className="w-6 h-6 text-blue-500" />
                 )}
               </div>
-              <p className="text-lg font-medium text-gray-900 mb-4">{modalMessage}</p>
+              <h3 className="text-lg font-medium text-gray-900">{modalMessage}</h3>
               <button
                 onClick={closeModal}
-                className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               >
                 Close
               </button>

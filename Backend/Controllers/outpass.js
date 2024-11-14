@@ -55,6 +55,7 @@ export async function handleUpdateStatus(req, res) {
             { $set :{status: 'Approved'} },
             { new: true }
         );
+        updatedOutpass.save();
 
         // Update recent activity based on the new status
         let description = "";
@@ -74,8 +75,44 @@ export async function handleUpdateStatus(req, res) {
             const mailOptions = {
                 from: 'ggbackup8520@gmail.com',
                 to: user.email,
-                subject: 'Your OTP for Order Confirmation',
-                text: `Your OTP for confirming your order is ${roll_number}.`,
+                subject: 'Outpass Confirmation',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9;">
+                        <h2 style="text-align: center; color: #333;">Outpass Request Confirmation</h2>
+                        <p style="font-size: 16px; color: #555;">Dear ${updatedOutpass.name},</p>
+                        <p style="font-size: 16px; color: #555;">Your outpass request has been processed. Please find the details below:</p>
+                        <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                            <tr>
+                                <th style="text-align: left; padding: 8px; border: 1px solid #ddd; background-color: #f0f0f0;">Roll Number</th>
+                                <td style="padding: 8px; border: 1px solid #ddd;">${updatedOutpass.roll_no}</td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left; padding: 8px; border: 1px solid #ddd; background-color: #f0f0f0;">Destination</th>
+                                <td style="padding: 8px; border: 1px solid #ddd;">${updatedOutpass.where}</td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left; padding: 8px; border: 1px solid #ddd; background-color: #f0f0f0;">Responsibility</th>
+                                <td style="padding: 8px; border: 1px solid #ddd;">${updatedOutpass.responsibility}</td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left; padding: 8px; border: 1px solid #ddd; background-color: #f0f0f0;">Reason</th>
+                                <td style="padding: 8px; border: 1px solid #ddd;">${updatedOutpass.reason}</td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left; padding: 8px; border: 1px solid #ddd; background-color: #f0f0f0;">Status</th>
+                                <td style="padding: 8px; border: 1px solid #ddd; color: ${updatedOutpass.status === 'Approved' ? 'green' : 'red'};">
+                                    ${updatedOutpass.status}
+                                </td>
+                            </tr>
+                        </table>
+                        <p style="font-size: 16px; color: #555;">If you have any questions, please contact the administration.</p>
+                        <p style="font-size: 16px; color: #555;">Regards,<br>Hostel Management Team</p>
+                        <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+                        <p style="font-size: 12px; color: #999; text-align: center;">
+                            This is an automated email. Please do not reply.
+                        </p>
+                    </div>
+                `,
             };
 
             await transporter.sendMail(mailOptions);

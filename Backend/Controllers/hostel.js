@@ -77,29 +77,64 @@ export async function handleRoomBooking(req,res) {
         room.studentId = studentId;
         await room.save();
 
-        const userEmail = await User.findById(studentObjectId).select('email');
-        if(!userEmail){
-            return res.status(404).json({message:"Email not found"});
+        const user = await User.findById(studentObjectId).select('email');
+        if (!user || !user.email) {
+            return res.status(404).json({ message: "Email not found" });
         }
+        const userEmail = user.email;
 
         const transporter = nodemailer.createTransport({
+            service: 'gmail',
             host: "smtp.gmail.com",
             port: 587,
-            secure: false, 
+            secure: false,
             auth: {
-                user: "mahakumbhlostfound@gmail.com", 
-                pass: "oevg lizk taxf hkrj", 
+                user: "ggbackup8520@gmail.com",
+                pass: "swpj cbea mdni rbdv",
             },
-        });``
+        });
 
         const mailOptions = {
-            from: 'rbir3438@gmail.com', 
+            from: 'ggbackup8520@gmail.com',
             to: userEmail,
-            subject: 'Regarding Room Booking',
-            text: `You has been alloted room number : ${roomNumber} of hostel ${hostel}.`,
+            subject: 'Room Booking Confirmation',
+            html: `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9;">
+                    <h2 style="text-align: center; color: #333;">Room Booking Confirmation</h2>
+                    <p style="font-size: 16px; color: #555;">Dear Student,</p>
+                    <p style="font-size: 16px; color: #555;">Your room booking has been successfully processed. Below are the details of your room allocation:</p>
+                    <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                        <tr>
+                            <th style="text-align: left; padding: 8px; border: 1px solid #ddd; background-color: #f0f0f0;">Room Number</th>
+                            <td style="padding: 8px; border: 1px solid #ddd;">${room.roomNumber}</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: left; padding: 8px; border: 1px solid #ddd; background-color: #f0f0f0;">Floor</th>
+                            <td style="padding: 8px; border: 1px solid #ddd;">${room.floor}</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: left; padding: 8px; border: 1px solid #ddd; background-color: #f0f0f0;">Hostel</th>
+                            <td style="padding: 8px; border: 1px solid #ddd;">${room.hostel}</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: left; padding: 8px; border: 1px solid #ddd; background-color: #f0f0f0;">Room Type</th>
+                            <td style="padding: 8px; border: 1px solid #ddd;">${room.type}</td>
+                        </tr>
+                    </table>
+                    <p style="font-size: 16px; color: #555;">If you have any questions or require further assistance, please contact the hostel administration.</p>
+                    <p style="font-size: 16px; color: #555;">Regards,<br>Hostel Management Team</p>
+                    <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+                    <p style="font-size: 12px; color: #999; text-align: center;">
+                        This is an automated email. Please do not reply.
+                    </p>
+                </div>
+            `,
         };
+        
 
         await transporter.sendMail(mailOptions);
+
+        console.log("done");
           
         return res.status(200).json(room);
 
@@ -126,13 +161,11 @@ export const fetchAllRooms = async (req,res) => {
 
 export async function handleRoomBookingRequest(req, res) {
     try {
-        const { roomNumber, hostel, studentId, roommateId } = req.body;
+        const { roomNumber, hostel, studentId, roomieRollNumber } = req.body;
 
         if (!roomNumber || !hostel) {
             return res.status(400).json({ message: "Room number and hostel are required" });
         }
-
-        console.log(req.body);
 
         // Find the room
         const room = await Room.findOne({ roomNumber: roomNumber, hostel: hostel });
@@ -143,8 +176,8 @@ export async function handleRoomBookingRequest(req, res) {
         let roomMateId = null;
 
         // If roommate roll number is provided, fetch the roommate's details
-        if (roommateId) {
-            const roomie = await User.findOne({ enrollmentId: roommateId });
+        if (roomieRollNumber) {
+            const roomie = await User.findOne({ enrollmentId: roomieRollNumber });
             if (!roomie) {
                 return res.status(404).json({ message: "Roommate not found" });
             }
@@ -168,12 +201,18 @@ export async function handleRoomBookingRequest(req, res) {
             resolved: false,
         });
 
-        return res.status(200).json({ message: "Request sent" });
+    
+        
+
+        await transporter.sendMail(mailOptions);
+
+        return res.status(200).json({ message: "Request approved" });
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: "Server didn't respond" });
     }
 }
+
 
 export async function fetchRoomBookingRequest(req,res) {
     try {
@@ -252,6 +291,57 @@ export async function updateRoomBookingRequest(req, res) {
 
             user.roomId = room._id;
             await user.save();
+    
+            // Send an email to the student    
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                host: "smtp.gmail.com",
+                port: 587,
+                secure: false,
+                auth: {
+                    user: "ggbackup8520@gmail.com",
+                    pass: "swpj cbea mdni rbdv",
+                },
+            });
+    
+            const mailOptions = {
+                from: 'ggbackup8520@gmail.com',
+                to: user.email,
+                subject: 'Room Booking Confirmation',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9;">
+                        <h2 style="text-align: center; color: #333;">Room Booking Confirmation</h2>
+                        <p style="font-size: 16px; color: #555;">Dear Student,</p>
+                        <p style="font-size: 16px; color: #555;">Your room booking has been successfully processed. Below are the details of your room allocation:</p>
+                        <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                            <tr>
+                                <th style="text-align: left; padding: 8px; border: 1px solid #ddd; background-color: #f0f0f0;">Room Number</th>
+                                <td style="padding: 8px; border: 1px solid #ddd;">${room.roomNumber}</td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left; padding: 8px; border: 1px solid #ddd; background-color: #f0f0f0;">Floor</th>
+                                <td style="padding: 8px; border: 1px solid #ddd;">${room.floor}</td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left; padding: 8px; border: 1px solid #ddd; background-color: #f0f0f0;">Hostel</th>
+                                <td style="padding: 8px; border: 1px solid #ddd;">${room.hostel}</td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left; padding: 8px; border: 1px solid #ddd; background-color: #f0f0f0;">Room Type</th>
+                                <td style="padding: 8px; border: 1px solid #ddd;">${room.type}</td>
+                            </tr>
+                        </table>
+                        <p style="font-size: 16px; color: #555;">If you have any questions or require further assistance, please contact the hostel administration.</p>
+                        <p style="font-size: 16px; color: #555;">Regards,<br>Hostel Management Team</p>
+                        <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+                        <p style="font-size: 12px; color: #999; text-align: center;">
+                            This is an automated email. Please do not reply.
+                        </p>
+                    </div>
+                `,
+            };
+    
+            await transporter.sendMail(mailOptions);
 
             // Update the recent activity entry to resolved
             recentActivity.resolved = true;

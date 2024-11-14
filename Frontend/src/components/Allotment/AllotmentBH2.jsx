@@ -6,119 +6,238 @@ import axios from 'axios';
 
 const serverURL = "http://localhost:8000";
 
-const RoomButton = ({ room, onClick }) => {
-  const isAvailable = room?.isAvailable;
-  
-  return (
-    <div className="relative group">
-      <button
-        onClick={() => onClick(room)}
-        disabled={!isAvailable}
-        className={`
-          relative h-8 w-12 rounded-lg font-medium text-sm transition-all duration-200
-          ${isAvailable 
-            ? 'bg-green-600 hover:bg-green-700 text-white' 
-            : 'bg-red-600 text-white opacity-80'
-          }
-        `}
-      >
-        {room?.roomNumber}
-        <Info className="absolute -top-1 -right-1 h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-      </button>
-    </div>
-  );
-};
-
-const RoomDetails = ({ room, onBook, onClose }) => (
-  <div className="space-y-4">
-    <div className="grid grid-cols-2 gap-4">
-      <div>
-        <p className="text-sm font-medium text-gray-500">Room Number</p>
-        <p className="text-lg font-semibold">{room.roomNumber}</p>
-      </div>
-      <div>
-        <p className="text-sm font-medium text-gray-500">Status</p>
-        <p className={`text-lg font-semibold ${room.isAvailable ? 'text-green-600' : 'text-red-600'}`}>
-          {room.isAvailable ? 'Available' : 'Occupied'}
-        </p>
-      </div>
-      <div>
-        <p className="text-sm font-medium text-gray-500">Floor</p>
-        <p className="text-lg font-semibold">{Math.floor(room.roomNumber / 100)}</p>
-      </div>
-      <div>
-        <p className="text-sm font-medium text-gray-500">Block</p>
-        <p className="text-lg font-semibold">BH-2</p>
-      </div>
-    </div>
-    
-    <DialogFooter className="flex gap-2 justify-end mt-4">
-      {room.isAvailable && (
-        <button
-          className="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors"
-          onClick={onBook}
-        >
-          Book Room
-        </button>
-      )}
-      <button
-        className="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors"
-        onClick={onClose}
-      >
-        Close
-      </button>
-    </DialogFooter>
-  </div>
-);
-
 const HostelLayout = () => {
   const [rooms, setRooms] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState(null);
-  const [studentId, setStudentId] = useState(null);
+  const [studentId, setStudentId] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+  const [isRoommateDialogOpen, setIsRoommateDialogOpen] = useState(false);
 
   useEffect(() => {
-    const getUserId = async () => {
-      const savedValue = JSON.parse(localStorage?.getItem('user'));
-      if (savedValue) {
-        setStudentId(savedValue);
-      }
-    };
-
-    const fetchRooms = async () => {
+    const initialize = async () => {
       try {
+        // Get user data first
+        const savedValue = localStorage.getItem('user');
+        if (savedValue) {
+          const parsedValue = JSON.parse(savedValue);
+          // Extract _id from the user object if it exists
+          const userId = parsedValue._id || parsedValue;
+          setStudentId(userId);
+        }
+
+        // Then fetch rooms
         const response = await axios.get(`${serverURL}/room`);
         const filteredRooms = response.data.filter(room => room.hostel === 'BH-2');
         setRooms(filteredRooms);
       } catch (error) {
-        console.error("Error fetching rooms:", error);
+        console.error("Error during initialization:", error);
       }
     };
 
-    fetchRooms();
-    getUserId();
-  }, []);
+    initialize();
+  }, []); // Single useEffect for initialization
 
-  const handleRoomBooking = async () => {
-    const reqData = { ...selectedRoom, studentId };
-    console.log(studentId);
+  const handleRoomBooking = async (roomData) => {
+    if (!studentId) {
+      alert("User ID not found. Please log in again.");
+      return;
+    }
+
     try {
-      const response = await axios.post(`${serverURL}/bookroom/req`, reqData);
-      setIsConfirmationOpen(false);
-      setIsDialogOpen(false);
+      const bookingData = {
+        ...roomData,
+        studentId: studentId,
+        hostel: 'BH-2',
+      };
+
+      const response = await axios.post(`${serverURL}/bookroom/req`, bookingData);
       
       if (response.status === 208) {
         alert("You have already booked a room!");
         return;
       }
       
-      alert(`Room ${selectedRoom.roomNumber}'s request has been sent!`);
-      window.location.reload(true);
+      alert(`Room ${roomData.roomNumber}'s request has been sent!`);
+      
+      // Refresh rooms instead of reloading page
+      const updatedRooms = await axios.get(`${serverURL}/room`);
+      setRooms(updatedRooms.data.filter(room => room.hostel === 'BH-2'));
+      
+      setIsDialogOpen(false);
     } catch (error) {
       console.error('Error booking room:', error);
       alert('Failed to book the room. Please try again.');
     }
+  };
+
+  const handleRoommateRequest = async (roommateData) => {
+    if (!studentId) {
+      alert("User ID not found. Please log in again.");
+      return;
+    }
+
+    try {
+      const payload = {
+        ...roommateData,
+        studentId: studentId,
+        hostel: 'BH-2',
+        roomNumber: selectedRoom.roomNumber
+      };
+      console.log(payload);
+
+      const response = await axios.post(`${serverURL}/bookroom/req`, payload);
+      setIsRoommateDialogOpen(false);
+      
+      const updatedRooms = await axios.get(`${serverURL}/room`);
+      setRooms(updatedRooms.data.filter(room => room.hostel === 'BH-2'));
+      alert("request sent!");
+    } catch (error) {
+      console.error('Error requesting roommate:', error);
+      alert('Failed to request a roommate. Please try again.');
+    }
+  };
+
+  const RoomButton = ({ room, onClick }) => {
+    const isAvailable = room?.isAvailable;
+    
+    return (
+      <div className="relative group">
+        <button
+          onClick={() => onClick(room)}
+          disabled={!isAvailable}
+          className={`
+            relative h-8 w-12 rounded-lg font-medium text-sm transition-all duration-200
+            ${isAvailable 
+              ? 'bg-green-600 hover:bg-green-700 text-white' 
+              : 'bg-red-600 text-white opacity-80'
+            }
+          `}
+        >
+          {room?.roomNumber}
+          <Info className="absolute -top-1 -right-1 h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+        </button>
+      </div>
+    );
+  };
+
+  const RoomDetails = ({ room, onBook, onClose, setIsRoommateDialogOpen }) => (
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <p className="text-sm font-medium text-gray-500">Room Number</p>
+          <p className="text-lg font-semibold">{room.roomNumber}</p>
+        </div>
+        <div>
+          <p className="text-sm font-medium text-gray-500">Status</p>
+          <p className={`text-lg font-semibold ${room.isAvailable ? 'text-green-600' : 'text-red-600'}`}>
+            {room.isAvailable ? 'Available' : 'Occupied'}
+          </p>
+        </div>
+        <div>
+          <p className="text-sm font-medium text-gray-500">Floor</p>
+          <p className="text-lg font-semibold">{Math.floor(room.roomNumber / 100)}</p>
+        </div>
+        <div>
+          <p className="text-sm font-medium text-gray-500">Block</p>
+          <p className="text-lg font-semibold">BH-2</p>
+        </div>
+        <div>
+          <p className="text-sm font-medium text-gray-500">Room Type</p>
+          <p className="text-lg font-semibold">{room.type}</p>
+        </div>
+      </div>
+      
+      <DialogFooter className="flex gap-2 justify-end mt-4">
+        {room.isAvailable && (
+          <button
+            className="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors"
+            onClick={() => onBook(room)}
+          >
+            Book Room
+          </button>
+        )}
+        {room.type === 'Double' && room.isAvailable && (
+          <button
+            className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+            onClick={() => setIsRoommateDialogOpen(true)}
+          >
+            Request Roommate
+          </button>
+        )}
+        <button
+          className="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors"
+          onClick={onClose}
+        >
+          Close
+        </button>
+      </DialogFooter>
+    </div>
+  );
+
+  const RoommateDialog = ({ room, onRequestRoommate, onClose }) => {
+    const [roommateName, setRoommateName] = useState('');
+    const [roommateId, setRoommateId] = useState('');
+
+    const handleSubmit = () => {
+      if (!roommateName || !roommateId) {
+        alert("Please fill in all fields");
+        return;
+      }
+      onRequestRoommate({
+        roommateName,
+        roommateId
+      });
+    };
+
+    return (
+      <Dialog open onOpenChange={onClose}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Request Roommate</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="roommateName" className="block text-sm font-medium text-gray-700">
+                Roommate Name
+              </label>
+              <input
+                type="text"
+                id="roommateName"
+                value={roommateName}
+                onChange={(e) => setRoommateName(e.target.value)}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              />
+            </div>
+            <div>
+              <label htmlFor="roommateId" className="block text-sm font-medium text-gray-700">
+                Roommate Enrollment ID
+              </label>
+              <input
+                type="text"
+                id="roommateId"
+                value={roommateId}
+                onChange={(e) => setRoommateId(e.target.value)}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              />
+            </div>
+          </div>
+          <DialogFooter className="flex gap-2 justify-end mt-4">
+            <button
+              onClick={handleSubmit}
+              className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Request Roommate
+            </button>
+            <button
+              onClick={onClose}
+              className="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors"
+            >
+              Cancel
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    );
   };
 
   const RoomGroup = ({ start, end }) => (
@@ -142,8 +261,9 @@ const HostelLayout = () => {
             </DialogHeader>
             <RoomDetails 
               room={room} 
-              onBook={() => setIsConfirmationOpen(true)}
+              onBook={handleRoomBooking}
               onClose={() => setIsDialogOpen(false)}
+              setIsRoommateDialogOpen={setIsRoommateDialogOpen}
             />
           </DialogContent>
         </Dialog>
@@ -183,7 +303,7 @@ const HostelLayout = () => {
               </div>
             ))}
             <div className="flex flex-col gap-4">
-              <RoomGroup start={22} end={24} />
+              <RoomGroup start={58} end={60} />
             </div>
           </div>
         </CardContent>
@@ -220,29 +340,13 @@ const HostelLayout = () => {
         </div>
       </div>
 
-      {/* Confirmation Dialog */}
-      <Dialog open={isConfirmationOpen} onOpenChange={setIsConfirmationOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Confirm Booking</DialogTitle>
-          </DialogHeader>
-          <p className="py-4">Are you sure you want to book room {selectedRoom?.roomNumber}?</p>
-          <DialogFooter className="flex gap-2 justify-end">
-            <button
-              onClick={handleRoomBooking}
-              className="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors"
-            >
-              Yes, Book It!
-            </button>
-            <button
-              onClick={() => setIsConfirmationOpen(false)}
-              className="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors"
-            >
-              Cancel
-            </button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {isRoommateDialogOpen && (
+        <RoommateDialog
+          room={selectedRoom}
+          onRequestRoommate={handleRoommateRequest}
+          onClose={() => setIsRoommateDialogOpen(false)}
+        />
+      )}
     </div>
   );
 };

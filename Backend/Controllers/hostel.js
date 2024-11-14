@@ -126,25 +126,42 @@ export const fetchAllRooms = async (req,res) => {
 
 export async function handleRoomBookingRequest(req, res) {
     try {
-        const { roomNumber, hostel, studentId } = req.body;
+        const { roomNumber, hostel, studentId, roommateId } = req.body;
+
         if (!roomNumber || !hostel) {
             return res.status(400).json({ message: "Room number and hostel are required" });
         }
 
+        console.log(req.body);
+
+        // Find the room
         const room = await Room.findOne({ roomNumber: roomNumber, hostel: hostel });
         if (!room) {
             return res.status(404).json({ message: "Room not found" });
         }
 
+        let roomMateId = null;
+
+        // If roommate roll number is provided, fetch the roommate's details
+        if (roommateId) {
+            const roomie = await User.findOne({ enrollmentId: roommateId });
+            if (!roomie) {
+                return res.status(404).json({ message: "Roommate not found" });
+            }
+            roomMateId = roomie._id; // Save the roommate's ID
+        }
+
+        // Create the room request
         const roomRequest = await Roomrequest.create({
             studentId: studentId,
             hostel: room.hostel,
             type: room.type,
             status: room.status,
             roomNumber: roomNumber,
+            roomMateId: roomMateId, // Include roommate ID only if it's available
         });
 
-        // Create a recent activity entry with resolved set to false
+        // Create a recent activity entry
         await RecentActivity.create({
             type: "Room Booking Request",
             description: `New booking request for Room ${roomNumber} in ${hostel}`,
@@ -153,7 +170,7 @@ export async function handleRoomBookingRequest(req, res) {
 
         return res.status(200).json({ message: "Request sent" });
     } catch (err) {
-        console.log(err);
+        console.error(err);
         return res.status(500).json({ message: "Server didn't respond" });
     }
 }

@@ -234,6 +234,8 @@ export async function fetchRoomBookingRequestById(req,res) {
 export async function updateRoomBookingRequest(req, res) {
     const { update } = req.body;
     const Id = req.params.id;
+    console.log(Id);
+    console.log(update);
 
     try {
         const roomRequest = await Roomrequest.findById(Id);
@@ -243,7 +245,7 @@ export async function updateRoomBookingRequest(req, res) {
 
         // Find the recent activity related to this room request
         const recentActivity = await RecentActivity.findOne({
-            description:` New booking request for Room ${roomRequest.roomNumber} in ${roomRequest.hostel}`,
+            description: `New booking request for Room ${roomRequest.roomNumber} in ${roomRequest.hostel}`,
             resolved: false,
         });
 
@@ -281,13 +283,6 @@ export async function updateRoomBookingRequest(req, res) {
                 return res.status(404).json({ message: "Room not found" });
             }
 
-            const roomieId = roomRequest.roomMateId;
-            const roomie = await User.findById(roomieId);
-            const roomieEmail = roomie.email;
-            if (!roomie || !roomieEmail) {
-                return res.status(404).json({ message: "Roomie email not found" });
-            }
-
             room.isAvailable = false;
             room.studentId = studentId;
             await room.save();
@@ -295,15 +290,15 @@ export async function updateRoomBookingRequest(req, res) {
             user.roomId = room._id;
             await user.save();
 
-            const hostel = await Hostel.findOne({name:roomRequest.hostel});
+            const hostel = await Hostel.findOne({ name: roomRequest.hostel });
             if (!hostel) {
                 return res.status(404).json({ message: "Hostel not found" });
             }
             hostel.bookedRooms += 1;
             hostel.availableRooms -= 1;
             await hostel.save();
-    
-            // Send an email to the student    
+
+            // Email logic
             const transporter = nodemailer.createTransport({
                 service: 'gmail',
                 host: "smtp.gmail.com",
@@ -314,10 +309,10 @@ export async function updateRoomBookingRequest(req, res) {
                     pass: "swpj cbea mdni rbdv",
                 },
             });
-    
+
             const mailOptions = {
                 from: 'ggbackup8520@gmail.com',
-                to: `${user.email},${roomieEmail}`,
+                to: user.email,
                 subject: 'Room Booking Confirmation',
                 html: `
                     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9;">
@@ -351,7 +346,14 @@ export async function updateRoomBookingRequest(req, res) {
                     </div>
                 `,
             };
-    
+
+            if (roomRequest.roomMateId) {
+                const roomie = await User.findById(roomRequest.roomMateId);
+                if (roomie && roomie.email) {
+                    mailOptions.to += `,${roomie.email}`;
+                }
+            }
+
             await transporter.sendMail(mailOptions);
 
             // Update the recent activity entry to resolved
@@ -369,6 +371,7 @@ export async function updateRoomBookingRequest(req, res) {
         return res.status(500).json({ message: "Status not updated due to server error" });
     }
 }
+
 
 
 

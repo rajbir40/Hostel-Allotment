@@ -5,7 +5,6 @@ import nodemailer from 'nodemailer';
 
 export async function handleApplyOutpass(req, res) {
     try {
-        console.log(req.body.roll_no);
         
         // Create new outpass request
         const outpass = await Outpass.create({

@@ -201,10 +201,6 @@ export async function handleRoomBookingRequest(req, res) {
             resolved: false,
         });
 
-    
-        
-
-        await transporter.sendMail(mailOptions);
 
         return res.status(200).json({ message: "Request approved" });
     } catch (err) {
@@ -247,7 +243,7 @@ export async function updateRoomBookingRequest(req, res) {
 
         // Find the recent activity related to this room request
         const recentActivity = await RecentActivity.findOne({
-            description: `New booking request for Room ${roomRequest.roomNumber} in ${roomRequest.hostel}`,
+            description:` New booking request for Room ${roomRequest.roomNumber} in ${roomRequest.hostel}`,
             resolved: false,
         });
 

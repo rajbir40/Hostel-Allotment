@@ -3,6 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { AlertCircle, Info, CheckCircle2 } from 'lucide-react';
+import Navbar from '../Navbar/Navbar';
 import axios from 'axios';
 
 const serverURL = "http://localhost:8000";
@@ -237,6 +238,8 @@ const HostelLayout = () => {
     const isAvailable = room?.isAvailable;
     
     return (
+      <>
+      <Navbar />
       <div className="relative group">
         <button
           onClick={() => onClick(room)}
@@ -253,6 +256,7 @@ const HostelLayout = () => {
           <Info className="absolute -top-1 -right-1 h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
         </button>
       </div>
+      </>
     );
   };
 
@@ -471,7 +475,7 @@ const HostelLayout = () => {
         </CardContent>
       </Card>
 
-      <div className="absolute top-4 left-4 flex items-center gap-4">
+      <div className="absolute top-4 left-4 flex items-center gap-4 ml-72">
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 bg-green-600 rounded-sm"></div>
           <span className="text-sm">Available</span>

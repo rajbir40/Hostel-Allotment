@@ -13,7 +13,7 @@ router.post("/login",handleUserLogin);
 router.post("/logout",authenticateuser,handleUserLogout);
 router.post("/send-code", handleSendOtp)
 router.post("/verify-code", handleVerifyOtp)
-router.post("/apply",authenticateuser,handleApplyOutpass);
+router.post("/apply",handleApplyOutpass);
 router.post("/update",userEdit);
 router.get("/recent-activities",handleFetchRecentActivity);
 router.get("/student/:id",fetchUserData);

@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const outpassSchema = new mongoose.Schema(
     {
         name:{type:String,required:true,},
-        roll_no:{type:String,required:true,unique:true},
+        roll_no:{type:String,required:true},
         where:{type:String,required:true,},
         responsibility:{type:String, required:true, default:'Yes'},
         reason: { type: String, required: true },

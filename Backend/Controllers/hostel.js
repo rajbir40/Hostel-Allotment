@@ -201,10 +201,6 @@ export async function handleRoomBookingRequest(req, res) {
             resolved: false,
         });
 
-    
-        
-
-        await transporter.sendMail(mailOptions);
 
         return res.status(200).json({ message: "Request approved" });
     } catch (err) {
@@ -285,12 +281,27 @@ export async function updateRoomBookingRequest(req, res) {
                 return res.status(404).json({ message: "Room not found" });
             }
 
+            const roomieId = roomRequest.roomMateId;
+            const roomie = await User.findById(roomieId);
+            const roomieEmail = roomie.email;
+            if (!roomie || !roomieEmail) {
+                return res.status(404).json({ message: "Roomie email not found" });
+            }
+
             room.isAvailable = false;
             room.studentId = studentId;
             await room.save();
 
             user.roomId = room._id;
             await user.save();
+
+            const hostel = await Hostel.findOne({name:roomRequest.hostel});
+            if (!hostel) {
+                return res.status(404).json({ message: "Hostel not found" });
+            }
+            hostel.bookedRooms += 1;
+            hostel.availableRooms -= 1;
+            await hostel.save();
     
             // Send an email to the student    
             const transporter = nodemailer.createTransport({
@@ -306,7 +317,7 @@ export async function updateRoomBookingRequest(req, res) {
     
             const mailOptions = {
                 from: 'ggbackup8520@gmail.com',
-                to: user.email,
+                to: `${user.email},${roomieEmail}`,
                 subject: 'Room Booking Confirmation',
                 html: `
                     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9;">

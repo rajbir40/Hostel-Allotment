@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
-import { Info } from 'lucide-react';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+import { AlertCircle, Info, CheckCircle2 } from 'lucide-react';
 import axios from 'axios';
 
 const serverURL = "http://localhost:8000";
@@ -54,6 +55,7 @@ const RoomDetails = ({ room, onBook, onClose }) => (
   <p className="text-sm font-medium text-gray-500">Booking Requests</p>
   <p className="text-lg font-semibold">{Math.floor(Math.random() * 3)}</p>
 </div>
+
     </div>
     
     <DialogFooter className="flex gap-2 justify-end mt-4">
@@ -81,34 +83,45 @@ const HostelLayout = () => {
   const [studentId, setStudentId] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isRoommateDialogOpen, setIsRoommateDialogOpen] = useState(false);
+  const [notification, setNotification] = useState(null);
+
+  const showNotification = (title, message, type = 'info') => {
+    setNotification({ title, message, type });
+    setTimeout(() => setNotification(null), 3000);
+  };
 
   useEffect(() => {
     const initialize = async () => {
       try {
-        // Get user data first
         const savedValue = localStorage.getItem('user');
         if (savedValue) {
           const parsedValue = JSON.parse(savedValue);
-          // Extract _id from the user object if it exists
           const userId = parsedValue._id || parsedValue;
           setStudentId(userId);
         }
 
-        // Then fetch rooms
         const response = await axios.get(`${serverURL}/room`);
         const filteredRooms = response.data.filter(room => room.hostel === 'BH-2');
         setRooms(filteredRooms);
       } catch (error) {
-        console.error("Error during initialization:", error);
+        showNotification(
+          'Error',
+          'Failed to initialize. Please try again.',
+          'error'
+        );
       }
     };
 
     initialize();
-  }, []); // Single useEffect for initialization
+  }, []);
 
   const handleRoomBooking = async (roomData) => {
     if (!studentId) {
-      alert("User ID not found. Please log in again.");
+      showNotification(
+        'Authentication Required',
+        'User ID not found. Please log in again.',
+        'error'
+      );
       return;
     }
 
@@ -122,26 +135,40 @@ const HostelLayout = () => {
       const response = await axios.post(`${serverURL}/bookroom/req`, bookingData);
       
       if (response.status === 208) {
-        alert("You have already booked a room!");
+        showNotification(
+          'Booking Failed',
+          'You have already booked a room!',
+          'error'
+        );
         return;
       }
       
-      alert(`Room ${roomData.roomNumber}'s request has been sent!`);
+      showNotification(
+        'Request Sent',
+        `Room ${roomData.roomNumber}'s request has been sent!`,
+        'success'
+      );
       
-      // Refresh rooms instead of reloading page
       const updatedRooms = await axios.get(`${serverURL}/room`);
       setRooms(updatedRooms.data.filter(room => room.hostel === 'BH-2'));
       
       setIsDialogOpen(false);
     } catch (error) {
-      console.error('Error booking room:', error);
-      alert('Failed to book the room. Please try again.');
+      showNotification(
+        'Booking Failed',
+        'Failed to book the room. Please try again.',
+        'error'
+      );
     }
   };
 
   const handleRoommateRequest = async (roommateData) => {
     if (!studentId) {
-      alert("User ID not found. Please log in again.");
+      showNotification(
+        'Authentication Required',
+        'User ID not found. Please log in again.',
+        'error'
+      );
       return;
     }
 
@@ -152,18 +179,58 @@ const HostelLayout = () => {
         hostel: 'BH-2',
         roomNumber: selectedRoom.roomNumber
       };
+
       console.log(payload);
 
-      const response = await axios.post(`${serverURL}/bookroom/req`, payload);
+      await axios.post(`${serverURL}/bookroom/req`, payload);
       setIsRoommateDialogOpen(false);
+      setIsDialogOpen(false);
       
       const updatedRooms = await axios.get(`${serverURL}/room`);
       setRooms(updatedRooms.data.filter(room => room.hostel === 'BH-2'));
-      alert("request sent!");
+      
+      showNotification(
+        'Request Sent',
+        'Roommate request has been sent successfully!',
+        'success'
+      );
     } catch (error) {
-      console.error('Error requesting roommate:', error);
-      alert('Failed to request a roommate. Please try again.');
+      showNotification(
+        'Request Failed',
+        'Failed to request a roommate. Please try again.',
+        'error'
+      );
     }
+  };
+
+  const NotificationAlert = ({ notification }) => {
+    if (!notification) return null;
+
+    const icons = {
+      error: <AlertCircle className="h-5 w-5 text-red-500" />,
+      success: <CheckCircle2 className="h-5 w-5 text-green-500" />,
+      info: <Info className="h-5 w-5 text-blue-500" />
+    };
+
+    const colors = {
+      error: 'border-red-500 bg-red-50',
+      success: 'border-green-500 bg-green-50',
+      info: 'border-blue-500 bg-blue-50'
+    };
+
+    return (
+      <div className="fixed top-4 right-4 z-50 w-96 animate-in slide-in-from-top-2 duration-300">
+        <Alert className={`${colors[notification.type]} shadow-lg`}>
+          <div className="flex gap-3">
+            {icons[notification.type]}
+            <div>
+              <AlertTitle className="font-semibold">{notification.title}</AlertTitle>
+              <AlertDescription>{notification.message}</AlertDescription>
+            </div>
+          </div>
+        </Alert>
+      </div>
+    );
   };
 
   const RoomButton = ({ room, onClick }) => {
@@ -245,16 +312,20 @@ const HostelLayout = () => {
 
   const RoommateDialog = ({ room, onRequestRoommate, onClose }) => {
     const [roommateName, setRoommateName] = useState('');
-    const [roommateId, setRoommateId] = useState('');
+    const [roomieRollNumber, setroomieRollNumber] = useState('');
 
     const handleSubmit = () => {
-      if (!roommateName || !roommateId) {
-        alert("Please fill in all fields");
+      if (!roommateName || !roomieRollNumber) {
+        showNotification(
+          'Validation Error',
+          'Please fill in all fields',
+          'error'
+        );
         return;
       }
       onRequestRoommate({
         roommateName,
-        roommateId
+        roomieRollNumber
       });
     };
 
@@ -278,14 +349,14 @@ const HostelLayout = () => {
               />
             </div>
             <div>
-              <label htmlFor="roommateId" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="roomieRollNumber" className="block text-sm font-medium text-gray-700">
                 Roommate Enrollment ID
               </label>
               <input
                 type="text"
-                id="roommateId"
-                value={roommateId}
-                onChange={(e) => setRoommateId(e.target.value)}
+                id="roomieRollNumber"
+                value={roomieRollNumber}
+                onChange={(e) => setroomieRollNumber(e.target.value)}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
               />
             </div>
@@ -342,6 +413,8 @@ const HostelLayout = () => {
 
   return (
     <div className="relative h-screen w-screen bg-gray-50 p-8">
+      <NotificationAlert notification={notification} />
+      
       <Card className="absolute top-20 left-20 right-20">
         <CardContent className="p-6">
           <div className="flex gap-8 justify-center">

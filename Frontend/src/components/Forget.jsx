@@ -1,30 +1,30 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { Mail, Lock, KeyRound, Loader2 } from 'lucide-react';
 
-export default function Forget() {
+export default function ForgetPassword() {
   const [email, setEmail] = useState('');
-  const [bool, setBool] = useState(false);
   const [verifyOtp, setOTP] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [stage, setStage] = useState('email');
   const navigate = useNavigate();
 
   const requestOtp = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:8000/user/send-code', { email },{withCredentials:true});
+      const response = await axios.post('http://localhost:8000/user/send-code', { email }, { withCredentials: true });
       if (response.data) {
-        setBool(true);
-        alert('OTP sent to your registered email!');
+        setStage('otp');
+        setLoading(false);
       } else {
         alert('Failed to send OTP: ' + response.data.message);
+        setLoading(false);
       }
     } catch (error) {
       alert('Error: ' + error.message);
-    } finally {
       setLoading(false);
     }
   };
@@ -33,7 +33,7 @@ export default function Forget() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:8000/user/verify-code', { email, verifyOtp , newPassword});
+      const response = await axios.post('http://localhost:8000/user/verify-code', { email, verifyOtp, newPassword });
       if (response.data) {
         alert('Password Changed successfully!');
         navigate('/login');
@@ -48,47 +48,85 @@ export default function Forget() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="w-full md:w-1/3">
-        {!bool ? (
-          <form className="flex items-center space-x-2">
-            <input
-              className="flex h-10 w-full rounded-md border border-black/30 bg-transparent px-3 py-2 text-sm placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-black/30 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center px-4">
+      <div className="w-full max-w-md bg-white shadow-2xl rounded-2xl p-8 space-y-6">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold text-gray-800 mb-2">Reset Password</h2>
+          <p className="text-gray-500">Recover access to your account</p>
+        </div>
+
+        {stage === 'email' && (
+          <form onSubmit={requestOtp} className="space-y-4">
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input
+                type="email"
+                placeholder="Enter your email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
             <button
-              className="inline-flex  items-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white hover:bg-black/80"
-              disabled={loading} onClick={requestOtp}
+              type="submit"
+              disabled={loading}
+              className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center space-x-2"
             >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              {loading ? 'Sending OTP...' : 'Get OTP'}
+              {loading ? (
+                <>
+                  <Loader2 className="animate-spin mr-2" />
+                  Sending OTP...
+                </>
+              ) : (
+                <>
+                  <KeyRound className="mr-2" />
+                  Get OTP
+                </>
+              )}
             </button>
           </form>
-        ) : (
-          <form className="space-y-4">
-            <input
-              className="flex h-10 w-full rounded-md border border-black/30 bg-transparent px-3 py-2 text-sm placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-black/30 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
-              type="text"
-              placeholder="Enter OTP"
-              value={verifyOtp}
-              onChange={(e) => setOTP(e.target.value)}
-            />
-            <input
-              className="flex h-10 w-full rounded-md border border-black/30 bg-transparent px-3 py-2 text-sm placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-black/30 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
-              type="text"
-              placeholder="Enter New Password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
+        )}
+
+        {stage === 'otp' && (
+          <form onSubmit={submitOtp} className="space-y-4">
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Enter OTP"
+                required
+                value={verifyOtp}
+                onChange={(e) => setOTP(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input
+                type="password"
+                placeholder="New Password"
+                required
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
             <button
-              className="inline-flex items-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white hover:bg-black/80"
+              type="submit"
               disabled={loading}
-              onClick={submitOtp}
+              className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center space-x-2"
             >
-              {loading ? 'Submitting...' : 'Submit'}
+              {loading ? (
+                <>
+                  <Loader2 className="animate-spin mr-2" />
+                  Submitting...
+                </>
+              ) : (
+                'Reset Password'
+              )}
             </button>
           </form>
         )}

@@ -131,18 +131,19 @@ export const handleSendOtp = async (req, res) => {
       foundUser.save();
   
       const transporter = nodemailer.createTransport({
+        service: 'gmail',
         host: "smtp.gmail.com",
         port: 587,
-        secure: false, // true for port 465, false for other ports
+        secure: false,
         auth: {
-          user: "rbir3438@gmail.com",
-          pass: "nifl uruh usub sxrr",
+            user: "ggbackup8520@gmail.com",
+            pass: "swpj cbea mdni rbdv",
         },
-      });``
+    });
       
 
       const mailOptions = {
-        from: 'rbir3438@gmail.com', // Replace with your email
+        from: 'ggbackup8520@gmail.com',
         to: email,
         subject: 'Your OTP for Password Reset',
         text: `Your OTP for password reset is ${otp}. This OTP is valid for 10 minutes.`,

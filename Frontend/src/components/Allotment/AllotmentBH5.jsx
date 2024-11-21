@@ -7,6 +7,76 @@ import axios from 'axios';
 
 const serverURL = "http://localhost:8000";
 
+const RoomButton = ({ room, onClick }) => {
+  const isAvailable = room?.isAvailable;
+  
+  return (
+    <div className="relative group">
+      <button
+        onClick={() => onClick(room)}
+        disabled={!isAvailable}
+        className={`
+          relative h-8 w-12 rounded-lg font-medium text-sm transition-all duration-200
+          ${isAvailable 
+            ? 'bg-green-600 hover:bg-green-700 text-white' 
+            : 'bg-red-600 text-white opacity-80'
+          }
+        `}
+      >
+        {room?.roomNumber}
+        <Info className="absolute -top-1 -right-1 h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+      </button>
+    </div>
+  );
+};
+
+const RoomDetails = ({ room, onBook, onClose }) => (
+  <div className="space-y-4">
+    <div className="grid grid-cols-2 gap-4">
+      <div>
+        <p className="text-sm font-medium text-gray-500">Room Number</p>
+        <p className="text-lg font-semibold">{room.roomNumber}</p>
+      </div>
+      <div>
+        <p className="text-sm font-medium text-gray-500">Status</p>
+        <p className={`text-lg font-semibold ${room.isAvailable ? 'text-green-600' : 'text-red-600'}`}>
+          {room.isAvailable ? 'Available' : 'Occupied'}
+        </p>
+      </div>
+      <div>
+        <p className="text-sm font-medium text-gray-500">Floor</p>
+        <p className="text-lg font-semibold">{Math.floor(room.roomNumber / 100)}</p>
+      </div>
+      <div>
+        <p className="text-sm font-medium text-gray-500">Block</p>
+        <p className="text-lg font-semibold">BH-5</p>
+      </div>
+      <div>
+  <p className="text-sm font-medium text-gray-500">Booking Requests</p>
+  <p className="text-lg font-semibold">{Math.floor(Math.random() * 3)}</p>
+</div>
+
+    </div>
+    
+    <DialogFooter className="flex gap-2 justify-end mt-4">
+      {room.isAvailable && (
+        <button
+          className="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors"
+          onClick={onBook}
+        >
+          Book Room
+        </button>
+      )}
+      <button
+        className="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors"
+        onClick={onClose}
+      >
+        Close
+      </button>
+    </DialogFooter>
+  </div>
+);
+
 const HostelLayout = () => {
   const [rooms, setRooms] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState(null);
@@ -110,8 +180,11 @@ const HostelLayout = () => {
         roomNumber: selectedRoom.roomNumber
       };
 
+      console.log(payload);
+
       await axios.post(`${serverURL}/bookroom/req`, payload);
       setIsRoommateDialogOpen(false);
+      setIsDialogOpen(false);
       
       const updatedRooms = await axios.get(`${serverURL}/room`);
       setRooms(updatedRooms.data.filter(room => room.hostel === 'BH-5'));
@@ -239,10 +312,10 @@ const HostelLayout = () => {
 
   const RoommateDialog = ({ room, onRequestRoommate, onClose }) => {
     const [roommateName, setRoommateName] = useState('');
-    const [roommateId, setRoommateId] = useState('');
+    const [roomieRollNumber, setroomieRollNumber] = useState('');
 
     const handleSubmit = () => {
-      if (!roommateName || !roommateId) {
+      if (!roommateName || !roomieRollNumber) {
         showNotification(
           'Validation Error',
           'Please fill in all fields',
@@ -252,7 +325,7 @@ const HostelLayout = () => {
       }
       onRequestRoommate({
         roommateName,
-        roommateId
+        roomieRollNumber
       });
     };
 
@@ -276,14 +349,14 @@ const HostelLayout = () => {
               />
             </div>
             <div>
-              <label htmlFor="roommateId" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="roomieRollNumber" className="block text-sm font-medium text-gray-700">
                 Roommate Enrollment ID
               </label>
               <input
                 type="text"
-                id="roommateId"
-                value={roommateId}
-                onChange={(e) => setRoommateId(e.target.value)}
+                id="roomieRollNumber"
+                value={roomieRollNumber}
+                onChange={(e) => setroomieRollNumber(e.target.value)}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
               />
             </div>

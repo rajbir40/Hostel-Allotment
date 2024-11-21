@@ -180,8 +180,11 @@ const HostelLayout = () => {
         roomNumber: selectedRoom.roomNumber
       };
 
+      console.log(payload);
+
       await axios.post(`${serverURL}/bookroom/req`, payload);
       setIsRoommateDialogOpen(false);
+      setIsDialogOpen(false);
       
       const updatedRooms = await axios.get(`${serverURL}/room`);
       setRooms(updatedRooms.data.filter(room => room.hostel === 'BH-1'));
@@ -309,10 +312,10 @@ const HostelLayout = () => {
 
   const RoommateDialog = ({ room, onRequestRoommate, onClose }) => {
     const [roommateName, setRoommateName] = useState('');
-    const [roommateId, setRoommateId] = useState('');
+    const [roomieRollNumber, setroomieRollNumber] = useState('');
 
     const handleSubmit = () => {
-      if (!roommateName || !roommateId) {
+      if (!roommateName || !roomieRollNumber) {
         showNotification(
           'Validation Error',
           'Please fill in all fields',
@@ -322,7 +325,7 @@ const HostelLayout = () => {
       }
       onRequestRoommate({
         roommateName,
-        roommateId
+        roomieRollNumber
       });
     };
 
@@ -346,14 +349,14 @@ const HostelLayout = () => {
               />
             </div>
             <div>
-              <label htmlFor="roommateId" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="roomieRollNumber" className="block text-sm font-medium text-gray-700">
                 Roommate Enrollment ID
               </label>
               <input
                 type="text"
-                id="roommateId"
-                value={roommateId}
-                onChange={(e) => setRoommateId(e.target.value)}
+                id="roomieRollNumber"
+                value={roomieRollNumber}
+                onChange={(e) => setroomieRollNumber(e.target.value)}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
               />
             </div>

@@ -86,7 +86,7 @@ The **Hostel Allotment System** offers a streamlined, online platform to manage:
    - Start Backend:  
      ```bash  
      cd backend  
-     npm start  
+     node index.js 
      ```  
    - Start Frontend:  
      ```bash  

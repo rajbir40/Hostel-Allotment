@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Loader } from 'lucide-react';
 
 const OutpassRequest = () => {
-  const host = 'http://localhost:8000';
+  const host = `${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}`;
   const [outpass, setOutpass] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 

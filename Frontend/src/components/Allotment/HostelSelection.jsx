@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ChevronDown, Building2, Users, Calendar, MapPin, Info } from 'lucide-react';
 import NavbarTest from '../Navbar/Navbar';
 const HostelSelection = () => {
-  const host = 'http://localhost:8000';
+  const host = `${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}`
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [selectedHostel, setSelectedHostel] = useState(null);
   const [isLoading, setIsLoading] = useState(false);

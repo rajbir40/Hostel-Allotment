@@ -5,7 +5,7 @@ import axios from 'axios';
 import './Allotment.css';
 import Navbar from '../Navbar/Navbar';
 
-const serverURL = "http://localhost:8000";
+const serverURL = `${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}`
 
 Modal.setAppElement('#root'); // Required for accessibility
 

@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Clock, ArrowRight, CheckCircle, AlertCircle } from 'lucide-react';
 
 const Dashboard = () => {
-  const host = 'http://localhost:8000';
+  const host = `${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}`;
   const [userCount, setUserCount] = useState(0);
   const [roomCount, setRoomCount] = useState(0);
   const [outpassCount, setOutpassCount] = useState(0);

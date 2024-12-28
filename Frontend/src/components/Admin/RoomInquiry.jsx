@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Loader } from "lucide-react";
 
 export default function RoomInquiry() {
-  const host = "http://localhost:8000";
+  const host = `${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}`;
   const [hostels, setHostels] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedHostel, setSelectedHostel] = useState(null);

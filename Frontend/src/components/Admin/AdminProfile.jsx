@@ -4,7 +4,7 @@ import '../Profile/Profile.css';
 import Sidebar from './Sidebar';
 
 export default function AdminProfile() {
-  const host = 'http://localhost:8000';
+  const host = `${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}`;
   const [admin, setAdmin] = useState({});
 
   const fetchAdmin = async () => {

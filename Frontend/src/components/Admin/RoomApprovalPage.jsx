@@ -9,7 +9,7 @@ import { Loader } from "lucide-react";
 const RoomApprovalPage = () => {
   const location = useLocation();
   const { id, studentId, roomMateId } = location.state || {};
-  const host = "http://localhost:8000";
+  const host = `${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}`;
   const navigate = useNavigate();
 
   const [details, setDetails] = useState(null);

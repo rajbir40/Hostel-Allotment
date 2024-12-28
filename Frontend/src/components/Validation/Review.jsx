@@ -3,7 +3,7 @@ import {io} from "socket.io-client"
 
 export default function Review() {
 
-    const socket = io("http://localhost:8000");
+    const socket = io(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}`);
 
     useEffect(()=>{
         socket.on("connect",()=>{

@@ -18,7 +18,7 @@ import {
   ArrowUpRight,
   AlertTriangle
 } from 'lucide-react';
-const serverURL = "http://localhost:8000";
+const serverURL = `${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}`
 
 const ProfilePage = ({ 
 }) => {

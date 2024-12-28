@@ -13,7 +13,7 @@ export default function Logout() {
   const handleLogout = async () => {
     try {
       // Make a request to the backend to logout and clear the authentication cookie
-      const response = await axios.post('http://localhost:8000/user/logout', {}, { withCredentials: true });
+      const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/user/logout`, {}, { withCredentials: true });
       console.log(response.data.message);
       localStorage.removeItem('user');
       // Show a success message in the modal and redirect to the login page

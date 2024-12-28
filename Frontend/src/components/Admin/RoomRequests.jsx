@@ -7,7 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { Loader } from 'lucide-react';
 
 const RoomRequests = () => {
-  const host = 'http://localhost:8000';
+  const host = `${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}`;
   const [requests, setRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();

@@ -15,7 +15,7 @@ export default function Forget() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:8000/user/send-code', { email },{withCredentials:true});
+      const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/user/send-code`, { email },{withCredentials:true});
       if (response.data) {
         setBool(true);
         alert('OTP sent to your registered email!');
@@ -33,7 +33,7 @@ export default function Forget() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:8000/user/verify-code', { email, verifyOtp , newPassword});
+      const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/user/verify-code`, { email, verifyOtp , newPassword});
       if (response.data) {
         alert('Password Changed successfully!');
         navigate('/login');

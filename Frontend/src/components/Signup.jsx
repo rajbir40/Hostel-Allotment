@@ -28,7 +28,7 @@ export default function SignUp() {
       }
 
       // Post data to the backend API
-      const response = await axios.post('http://localhost:8000/user/signup', data);
+      const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/user/signup`, data);
       setModalMessage('Signup successful!');
       setModalOpen(true);
     } catch (error) {

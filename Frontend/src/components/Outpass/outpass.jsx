@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
 import { Calendar, Clock, MapPin, User, UserCheck, FileText, AlertCircle } from "lucide-react";
 
-const serverURL = "http://localhost:8000";
+const serverURL = `${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}`
 
 const Outpass = () => {
   const navigate = useNavigate();

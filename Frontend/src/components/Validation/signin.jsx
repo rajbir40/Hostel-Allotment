@@ -15,7 +15,7 @@ export default function SignIn() {
     e.preventDefault(); 
 
     try {
-      const response = await axios.post('http://localhost:8000/user/login', { email, password }, { withCredentials: true });
+      const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/user/login`, { email, password }, { withCredentials: true });
       setModalMessage('Login successful!');
       localStorage.setItem('user', JSON.stringify(response.data.id));
       setIsModalOpen(true); // Open modal on success

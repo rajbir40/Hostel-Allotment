@@ -6,7 +6,7 @@ import { AlertCircle, Info, CheckCircle2 } from 'lucide-react';
 import Navbar from '../Navbar/Navbar';
 import axios from 'axios';
 
-const serverURL = "http://localhost:8000";
+const serverURL = `${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}`
 
 const RoomButton = ({ room, onClick }) => {
   const isAvailable = room?.isAvailable;

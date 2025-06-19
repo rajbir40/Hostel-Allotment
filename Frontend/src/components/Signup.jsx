@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Modal from './Modal';
 import './Signup.css';
+const serverURL = `${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}`
 
 export default function SignUp() {
   const [name, setName] = useState('');
@@ -17,10 +18,13 @@ export default function SignUp() {
   const [modalMessage, setModalMessage] = useState('');
   const navigate = useNavigate();
 
+  console.log(serverURL);
+
   const handleSignup = async (e) => {
     e.preventDefault();
 
     try {
+      console.log(name, email, password, role, address, dob, phoneNumber, enrollmentId);
       // Include enrollmentId in the data only if role is "student"
       const data = { name, email, password, role, address, dob, phoneNumber };
       if (role === 'student') {

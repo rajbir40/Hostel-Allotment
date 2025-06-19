@@ -27,6 +27,10 @@ connectMongoDB(MONGODB_URI)
 
 app.use(cookieParser());
 
+app.get("/", (req, res) => {
+  res.send("API is running...");
+});
+
 app.use("/activity",activityRoutes);
 app.use("/user",userRoute);
 app.use("/pending",outpassRoute);

@@ -16,17 +16,21 @@ const RoomApprovalPage = () => {
   const [studentData, setStudentData] = useState(null);
   const [roomie, setRoomieData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
+  
+  // console.log(studentId);
   useEffect(() => {
     const fetchDetails = async () => {
       if (!id || !studentId) return;
       setIsLoading(true);
 
-      console.log(id);
+    //  console.log("Student ID:", studentId);
+    //   console.log("Roommate ID:", roomMateId);
+
 
       try {
         const roomRes = await axios.get(`${host}/roomrequests/requestdetails/${id}`);
         setDetails(roomRes.data);
+        // console.log("hello")
 
         const studentRes = await axios.get(`${host}/getuser/student/${studentId}`);
         setStudentData(studentRes.data);
@@ -34,7 +38,7 @@ const RoomApprovalPage = () => {
 
         if (roomMateId) {
           const roomieRes = await axios.get(`${host}/getuser/student/${roomMateId}`);
-          setRoomieData(roomieRes.data.data);
+          setRoomieData(roomieRes.data);
         }
       } catch (error) {
         console.error("Error fetching details:", error);
@@ -48,7 +52,6 @@ const RoomApprovalPage = () => {
 
   const handleApprove = async () => {
     setIsLoading(true);
-    // console.log(studentId);
     try {
       await axios.post(`${host}/roomrequests/update/${id}`, {
         update: "Approved",

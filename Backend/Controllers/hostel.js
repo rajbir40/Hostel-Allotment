@@ -162,27 +162,30 @@ export const fetchAllRooms = async (req,res) => {
 export async function handleRoomBookingRequest(req, res) {
     try {
         const { roomNumber, hostel, studentId, roomieRollNumber } = req.body;
-
+        console.log(studentId);
+        
         if (!roomNumber || !hostel) {
             return res.status(400).json({ message: "Room number and hostel are required" });
         }
-
+        
         // Find the room
         const room = await Room.findOne({ roomNumber: roomNumber, hostel: hostel });
         if (!room) {
             return res.status(404).json({ message: "Room not found" });
         }
-
+        
         let roomMateId = null;
-
+        
         // If roommate roll number is provided, fetch the roommate's details
         if (roomieRollNumber) {
             const roomie = await User.findOne({ enrollmentId: roomieRollNumber });
+            // console.log(roomie);
             if (!roomie) {
                 return res.status(404).json({ message: "Roommate not found" });
             }
             roomMateId = roomie._id; // Save the roommate's ID
         }
+        console.log(roomMateId);
 
         // Create the room request
         const roomRequest = await Roomrequest.create({

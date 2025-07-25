@@ -142,7 +142,7 @@ export async function handleRoomBooking(req,res) {
 
     catch(err){
         console.log(err)
-        return res.status(404).json({message:"Server didn't responded"});
+        return res.status(404).json({message:"Server didn't respond"});
     }
 
     

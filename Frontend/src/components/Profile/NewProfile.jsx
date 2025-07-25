@@ -93,12 +93,8 @@ const ProfilePage = ({
               <CardContent className="p-6">
                 <div className="flex flex-col items-center">
                   <div className="relative mb-6">
-                    <div className="w-32 h-32 rounded-full bg-brown-100 border-4 border-white shadow-xl overflow-hidden">
-                      <img
-                        src="/api/placeholder/128/128"
-                        alt={username}
-                        className="w-full h-full object-cover"
-                      />
+                    <div className="w-32 h-32 rounded-full bg-brown-100 border-4 border-white shadow-xl overflow-hidden flex items-center justify-center text-6xl font-bold text-gray-800">
+                      {username ? username.charAt(0).toUpperCase() : ""}
                     </div>
                     <Badge className="absolute bottom-2 right-2 bg-green-500">Active</Badge>
                   </div>
@@ -200,17 +196,7 @@ const ProfilePage = ({
                               {outpass.status=='Approved' ? 'Approved' : 'Pending'}
                             </Badge>
                             
-                            {!outpass.approved && (
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                                onClick={() => navigate("/adminpage/outpassrequest")}
-                              >
-                                View details
-                                <ArrowUpRight className="w-4 h-4 ml-1" />
-                              </Button>
-                            )}
+                            
                           </div>
                         </div>
                       </div>

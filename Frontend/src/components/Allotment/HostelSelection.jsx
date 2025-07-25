@@ -1,12 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronDown, Building2, Users, Calendar, MapPin, Info } from 'lucide-react';
 import NavbarTest from '../Navbar/Navbar';
+import axios from 'axios';
+
 const HostelSelection = () => {
   const host = `${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}`
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [selectedHostel, setSelectedHostel] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [Hostels, setHostels] = useState([]);
+  const [storedStudentId,setStudentId] = useState(null);
+  const [gender,setGender] = useState('');
+  useEffect(() => {
+  const fetchUserData = async () => {
+    try {
+      const storedStudentId = JSON.parse(localStorage?.getItem('user'));
+      setStudentId(storedStudentId);
+      if (storedStudentId) {
+        const response = await axios.get(`${host}/user/student/${storedStudentId}`);
+        const user = response.data;
+        setGender(user.gender);
+        // console.log(gender);
+      } else {
+        console.error("No student ID found in local storage.");
+      }
+    } catch (error) {
+      console.error("Error fetching user gender:", error);
+    }
+  };
+
+  fetchUserData();
+}, []);
   const fetchHostels = async () => {
     setIsLoading(true);
     try {
@@ -67,21 +91,32 @@ const HostelSelection = () => {
               
               {isDropdownOpen && (
                 <div className="absolute w-full mt-2 bg-white border border-gray-200 rounded-lg shadow-xl z-10 max-h-64 overflow-y-auto">
-                  {Hostels.length > 0 ? Hostels.map((hostel) => (
-                    <button
-                      key={hostel._id}
-                      onClick={() => {
-                        setSelectedHostel(hostel);
-                        setDropdownOpen(false);
-                      }}
-                      className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors duration-200 flex items-center gap-2"
-                    >
-                      <Building2 className="text-blue-600 w-4 h-4" />
-                      {hostel.name}
-                    </button>
-                  )) : (
+                  {Hostels.length > 0 && gender ? (
+                    Hostels.filter((hostel) => {
+                      if (gender === "Male") {
+                        return ["BH-1", "BH-2", "BH-3", "BH-4", "BH-5"].includes(hostel.name);
+                      } else if (gender === "Female") {
+                        return !["BH-1", "BH-2", "BH-3", "BH-4", "BH-5"].includes(hostel.name);
+                      }
+                      return false;
+                    }).map((hostel) => (
+
+                      <button
+                        key={hostel._id}
+                        onClick={() => {
+                          setSelectedHostel(hostel);
+                          setDropdownOpen(false);
+                        }}
+                        className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors duration-200 flex items-center gap-2"
+                      >
+                        <Building2 className="text-blue-600 w-4 h-4" />
+                        {hostel.name}
+                      </button>
+                    ))
+                  ) : (
                     <p className="p-4 text-center text-gray-500">No hostels available</p>
                   )}
+
                 </div>
               )}
             </div>

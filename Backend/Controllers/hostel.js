@@ -231,19 +231,56 @@ export async function fetchRoomBookingRequestById(req,res) {
     }
 }
 
+// export async function deleteDup(req, res) {
+//     const requestId = req.params.id;
+//   const { update } = req.body;
+
+//   try {
+//     const approvedRequest = await Roomrequest.findByIdAndUpdate(
+//       requestId,
+//       {
+//         status: update,
+//         processedAt: new Date(),
+//       },
+//       { new: true }
+//     );
+
+//     if (!approvedRequest) {
+//       return res.status(404).json({ message: "Request not found." });
+//     }
+
+//     if (update === "Approved") {
+//       // Delete all other pending requests for the same room
+//       await Roomrequest.deleteMany({
+//         _id: { $ne: requestId }, // not the current one
+//         roomNumber: approvedRequest.roomNumber,
+//         hostel: approvedRequest.hostel,
+//         status: "Pending"
+//       });
+//     }
+
+//     return res.status(200).json({
+//       message: `Request ${update} successfully.`,
+//       approvedRequest,
+//     });
+//   } catch (error) {
+//     console.error("Error updating request:", error);
+//     return res.status(500).json({ message: "Internal server error." });
+//   }
+// }
 export async function updateRoomBookingRequest(req, res) {
     const { update } = req.body;
     const Id = req.params.id;
-    console.log(Id);
-    console.log(update);
+
+    console.log("Request ID:", Id);
+    console.log("Update Action:", update);
 
     try {
         const roomRequest = await Roomrequest.findById(Id);
-        if (!roomRequest || !roomRequest.status) {
-            return res.status(404).json({ message: "Invalid room request" });
+        if (!roomRequest) {
+            return res.status(404).json({ message: "Room request not found" });
         }
 
-        // Find the recent activity related to this room request
         const recentActivity = await RecentActivity.findOne({
             description: `New booking request for Room ${roomRequest.roomNumber} in ${roomRequest.hostel}`,
             resolved: false,
@@ -253,35 +290,46 @@ export async function updateRoomBookingRequest(req, res) {
             return res.status(404).json({ message: "Activity not found" });
         }
 
-        // Handle rejection
+        // ✅ Handle Rejection
         if (update === 'Rejected') {
+            console.log("Handling Rejection");
             roomRequest.status = 'Rejected';
             await roomRequest.save();
 
-            // Update the recent activity entry to resolved
             recentActivity.resolved = true;
             recentActivity.description = `Request Rejected for Room ${roomRequest.roomNumber} in ${roomRequest.hostel}`;
             await recentActivity.save();
 
-            return res.status(200).json({ message: "Request rejected" });
+            return res.status(200).json({ message: "Request rejected successfully" });
         }
 
-        // Handle approval
+        // ✅ Handle Approval
         if (update === 'Approved') {
+            console.log("Handling Approval");
+            
             roomRequest.status = 'Approved';
             roomRequest.isAvailable = false;
             await roomRequest.save();
-
+            
+            // ❗ Reject other pending requests for same room
+            await Roomrequest.deleteMany({
+                _id: { $ne: Id },
+                roomNumber: roomRequest.roomNumber,
+                hostel: roomRequest.hostel,
+                status: "Pending"
+            });
+            
             const studentId = roomRequest.studentId;
             const user = await User.findById(studentId).select('email');
-            if (!user) {
-                return res.status(404).json({ message: "User email not found" });
-            }
+            if (!user) return res.status(404).json({ message: "User not found" });
+            // console.log("Handling Approval2");
 
-            const room = await Room.findOne({ roomNumber: roomRequest.roomNumber, hostel: roomRequest.hostel });
-            if (!room) {
-                return res.status(404).json({ message: "Room not found" });
-            }
+            const room = await Room.findOne({
+                roomNumber: roomRequest.roomNumber,
+                hostel: roomRequest.hostel
+            });
+
+            if (!room) return res.status(404).json({ message: "Room not found" });
 
             room.isAvailable = false;
             room.studentId = studentId;
@@ -291,19 +339,15 @@ export async function updateRoomBookingRequest(req, res) {
             await user.save();
 
             const hostel = await Hostel.findOne({ name: roomRequest.hostel });
-            if (!hostel) {
-                return res.status(404).json({ message: "Hostel not found" });
-            }
+            if (!hostel) return res.status(404).json({ message: "Hostel not found" });
+
             hostel.bookedRooms += 1;
             hostel.availableRooms -= 1;
             await hostel.save();
 
-            // Email logic
+            // ✅ Send Confirmation Email
             const transporter = nodemailer.createTransport({
                 service: 'gmail',
-                host: "smtp.gmail.com",
-                port: 587,
-                secure: false,
                 auth: {
                     user: "ggbackup8520@gmail.com",
                     pass: "swpj cbea mdni rbdv",
@@ -315,62 +359,46 @@ export async function updateRoomBookingRequest(req, res) {
                 to: user.email,
                 subject: 'Room Booking Confirmation',
                 html: `
-                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9;">
-                        <h2 style="text-align: center; color: #333;">Room Booking Confirmation</h2>
-                        <p style="font-size: 16px; color: #555;">Dear Student,</p>
-                        <p style="font-size: 16px; color: #555;">Your room booking has been successfully processed. Below are the details of your room allocation:</p>
-                        <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
-                            <tr>
-                                <th style="text-align: left; padding: 8px; border: 1px solid #ddd; background-color: #f0f0f0;">Room Number</th>
-                                <td style="padding: 8px; border: 1px solid #ddd;">${room.roomNumber}</td>
-                            </tr>
-                            <tr>
-                                <th style="text-align: left; padding: 8px; border: 1px solid #ddd; background-color: #f0f0f0;">Floor</th>
-                                <td style="padding: 8px; border: 1px solid #ddd;">${room.floor}</td>
-                            </tr>
-                            <tr>
-                                <th style="text-align: left; padding: 8px; border: 1px solid #ddd; background-color: #f0f0f0;">Hostel</th>
-                                <td style="padding: 8px; border: 1px solid #ddd;">${room.hostel}</td>
-                            </tr>
-                            <tr>
-                                <th style="text-align: left; padding: 8px; border: 1px solid #ddd; background-color: #f0f0f0;">Room Type</th>
-                                <td style="padding: 8px; border: 1px solid #ddd;">${room.type}</td>
-                            </tr>
-                        </table>
-                        <p style="font-size: 16px; color: #555;">If you have any questions or require further assistance, please contact the hostel administration.</p>
-                        <p style="font-size: 16px; color: #555;">Regards,<br>Hostel Management Team</p>
-                        <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
-                        <p style="font-size: 12px; color: #999; text-align: center;">
-                            This is an automated email. Please do not reply.
-                        </p>
+                    <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ddd; background-color: #f9f9f9;">
+                        <h2>Room Booking Confirmed</h2>
+                        <p>Your room has been booked successfully. Details:</p>
+                        <ul>
+                            <li><strong>Room:</strong> ${room.roomNumber}</li>
+                            <li><strong>Hostel:</strong> ${room.hostel}</li>
+                            <li><strong>Floor:</strong> ${room.floor}</li>
+                            <li><strong>Type:</strong> ${room.type}</li>
+                        </ul>
+                        <p>Contact the hostel office for queries.</p>
                     </div>
                 `,
             };
 
             if (roomRequest.roomMateId) {
-                const roomie = await User.findById(roomRequest.roomMateId);
-                if (roomie && roomie.email) {
-                    mailOptions.to += `,${roomie.email}`;
+                const roomMate = await User.findById(roomRequest.roomMateId).select("email");
+                if (roomMate && roomMate.email) {
+                    mailOptions.to += `,${roomMate.email}`;
                 }
             }
 
             await transporter.sendMail(mailOptions);
 
-            // Update the recent activity entry to resolved
+            // ✅ Mark activity as resolved
             recentActivity.resolved = true;
-            recentActivity.description = `Request Approved for Room ${room.roomNumber} in ${roomRequest.hostel}`;
+            recentActivity.description = `Request Approved for Room ${room.roomNumber} in ${room.hostel}`;
             await recentActivity.save();
 
-            return res.status(200).json({ message: "Room booked successfully" });
+            return res.status(200).json({ message: "Room booked and email sent successfully" });
         }
 
-        await roomRequest.save();
-        res.status(200).json({ message: 'Room request status updated successfully', status: update });
+        // ❗ Invalid `update` value
+        return res.status(400).json({ message: "Invalid update action" });
+
     } catch (err) {
-        console.log(err);
-        return res.status(500).json({ message: "Status not updated due to server error" });
+        console.error("Error in updateRoomBookingRequest:", err);
+        return res.status(500).json({ message: "Internal server error" });
     }
 }
+
 
 
 

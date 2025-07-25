@@ -14,6 +14,7 @@ export default function SignUp() {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('student');
   const [enrollmentId, setEnrollmentId] = useState(''); // State for enrollment ID
+  const [gender, setGender] = useState('');
   const [isModalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const navigate = useNavigate();
@@ -24,9 +25,9 @@ export default function SignUp() {
     e.preventDefault();
 
     try {
-      console.log(name, email, password, role, address, dob, phoneNumber, enrollmentId);
+      console.log(name, email, password, role, address, dob, phoneNumber, enrollmentId, gender);
       // Include enrollmentId in the data only if role is "student"
-      const data = { name, email, password, role, address, dob, phoneNumber };
+      const data = { name, email, password, role, address, dob, phoneNumber, gender };
       if (role === 'student') {
         data.enrollmentId = enrollmentId;
       }
@@ -124,6 +125,18 @@ export default function SignUp() {
                 placeholder="Phone Number"
               />
             </div>
+            <div className="relative flex items-center mt-4">
+              <select
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+                className="block w-full py-3 text-gray-700 bg-gray-200 border rounded-lg pl-3 focus:border-blue-400 focus:outline-none"
+              >
+                <option value="" disabled>Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+            </div>
+
 
             <div className="relative flex items-center mt-4">
               <input

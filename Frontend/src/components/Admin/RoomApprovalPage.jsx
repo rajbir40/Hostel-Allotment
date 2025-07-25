@@ -4,7 +4,7 @@ import Sidebar from "./Sidebar";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react";
-
+import axios from "axios";
 
 const RoomApprovalPage = () => {
   const location = useLocation();
@@ -17,52 +17,46 @@ const RoomApprovalPage = () => {
   const [roomie, setRoomieData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchDetails = async () => {
-    if (!id || !studentId) return;
-    setIsLoading(true);
-
-    try {
-      const response = await fetch(`${host}/roomrequests/requestdetails/${id}`);
-      if (!response.ok) throw new Error("Failed to fetch room details");
-
-      const data = await response.json();
-      setDetails(data);
-
-      const studentResponse = await fetch(`${host}/getuser/student/${studentId}`);
-      if (!studentResponse.ok) throw new Error("Failed to fetch student details");
-      const studentData = await studentResponse.json();
-      setStudentData(studentData);
-
-      if (roomMateId) {
-        const roomieResponse = await fetch(`${host}/getuser/student/${roomMateId}`);
-        if (!roomieResponse.ok) throw new Error("Failed to fetch roommate details");
-        const roomieData = await roomieResponse.json();
-        setRoomieData(roomieData);
-      }
-    } catch (error) {
-      console.error("Error fetching details:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchDetails = async () => {
+      if (!id || !studentId) return;
+      setIsLoading(true);
+
+      console.log(id);
+
+      try {
+        const roomRes = await axios.get(`${host}/roomrequests/requestdetails/${id}`);
+        setDetails(roomRes.data);
+
+        const studentRes = await axios.get(`${host}/getuser/student/${studentId}`);
+        setStudentData(studentRes.data);
+        // console.log(studentRes.data);
+
+        if (roomMateId) {
+          const roomieRes = await axios.get(`${host}/getuser/student/${roomMateId}`);
+          setRoomieData(roomieRes.data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching details:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
     fetchDetails();
   }, [id, studentId, roomMateId]);
 
   const handleApprove = async () => {
     setIsLoading(true);
+    // console.log(studentId);
     try {
-      const response = await fetch(`${host}/roomrequests/update/${id}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ update: "Approved" }),
+      await axios.post(`${host}/roomrequests/update/${id}`, {
+        update: "Approved",
       });
-      const data = await response.json();
+
       navigate("/adminpage/roomrequests");
     } catch (error) {
       console.error("Error approving request:", error);
-      toast.error("An error occurred while approving the request.");
     } finally {
       setIsLoading(false);
     }
@@ -71,21 +65,17 @@ const RoomApprovalPage = () => {
   const handleReject = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`${host}/roomrequests/update/${id}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ update: "Rejected" }),
+      await axios.post(`${host}/roomrequests/update/${id}`, {
+        update: "Rejected",
       });
-      const data = await response.json();
-      toast.error(data.message);
+
       navigate("/adminpage/roomrequests");
     } catch (error) {
       console.error("Error rejecting request:", error);
-      toast.error("An error occurred while rejecting the request.");
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   return (
     <div className="ml-20 flex h-screen">
@@ -119,8 +109,8 @@ const RoomApprovalPage = () => {
                     <div className="text-gray-900">{details?.type}</div>
                   </div>
                   <div>
-                    <div className="font-medium text-gray-600">Availability</div>
-                    <div className="text-gray-900">{details?.isAvailable?.toString()}</div>
+                    <div className="font-medium text-gray-600">Available</div>
+                    <div className="text-gray-900">{details?.isAvailable ? "Yes" : "No"}</div>
                   </div>
                 </div>
               </CardContent>
@@ -150,7 +140,7 @@ const RoomApprovalPage = () => {
                     <div className="text-gray-900">{studentData?.address}</div>
                   </div>
                   <div>
-                    <div className="font-medium text-gray-600">Contact Details</div>
+                    <div className="font-medium text-gray-600">Phone</div>
                     <div className="text-gray-900">{studentData?.phoneNumber}</div>
                   </div>
                 </div>
@@ -183,7 +173,7 @@ const RoomApprovalPage = () => {
                         <div className="text-gray-900">{roomie?.address}</div>
                       </div>
                       <div>
-                        <div className="font-medium text-gray-600">Contact Details</div>
+                        <div className="font-medium text-gray-600">Phone</div>
                         <div className="text-gray-900">{roomie?.phoneNumber}</div>
                       </div>
                     </div>
@@ -194,20 +184,19 @@ const RoomApprovalPage = () => {
               </Card>
             )}
 
-            {/* Approve/Reject Buttons */}
+            {/* Approve / Reject Buttons */}
             <div className="flex justify-end space-x-4">
               <Button
                 onClick={handleApprove}
                 disabled={isLoading}
-                className="bg-green-500 hover:bg-green-600 text-white"
+                className="bg-green-600 hover:bg-green-700 text-white"
               >
                 Approve
               </Button>
               <Button
                 onClick={handleReject}
                 disabled={isLoading}
-                variant="destructive"
-                className="bg-red-500 hover:bg-red-600 text-white"
+                className="bg-red-600 hover:bg-red-700 text-white"
               >
                 Reject
               </Button>

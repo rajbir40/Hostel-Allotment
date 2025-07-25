@@ -12,7 +12,7 @@ const generateOTP = () => {
 
 export async function handleUserSignUp(req, res) {
     try {
-        const { name, email, password, address, dob ,phoneNumber, enrollmentId} = req.body;
+        const { name, email, password, address, dob ,phoneNumber, enrollmentId, gender} = req.body;
         
         const existingUser = await User.findOne({ email });
         if (existingUser) {
@@ -30,6 +30,7 @@ export async function handleUserSignUp(req, res) {
             password: secPass,
             dob,
             enrollmentId,
+            gender,
         });
 
         const userResponse = { 
@@ -40,7 +41,8 @@ export async function handleUserSignUp(req, res) {
             phoneNumber: user.phoneNumber,
             role: user.role,
             createdAt: user.createdAt,
-            updatedAt: user.updatedAt
+            updatedAt: user.updatedAt,
+            gender: user.gender
         };
 
         return res.status(201).json(userResponse); 

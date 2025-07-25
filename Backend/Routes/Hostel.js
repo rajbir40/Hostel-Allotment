@@ -16,5 +16,4 @@ router.get("/requestdetails/:id",fetchRoomBookingRequestById);
 router.post("/update/:id",updateRoomBookingRequest)
 router.post("/create",createRooms);
 
-
 export default router;  
